@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<title>Carte VHS 120x70</title>
+<style>
+  * { box-sizing:border-box; }
+
+  body {
+    margin:0;
+    padding:1rem;
+    font-family:system-ui,sans-serif;
+    background:#222;
+    color:#fff;
+  }
+
+  .app {
+    display:flex;
+    gap:2rem;
+    align-items:flex-start;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  /* CARTA 120x70mm con bordo arrotondato */
+  .card {
+    position:relative;
+    width:120mm;
+    height:70mm;
+    border-radius:1.5mm;
+    background:#fff;
+    overflow:hidden;
+    box-shadow:0 0 8px rgba(0,0,0,.6);
+  }
+
+  /* livello 1: sfondo completo (negozio, personaggi ecc.) */
+  .bg {
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:1;
+    pointer-events:none;
+  }
+
+  /* livello 2: solo scaffale (separato, opzionale) */
+  .shelf {
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:2;
+    pointer-events:none;
+  }
+
+  /* livello 3: colori delle cassette (sotto le PNG delle cassette) */
+  .shelf-colors {
+    position:absolute;
+    z-index:3;
+
+    /* TODO: regola questi 4 valori in mm o % per allineare la griglia
+       al blocco di 15 cassette nello scaffale */
+    left:18mm;
+    top:18mm;
+    width:84mm;
+    height:34mm;
+
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    grid-template-rows:repeat(3, 1fr);
+    column-gap:3mm;  /* TODO: affina se serve */
+    row-gap:4mm;     /* TODO: affina se serve */
+  }
+
+  .tape-color {
+    background:#ffffff; /* verrà cambiato via JS */
+  }
+
+  /* livello 4: cassette PNG “bucate” sopra i colori */
+  .tape-img {
+    position:absolute;
+    z-index:4;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    pointer-events:none;
+  }
+
+  /* pannello controlli */
+  .controls {
+    max-width:260px;
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+  }
+
+  .tape-controls {
+    display:grid;
+    grid-template-columns:auto auto;
+    gap:.4rem .6rem;
+    align-items:center;
+    font-size:.9rem;
+  }
+
+  .tape-controls select {
+    padding:.1rem .3rem;
+  }
+
+  button#printBtn {
+    padding:.6rem 1rem;
+    border:none;
+    border-radius:4px;
+    background:#ffd400;
+    color:#000;
+    font-weight:bold;
+    cursor:pointer;
+  }
+  button#printBtn:hover { background:#ffea7a; }
+
+  /* stampa: mostra solo la carta centrata */
+  @media print {
+    body {
+      margin:0;
+      padding:0;
+      background:#fff;
+      color:#000;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .controls { display:none; }
+    .app {
+      justify-content:center;
+      align-items:center;
+    }
+    .card {
+      box-shadow:none;
+      margin:0;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- CARTA UNICA -->
+  <div class="card" id="card">
+    <!-- livello 1: sfondo -->
+    <img src="sfondo.png" alt="Sfondo" class="bg">
+
+    <!-- livello 2: scaffale -->
+    <img src="shelf.png" alt="Scaffale" class="shelf">
+
+    <!-- livello 3: colori (griglia 3x5) -->
+    <div class="shelf-colors" id="shelfColors">
+      <!-- riga A -->
+      <div class="tape-color" data-id="A1"></div>
+      <div class="tape-color" data-id="A2"></div>
+      <div class="tape-color" data-id="A3"></div>
+      <div class="tape-color" data-id="A4"></div>
+      <div class="tape-color" data-id="A5"></div>
+      <!-- riga B -->
+      <div class="tape-color" data-id="B1"></div>
+      <div class="tape-color" data-id="B2"></div>
+      <div class="tape-color" data-id="B3"></div>
+      <div class="tape-color" data-id="B4"></div>
+      <div class="tape-color" data-id="B5"></div>
+      <!-- riga C -->
+      <div class="tape-color" data-id="C1"></div>
+      <div class="tape-color" data-id="C2"></div>
+      <div class="tape-color" data-id="C3"></div>
+      <div class="tape-color" data-id="C4"></div>
+      <div class="tape-color" data-id="C5"></div>
+    </div>
+
+    <!-- livello 4: cassette PNG singole sopra i colori -->
+    <!-- NOTA: usiamo position assoluta per ognuna così puoi rifinire
+         se hai piccole differenze tra cassette -->
+
+    <!-- Riga A -->
+    <img src="A1.png" alt="A1" class="tape-img" style="left:18mm; top:18mm; width:14mm; height:10mm;">
+    <img src="A2.png" alt="A2" class="tape-img" style="left:18mm+?; top:18mm; width:14mm; height:10mm;">
+    <!-- ripeti per A3..A5, B1..C5 regolando left/top se non sono perfettamente regolari -->
+
+  </div>
+
+  <!-- CONTROLLI -->
+  <div class="controls">
+    <h2>Colori cassette</h2>
+    <p>Clicca sulla cassetta o usa le tendine. Colori disponibili: nero, blu, giallo, rosso, arancio, rosa, viola, verde.</p>
+
+    <div class="tape-controls" id="tapeControls"></div>
+
+    <button id="printBtn">Stampa carta</button>
+  </div>
+</div>
+
+<script>
+  // palette fissa (8 colori)
+  const palette = [
+    { name:'Nero',   value:'#000000' },
+    { name:'Blu',    value:'#0047AB' },
+    { name:'Giallo', value:'#FFD800' },
+    { name:'Rosso',  value:'#E52020' },
+    { name:'Arancio',value:'#FF8C00' },
+    { name:'Rosa',   value:'#FF66CC' },
+    { name:'Viola',  value:'#8A2BE2' },
+    { name:'Verde',  value:'#1E9E47' }
+  ];
+
+  const tapeColors = document.querySelectorAll('.tape-color');
+  const controlsContainer = document.getElementById('tapeControls');
+
+  tapeColors.forEach((tape, i) => {
+    // colore iniziale (es. tutti gialli = indice 2)
+    let colorIndex = 2;
+    tape.dataset.colorIndex = colorIndex;
+    tape.style.backgroundColor = palette[colorIndex].value;
+
+    const id = tape.dataset.id;
+
+    const label = document.createElement('label');
+    label.textContent = id;
+
+    const select = document.createElement('select');
+    select.dataset.id = id;
+
+    palette.forEach((c, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = c.name;
+      if (idx === colorIndex) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    // cambio da select
+    select.addEventListener('change', (e) => {
+      const selectedId = e.target.dataset.id;
+      const idx = parseInt(e.target.value, 10);
+      const t = document.querySelector('.tape-color[data-id="'+selectedId+'"]');
+      t.dataset.colorIndex = idx;
+      t.style.backgroundColor = palette[idx].value;
+    });
+
+    // click sulla “macchia” di colore: cicla colori
+    tape.addEventListener('click', () => {
+      let idx = parseInt(tape.dataset.colorIndex, 10);
+      idx = (idx + 1) % palette.length;
+      tape.dataset.colorIndex = idx;
+      tape.style.backgroundColor = palette[idx].value;
+      select.value = idx;
+    });
+
+    controlsContainer.appendChild(label);
+    controlsContainer.appendChild(select);
+  });
+
+  document.getElementById('printBtn').addEventListener('click', () => {
+    window.print();
+  });
+</script>
+</body>
+</html>
