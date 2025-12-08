@@ -33,7 +33,7 @@
     box-shadow:0 0 8px rgba(0,0,0,.6);
   }
 
-  /* livello 1: sfondo completo (negozio, personaggi ecc.) */
+  /* livello 1: sfondo completo */
   .bg {
     position:absolute;
     inset:0;
@@ -44,7 +44,7 @@
     pointer-events:none;
   }
 
-  /* livello 2: solo scaffale (separato, opzionale) */
+  /* livello 2: scaffale (separato dal resto) */
   .shelf {
     position:absolute;
     inset:0;
@@ -55,30 +55,32 @@
     pointer-events:none;
   }
 
-  /* livello 3: colori delle cassette (sotto le PNG delle cassette) */
+  /* livello 3: colori delle cassette (griglia 3x5) */
   .shelf-colors {
     position:absolute;
     z-index:3;
 
-    /* TODO: regola questi 4 valori in mm o % per allineare la griglia
-       al blocco di 15 cassette nello scaffale */
-    left:18mm;
-    top:18mm;
-    width:84mm;
-    height:34mm;
+    /* offset rispetto alla carta */
+    left:28.638mm;     /* misurato in Illustrator */
+    top:18mm;          /* REGOLA questo se le file non sono ancora perfette */
+
+    width:61.969mm;    /* area totale cassette */
+    height:36.749mm;
 
     display:grid;
     grid-template-columns:repeat(5, 1fr);
     grid-template-rows:repeat(3, 1fr);
-    column-gap:3mm;  /* TODO: affina se serve */
-    row-gap:4mm;     /* TODO: affina se serve */
+    column-gap:5.314mm;
+    row-gap:3.017mm;
   }
 
   .tape-color {
-    background:#ffffff; /* verrà cambiato via JS */
+    background:#ffffff; /* il JS cambierà colore */
+    cursor:pointer;
   }
 
-  /* livello 4: cassette PNG “bucate” sopra i colori */
+  /* livello 4: cassette PNG sopra i colori
+     (se tutte uguali, puoi usare un unico shelf.png con i “buchi” e togliere queste) */
   .tape-img {
     position:absolute;
     z-index:4;
@@ -119,7 +121,7 @@
   }
   button#printBtn:hover { background:#ffea7a; }
 
-  /* stampa: mostra solo la carta centrata */
+  /* stampa */
   @media print {
     body {
       margin:0;
@@ -144,7 +146,7 @@
 <body>
 <div class="app">
   <!-- CARTA UNICA -->
-  <div class="card" id="card">
+  <div class="card">
     <!-- livello 1: sfondo -->
     <img src="sfondo.png" alt="Sfondo" class="bg">
 
@@ -153,19 +155,19 @@
 
     <!-- livello 3: colori (griglia 3x5) -->
     <div class="shelf-colors" id="shelfColors">
-      <!-- riga A -->
+      <!-- A -->
       <div class="tape-color" data-id="A1"></div>
       <div class="tape-color" data-id="A2"></div>
       <div class="tape-color" data-id="A3"></div>
       <div class="tape-color" data-id="A4"></div>
       <div class="tape-color" data-id="A5"></div>
-      <!-- riga B -->
+      <!-- B -->
       <div class="tape-color" data-id="B1"></div>
       <div class="tape-color" data-id="B2"></div>
       <div class="tape-color" data-id="B3"></div>
       <div class="tape-color" data-id="B4"></div>
       <div class="tape-color" data-id="B5"></div>
-      <!-- riga C -->
+      <!-- C -->
       <div class="tape-color" data-id="C1"></div>
       <div class="tape-color" data-id="C2"></div>
       <div class="tape-color" data-id="C3"></div>
@@ -173,21 +175,17 @@
       <div class="tape-color" data-id="C5"></div>
     </div>
 
-    <!-- livello 4: cassette PNG singole sopra i colori -->
-    <!-- NOTA: usiamo position assoluta per ognuna così puoi rifinire
-         se hai piccole differenze tra cassette -->
-
-    <!-- Riga A -->
-    <img src="A1.png" alt="A1" class="tape-img" style="left:18mm; top:18mm; width:14mm; height:10mm;">
-    <img src="A2.png" alt="A2" class="tape-img" style="left:18mm+?; top:18mm; width:14mm; height:10mm;">
-    <!-- ripeti per A3..A5, B1..C5 regolando left/top se non sono perfettamente regolari -->
-
+    <!-- livello 4: cassette PNG singole (se ti servono sopra ai colori)
+         se hai già shelf.png con i “buchi” e contorni, puoi ignorare questa parte -->
+    <!-- Esempio: una singola immagine per tutte le cassette, già in prospettiva:
+    <img src="cassette_overlay.png" alt="Cassette" class="tape-img">
+    -->
   </div>
 
   <!-- CONTROLLI -->
   <div class="controls">
     <h2>Colori cassette</h2>
-    <p>Clicca sulla cassetta o usa le tendine. Colori disponibili: nero, blu, giallo, rosso, arancio, rosa, viola, verde.</p>
+    <p>Clicca su una cassetta o usa le tendine. Colori: nero, blu, giallo, rosso, arancio, rosa, viola, verde.</p>
 
     <div class="tape-controls" id="tapeControls"></div>
 
@@ -211,8 +209,8 @@
   const tapeColors = document.querySelectorAll('.tape-color');
   const controlsContainer = document.getElementById('tapeControls');
 
-  tapeColors.forEach((tape, i) => {
-    // colore iniziale (es. tutti gialli = indice 2)
+  tapeColors.forEach((tape) => {
+    // colore iniziale (tutti gialli, indice 2)
     let colorIndex = 2;
     tape.dataset.colorIndex = colorIndex;
     tape.style.backgroundColor = palette[colorIndex].value;
@@ -242,7 +240,7 @@
       t.style.backgroundColor = palette[idx].value;
     });
 
-    // click sulla “macchia” di colore: cicla colori
+    // click sulla “cassetta” → cicla colori
     tape.addEventListener('click', () => {
       let idx = parseInt(tape.dataset.colorIndex, 10);
       idx = (idx + 1) % palette.length;
