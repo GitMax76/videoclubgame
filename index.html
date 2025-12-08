@@ -34,35 +34,29 @@
   }
 
   /* livello 1: sfondo completo */
-  .bg {
+  .bg,
+  .shelf,
+  .tapes {
     position:absolute;
     inset:0;
     width:100%;
     height:100%;
     object-fit:cover;
-    z-index:1;
     pointer-events:none;
   }
 
-  /* livello 2: scaffale (separato dal resto) */
-  .shelf {
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    z-index:2;
-    pointer-events:none;
-  }
+  .bg    { z-index:1; }
+  .shelf { z-index:2; }
+  .tapes { z-index:4; } /* sopra ai colori */
 
   /* livello 3: colori delle cassette (griglia 3x5) */
   .shelf-colors {
     position:absolute;
     z-index:3;
 
-    /* offset rispetto alla carta */
-    left:28.638mm;     /* misurato in Illustrator */
-    top:18mm;          /* REGOLA questo se le file non sono ancora perfette */
+    /* offset rispetto alla carta (da Illustrator) */
+    left:28.638mm;
+    top:18mm;          /* regola questo di poco se le file non centrano perfettamente */
 
     width:61.969mm;    /* area totale cassette */
     height:36.749mm;
@@ -77,17 +71,6 @@
   .tape-color {
     background:#ffffff; /* il JS cambierà colore */
     cursor:pointer;
-  }
-
-  /* livello 4: cassette PNG sopra i colori
-     (se tutte uguali, puoi usare un unico shelf.png con i “buchi” e togliere queste) */
-  .tape-img {
-    position:absolute;
-    z-index:4;
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    pointer-events:none;
   }
 
   /* pannello controlli */
@@ -149,10 +132,8 @@
   <div class="card">
     <!-- livello 1: sfondo -->
     <img src="sfondo.png" alt="Sfondo" class="bg">
-
     <!-- livello 2: scaffale -->
     <img src="shelf.png" alt="Scaffale" class="shelf">
-
     <!-- livello 3: colori (griglia 3x5) -->
     <div class="shelf-colors" id="shelfColors">
       <!-- A -->
@@ -174,12 +155,8 @@
       <div class="tape-color" data-id="C4"></div>
       <div class="tape-color" data-id="C5"></div>
     </div>
-
-    <!-- livello 4: cassette PNG singole (se ti servono sopra ai colori)
-         se hai già shelf.png con i “buchi” e contorni, puoi ignorare questa parte -->
-    <!-- Esempio: una singola immagine per tutte le cassette, già in prospettiva:
-    <img src="cassette_overlay.png" alt="Cassette" class="tape-img">
-    -->
+    <!-- livello 4: overlay con tutte le cassette (lineart con “buchi”) -->
+    <img src="tapes.png" alt="Cassette" class="tapes">
   </div>
 
   <!-- CONTROLLI -->
