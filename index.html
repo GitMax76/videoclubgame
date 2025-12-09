@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<title>Carte VHS 120x70 - Grandezza Naturale</title>
+<style>
+  * { box-sizing:border-box; }
+
+  body {
+    margin:0;
+    padding:1rem;
+    font-family:system-ui,sans-serif;
+    background:#222;
+    color:#fff;
+  }
+
+  .app {
+    display:flex;
+    gap:2rem;
+    align-items:flex-start;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  /* Carta fisica 120x70 mm - Questa è la "finestra" fissa */
+  .card {
+    position:relative;
+    width:120mm;
+    height:70mm;
+    border-radius:1.5mm;
+    background:#fff;
+    overflow:hidden; /* Taglia tutto ciò che esce dai bordi */
+    box-shadow:0 0 8px rgba(0,0,0,.6);
+    padding:0;
+  }
+
+  /* --- IMPOSTAZIONE UNICA PER TUTTE LE IMMAGINI --- */
+  /* 1. Nessuna dimensione forzata (width/height: auto) -> Grandezza naturale 
+     2. Posizionate al centro esatto della carta 
+  */
+  .bg,
+  .shelf,
+  .tapes {
+    position:absolute;
+    pointer-events:none;
+    display: block;
+
+    /* Le dimensioni dipendono esclusivamente dai pixel del PNG */
+    width: auto;
+    height: auto;
+
+    /* Centratura perfetta */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Ordine di sovrapposizione (Z-Index) */
+  .bg    { z-index:1; }
+  .shelf { z-index:2; }
+  .tapes { z-index:4; }
+
+  /* ----------------------------------------------- */
+
+  /* Zona cassette: rettangolo misurato in Illustrator 
+     (Nota: se le immagini PNG non sono centrate nel file, 
+     questa griglia potrebbe dover essere spostata manualmente) */
+  .shelf-colors {
+    position:absolute;
+    z-index:3;
+
+    left:62.554mm;      
+    top:42.336mm;       
+    width:71.096mm;     
+    height:42.513mm;    
+
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    grid-template-rows:repeat(3, 1fr);
+
+    column-gap:5.314mm;
+    row-gap:3.017mm;
+  }
+
+  .tape-color {
+    background:#ffffff; 
+    cursor:pointer;
+  }
+
+  /* Controlli interfaccia */
+  .controls {
+    max-width:260px;
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+  }
+
+  .tape-controls {
+    display:grid;
+    grid-template-columns:auto auto;
+    gap:.4rem .6rem;
+    align-items:center;
+    font-size:.9rem;
+  }
+
+  .tape-controls select {
+    padding:.1rem .3rem;
+  }
+
+  button#printBtn {
+    padding:.6rem 1rem;
+    border:none;
+    border-radius:4px;
+    background:#ffd400;
+    color:#000;
+    font-weight:bold;
+    cursor:pointer;
+  }
+  button#printBtn:hover { background:#ffea7a; }
+
+  /* Stampa */
+  @media print {
+    body {
+      margin:0;
+      padding:0;
+      background:#fff;
+      color:#000;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .controls { display:none; }
+    .app {
+      display: block;
+      text-align: center;
+    }
+    .card {
+      box-shadow:none;
+      margin: 0 auto;
+      page-break-inside: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="card">
+    <img src="sfondo120x70.png" alt="Sfondo" class="bg">
+    <img src="shelf120x70.png" alt="Scaffale" class="shelf">
+
+    <div class="shelf-colors" id="shelfColors">
+      <div class="tape-color" data-id="A1"></div>
+      <div class="tape-color" data-id="A2"></div>
+      <div class="tape-color" data-id="A3"></div>
+      <div class="tape-color" data-id="A4"></div>
+      <div class="tape-color" data-id="A5"></div>
+      <div class="tape-color" data-id="B1"></div>
+      <div class="tape-color" data-id="B2"></div>
+      <div class="tape-color" data-id="B3"></div>
+      <div class="tape-color" data-id="B4"></div>
+      <div class="tape-color" data-id="B5"></div>
+      <div class="tape-color" data-id="C1"></div>
+      <div class="tape-color" data-id="C2"></div>
+      <div class="tape-color" data-id="C3"></div>
+      <div class="tape-color" data-id="C4"></div>
+      <div class="tape-color" data-id="C5"></div>
+    </div>
+
+    <img src="tapes120x70.png" alt="Cassette" class="tapes">
+  </div>
+
+  <div class="controls">
+    <h2>Colori cassette</h2>
+    <p>Grandezza naturale (no scale).<br>Clicca per cambiare colore.</p>
+    <div class="tape-controls" id="tapeControls"></div>
+    <button id="printBtn">Stampa carta</button>
+  </div>
+</div>
+
+<script>
+  const palette = [
+    { name:'Nero',   value:'#000000' },
+    { name:'Blu',    value:'#0047AB' },
+    { name:'Giallo', value:'#FFD800' },
+    { name:'Rosso',  value:'#E52020' },
+    { name:'Arancio',value:'#FF8C00' },
+    { name:'Rosa',   value:'#FF66CC' },
+    { name:'Viola',  value:'#8A2BE2' },
+    { name:'Verde',  value:'#1E9E47' }
+  ];
+
+  const tapeColors = document.querySelectorAll('.tape-color');
+  const controlsContainer = document.getElementById('tapeControls');
+
+  tapeColors.forEach((tape) => {
+    let colorIndex = 2; 
+    tape.dataset.colorIndex = colorIndex;
+    tape.style.backgroundColor = palette[colorIndex].value;
+
+    const id = tape.dataset.id;
+
+    const label = document.createElement('label');
+    label.textContent = id;
+
+    const select = document.createElement('select');
+    select.dataset.id = id;
+
+    palette.forEach((c, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = c.name;
+      if (idx === colorIndex) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    select.addEventListener('change', (e) => {
+      const selectedId = e.target.dataset.id;
+      const idx = parseInt(e.target.value, 10);
+      const t = document.querySelector('.tape-color[data-id="'+selectedId+'"]');
+      t.dataset.colorIndex = idx;
+      t.style.backgroundColor = palette[idx].value;
+    });
+
+    tape.addEventListener('click', () => {
+      let idx = parseInt(tape.dataset.colorIndex, 10);
+      idx = (idx + 1) % palette.length;
+      tape.dataset.colorIndex = idx;
+      tape.style.backgroundColor = palette[idx].value;
+      select.value = idx;
+    });
+
+    controlsContainer.appendChild(label);
+    controlsContainer.appendChild(select);
+  });
+
+  document.getElementById('printBtn').addEventListener('click', () => {
+    window.print();
+  });
+</script>
+</body>
+</html>
