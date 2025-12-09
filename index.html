@@ -2,150 +2,164 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<title>Carte VHS 120x70 - Grandezza Naturale</title>
+<title>Carte VHS 120x70 - Fix Dimensioni</title>
 <style>
-  * { box-sizing:border-box; }
+  * { box-sizing: border-box; }
 
   body {
-    margin:0;
-    padding:1rem;
-    font-family:system-ui,sans-serif;
-    background:#222;
-    color:#fff;
+    margin: 0;
+    padding: 2rem;
+    font-family: system-ui, sans-serif;
+    background: #222;
+    color: #fff;
+    text-align: center;
   }
 
   .app {
-    display:flex;
-    gap:2rem;
-    align-items:flex-start;
-    justify-content:center;
-    flex-wrap:wrap;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
   }
 
-  /* Carta fisica 120x70 mm - Questa è la "finestra" fissa */
+  /* --- CARTA FISICA (Contenitore Principale) --- */
   .card {
-    position:relative;
-    width:120mm;
-    height:70mm;
-    border-radius:1.5mm;
-    background:#fff;
-    overflow:hidden; /* Taglia tutto ciò che esce dai bordi */
-    box-shadow:0 0 8px rgba(0,0,0,.6);
-    padding:0;
+    position: relative;
+    /* La carta ha dimensioni fisse fisiche */
+    width: 120mm;
+    height: 70mm;
+    background: #fff;
+    border-radius: 1.5mm;
+    overflow: hidden; /* Taglia tutto ciò che esce */
+    box-shadow: 0 0 15px rgba(0,0,0,0.7);
+    margin: 0 auto;
   }
 
-  /* --- IMPOSTAZIONE UNICA PER TUTTE LE IMMAGINI --- */
-  /* 1. Nessuna dimensione forzata (width/height: auto) -> Grandezza naturale 
-     2. Posizionate al centro esatto della carta 
+  /* --- IMMAGINI (Livelli) --- */
+  /* IMPORTANTE: Forziamo le immagini a riempire esattamente i 120x70mm.
+     In stampa useranno la loro risoluzione massima, ma a video staranno al loro posto.
   */
-  .bg,
-  .shelf,
-  .tapes {
-    position:absolute;
-    pointer-events:none;
+  .bg, .shelf, .tapes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill; /* Stira l'immagine per coprire esattamente la carta */
     display: block;
-
-    /* Le dimensioni dipendono esclusivamente dai pixel del PNG */
-    width: auto;
-    height: auto;
-
-    /* Centratura perfetta */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    pointer-events: none;
   }
 
-  /* Ordine di sovrapposizione (Z-Index) */
-  .bg    { z-index:1; }
-  .shelf { z-index:2; }
-  .tapes { z-index:4; }
+  .bg    { z-index: 1; }
+  .shelf { z-index: 2; }
+  .tapes { z-index: 4; } /* L'overlay coi buchi va sopra i colori */
 
-  /* ----------------------------------------------- */
 
-  /* Zona cassette: rettangolo misurato in Illustrator 
-     (Nota: se le immagini PNG non sono centrate nel file, 
-     questa griglia potrebbe dover essere spostata manualmente) */
+  /* --- GRIGLIA COLORI (Livello Intermedio) --- */
   .shelf-colors {
-    position:absolute;
-    z-index:3;
+    position: absolute;
+    z-index: 3;
+    
+    /* HO CORRETTO LE COORDINATE:
+       Quelle precedenti (Left 62mm + Width 71mm) uscivano dalla carta.
+       Qui ho ipotizzato che la griglia sia centrata o leggermente spostata.
+       Modifica 'top' e 'left' qui sotto per spostare tutto il blocco colori.
+    */
+    top: 14mm;   /* Spostamento verticale */
+    left: 24mm;  /* Spostamento orizzontale */
+    
+    width: 71.096mm;
+    height: 42.513mm;
 
-    left:62.554mm;      
-    top:42.336mm;       
-    width:71.096mm;     
-    height:42.513mm;    
-
-    display:grid;
-    grid-template-columns:repeat(5, 1fr);
-    grid-template-rows:repeat(3, 1fr);
-
-    column-gap:5.314mm;
-    row-gap:3.017mm;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    
+    /* Gap tra le cassette */
+    column-gap: 5.314mm;
+    row-gap: 3.017mm;
   }
 
   .tape-color {
-    background:#ffffff; 
-    cursor:pointer;
+    background: #FFD800; /* Colore default visibile */
+    cursor: pointer;
+    /* Opzionale: bordo per vedere le caselle se l'overlay non carica */
+    /* border: 1px solid rgba(0,0,0,0.1); */
   }
 
-  /* Controlli interfaccia */
+  /* --- CONTROLLI --- */
   .controls {
-    max-width:260px;
-    display:flex;
-    flex-direction:column;
-    gap:1rem;
+    background: #333;
+    padding: 1.5rem;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
   }
 
   .tape-controls {
-    display:grid;
-    grid-template-columns:auto auto;
-    gap:.4rem .6rem;
-    align-items:center;
-    font-size:.9rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+  
+  .tape-controls label {
+      font-size: 0.85rem;
+      color: #ccc;
+      align-self: center;
+      justify-self: end;
+      padding-right: 10px;
   }
 
-  .tape-controls select {
-    padding:.1rem .3rem;
+  select {
+    padding: 4px;
+    border-radius: 4px;
+    border: none;
   }
 
   button#printBtn {
-    padding:.6rem 1rem;
-    border:none;
-    border-radius:4px;
-    background:#ffd400;
-    color:#000;
-    font-weight:bold;
-    cursor:pointer;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: #ffd400;
+    color: #000;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 1rem;
   }
-  button#printBtn:hover { background:#ffea7a; }
+  button#printBtn:hover { background: #ffea7a; }
 
-  /* Stampa */
+  /* --- STAMPA --- */
   @media print {
     body {
-      margin:0;
-      padding:0;
-      background:#fff;
-      color:#000;
-      -webkit-print-color-adjust:exact;
-      print-color-adjust:exact;
+      margin: 0;
+      padding: 0;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
-    .controls { display:none; }
-    .app {
-      display: block;
-      text-align: center;
-    }
+    .app { display: block; }
+    .controls { display: none; }
     .card {
-      box-shadow:none;
-      margin: 0 auto;
+      box-shadow: none;
+      border: 1px solid #ddd; /* Leggero bordo di taglio opzionale */
       page-break-inside: avoid;
     }
   }
 </style>
 </head>
 <body>
+
 <div class="app">
   <div class="card">
-    <img src="sfondo120x70.png" alt="Sfondo" class="bg">
-    <img src="shelf120x70.png" alt="Scaffale" class="shelf">
+    <img src="sfondo120x70.png" alt="" class="bg">
+    
+    <img src="shelf120x70.png" alt="" class="shelf">
 
     <div class="shelf-colors" id="shelfColors">
       <div class="tape-color" data-id="A1"></div>
@@ -165,14 +179,14 @@
       <div class="tape-color" data-id="C5"></div>
     </div>
 
-    <img src="tapes120x70.png" alt="Cassette" class="tapes">
+    <img src="tapes120x70.png" alt="" class="tapes">
   </div>
 
   <div class="controls">
-    <h2>Colori cassette</h2>
-    <p>Grandezza naturale (no scale).<br>Clicca per cambiare colore.</p>
+    <h2>Configuratore VHS</h2>
+    <p style="font-size:0.9rem; color:#aaa;">Clicca sulle cassette nell'immagine o usa i controlli qui sotto.</p>
     <div class="tape-controls" id="tapeControls"></div>
-    <button id="printBtn">Stampa carta</button>
+    <button id="printBtn">Stampa Carta</button>
   </div>
 </div>
 
@@ -192,15 +206,17 @@
   const controlsContainer = document.getElementById('tapeControls');
 
   tapeColors.forEach((tape) => {
+    // Default Giallo
     let colorIndex = 2; 
     tape.dataset.colorIndex = colorIndex;
     tape.style.backgroundColor = palette[colorIndex].value;
 
     const id = tape.dataset.id;
 
+    // Creazione UI Controlli
     const label = document.createElement('label');
-    label.textContent = id;
-
+    label.textContent = `Cassetta ${id}:`;
+    
     const select = document.createElement('select');
     select.dataset.id = id;
 
@@ -212,20 +228,20 @@
       select.appendChild(opt);
     });
 
+    // Evento: Cambio dalla tendina
     select.addEventListener('change', (e) => {
-      const selectedId = e.target.dataset.id;
       const idx = parseInt(e.target.value, 10);
-      const t = document.querySelector('.tape-color[data-id="'+selectedId+'"]');
-      t.dataset.colorIndex = idx;
-      t.style.backgroundColor = palette[idx].value;
-    });
-
-    tape.addEventListener('click', () => {
-      let idx = parseInt(tape.dataset.colorIndex, 10);
-      idx = (idx + 1) % palette.length;
       tape.dataset.colorIndex = idx;
       tape.style.backgroundColor = palette[idx].value;
-      select.value = idx;
+    });
+
+    // Evento: Click diretto sulla cassetta
+    tape.addEventListener('click', () => {
+      let idx = parseInt(tape.dataset.colorIndex, 10);
+      idx = (idx + 1) % palette.length; // Cicla colori
+      tape.dataset.colorIndex = idx;
+      tape.style.backgroundColor = palette[idx].value;
+      select.value = idx; // Aggiorna tendina
     });
 
     controlsContainer.appendChild(label);
