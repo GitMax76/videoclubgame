@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<title>Carte VHS 120x70</title>
+<title>Carte VHS pixel-perfect</title>
 <style>
   * { box-sizing:border-box; }
 
@@ -22,32 +22,26 @@
     flex-wrap:wrap;
   }
 
-  /* Contenitore carta: solo per dare il bordo fisico 120x70 in stampa */
+  /* CARTA: stessa dimensione in pixel del PNG: 1475x902 */
   .card {
     position:relative;
-    width:120mm;
-    height:70mm;
-    border-radius:1.5mm;
+    width:1475px;
+    height:902px;
     background:#fff;
     overflow:hidden;
     box-shadow:0 0 8px rgba(0,0,0,.6);
   }
 
-  /* Contenitore interno che usa la dimensione NATIVA delle immagini */
-  .card-inner {
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform:translate(-50%, -50%); /* centra il blocco immagini nella carta */
-  }
-
-  /* PNG non ridimensionati: niente width/height forzati */
+  /* Immagini PNG: riempiono esattamente la carta, nessuno stretch extra */
   .bg,
   .shelf,
   .tapes {
     position:absolute;
     left:0;
     top:0;
+    width:1475px;
+    height:902px;
+    object-fit:fill;      /* l’immagine ha già esattamente queste dimensioni */
     pointer-events:none;
   }
 
@@ -55,24 +49,24 @@
   .shelf { z-index:2; }
   .tapes { z-index:4; }
 
-  /* Griglia colori nella stessa "unità" (px) delle immagini */
+  /* Griglia colori: TUTTO in pixel, misurato su questo PNG */
   .shelf-colors {
     position:absolute;
     z-index:3;
 
-    /* QUI devi rimettere le misure ma in pixel,
-       esattamente quelle che hai in Illustrator per la zona cassette
-       (non in mm). Esempio fittizio: */
-    left: 352px;   /* X della prima cassetta nella PNG */
-    top:  230px;   /* Y della prima cassetta */
-    width: 760px;  /* larghezza totale zona cassette */
-    height:420px;  /* altezza totale zona cassette */
+    /* QUI devi mettere le misure in PIXEL, non più in mm.
+       Per ora metto valori fittizi che sicuramente si vedono;
+       poi li sostituisci con quelli reali da Illustrator. */
+    left:300px;      /* X della prima cassetta rispetto all’angolo del PNG */
+    top: 250px;      /* Y della prima cassetta */
+    width:700px;     /* larghezza zona con 5 cassette */
+    height:400px;    /* altezza zona con 3 cassette */
 
     display:grid;
     grid-template-columns:repeat(5, 1fr);
     grid-template-rows:repeat(3, 1fr);
-    column-gap:??px;   /* spazio orizzontale tra cassette in px */
-    row-gap:??px;      /* spazio verticale tra righe in px */
+    column-gap:50px;
+    row-gap:30px;
   }
 
   .tape-color {
@@ -80,7 +74,6 @@
     cursor:pointer;
   }
 
-  /* Controlli */
   .controls {
     max-width:260px;
     display:flex;
@@ -111,55 +104,34 @@
   }
   button#printBtn:hover { background:#ffea7a; }
 
-  /* Stampa */
-  @media print {
-    body {
-      margin:0;
-      padding:0;
-      background:#fff;
-      color:#000;
-      -webkit-print-color-adjust:exact;
-      print-color-adjust:exact;
-    }
-    .controls { display:none; }
-    .app {
-      justify-content:center;
-      align-items:center;
-    }
-    .card {
-      box-shadow:none;
-      margin:0;
-    }
-  }
+  /* per ora ignoriamo la stampa precisa in mm; la sistemiamo dopo */
 </style>
 </head>
 <body>
 <div class="app">
   <div class="card">
-    <div class="card-inner">
-      <img src="sfondo120x70.png" alt="Sfondo" class="bg">
-      <img src="shelf120x70.png"  alt="Scaffale" class="shelf">
+    <img src="sfondo120x70.png" alt="Sfondo" class="bg">
+    <img src="shelf120x70.png"  alt="Scaffale" class="shelf">
 
-      <div class="shelf-colors" id="shelfColors">
-        <div class="tape-color" data-id="A1"></div>
-        <div class="tape-color" data-id="A2"></div>
-        <div class="tape-color" data-id="A3"></div>
-        <div class="tape-color" data-id="A4"></div>
-        <div class="tape-color" data-id="A5"></div>
-        <div class="tape-color" data-id="B1"></div>
-        <div class="tape-color" data-id="B2"></div>
-        <div class="tape-color" data-id="B3"></div>
-        <div class="tape-color" data-id="B4"></div>
-        <div class="tape-color" data-id="B5"></div>
-        <div class="tape-color" data-id="C1"></div>
-        <div class="tape-color" data-id="C2"></div>
-        <div class="tape-color" data-id="C3"></div>
-        <div class="tape-color" data-id="C4"></div>
-        <div class="tape-color" data-id="C5"></div>
-      </div>
-
-      <img src="tapes120x70.png" alt="Cassette" class="tapes">
+    <div class="shelf-colors" id="shelfColors">
+      <div class="tape-color" data-id="A1"></div>
+      <div class="tape-color" data-id="A2"></div>
+      <div class="tape-color" data-id="A3"></div>
+      <div class="tape-color" data-id="A4"></div>
+      <div class="tape-color" data-id="A5"></div>
+      <div class="tape-color" data-id="B1"></div>
+      <div class="tape-color" data-id="B2"></div>
+      <div class="tape-color" data-id="B3"></div>
+      <div class="tape-color" data-id="B4"></div>
+      <div class="tape-color" data-id="B5"></div>
+      <div class="tape-color" data-id="C1"></div>
+      <div class="tape-color" data-id="C2"></div>
+      <div class="tape-color" data-id="C3"></div>
+      <div class="tape-color" data-id="C4"></div>
+      <div class="tape-color" data-id="C5"></div>
     </div>
+
+    <img src="tapes120x70.png" alt="Cassette" class="tapes">
   </div>
 
   <div class="controls">
