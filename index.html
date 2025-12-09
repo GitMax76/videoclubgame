@@ -22,7 +22,7 @@
     flex-wrap:wrap;
   }
 
-  /* Carta fisica 120x70 mm */
+  /* Contenitore carta: solo per dare il bordo fisico 120x70 in stampa */
   .card {
     position:relative;
     width:120mm;
@@ -33,15 +33,21 @@
     box-shadow:0 0 8px rgba(0,0,0,.6);
   }
 
-  /* Tre PNG tutti esattamente 120x70 mm */
+  /* Contenitore interno che usa la dimensione NATIVA delle immagini */
+  .card-inner {
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%); /* centra il blocco immagini nella carta */
+  }
+
+  /* PNG non ridimensionati: niente width/height forzati */
   .bg,
   .shelf,
   .tapes {
     position:absolute;
     left:0;
     top:0;
-    width:120mm;
-    height:70mm;
     pointer-events:none;
   }
 
@@ -49,26 +55,28 @@
   .shelf { z-index:2; }
   .tapes { z-index:4; }
 
-  /* Griglia colori sotto le cassette, in mm misurati */
+  /* Griglia colori nella stessa "unità" (px) delle immagini */
   .shelf-colors {
     position:absolute;
     z-index:3;
 
-    left:28.638mm;      /* offset da sinistra alla prima cassetta */
-    top:18mm;           /* regola di poco se serve rifinire in verticale */
-
-    width:61.969mm;     /* area totale 5x3 cassette */
-    height:36.749mm;
+    /* QUI devi rimettere le misure ma in pixel,
+       esattamente quelle che hai in Illustrator per la zona cassette
+       (non in mm). Esempio fittizio: */
+    left: 352px;   /* X della prima cassetta nella PNG */
+    top:  230px;   /* Y della prima cassetta */
+    width: 760px;  /* larghezza totale zona cassette */
+    height:420px;  /* altezza totale zona cassette */
 
     display:grid;
     grid-template-columns:repeat(5, 1fr);
     grid-template-rows:repeat(3, 1fr);
-    column-gap:5.314mm;
-    row-gap:3.017mm;
+    column-gap:??px;   /* spazio orizzontale tra cassette in px */
+    row-gap:??px;      /* spazio verticale tra righe in px */
   }
 
   .tape-color {
-    background:#ffffff; /* verrà cambiato via JS */
+    background:#ffffff;
     cursor:pointer;
   }
 
@@ -103,7 +111,7 @@
   }
   button#printBtn:hover { background:#ffea7a; }
 
-  /* Stampa: usa dimensioni reali */
+  /* Stampa */
   @media print {
     body {
       margin:0;
@@ -128,47 +136,41 @@
 <body>
 <div class="app">
   <div class="card">
-    <!-- livello 1: sfondo completo -->
-    <img src="sfondo120x70.png" alt="Sfondo" class="bg">
-    <!-- livello 2: scaffale -->
-    <img src="shelf120x70.png" alt="Scaffale" class="shelf">
+    <div class="card-inner">
+      <img src="sfondo120x70.png" alt="Sfondo" class="bg">
+      <img src="shelf120x70.png"  alt="Scaffale" class="shelf">
 
-    <!-- livello 3: colori delle 15 cassette -->
-    <div class="shelf-colors" id="shelfColors">
-      <!-- riga A -->
-      <div class="tape-color" data-id="A1"></div>
-      <div class="tape-color" data-id="A2"></div>
-      <div class="tape-color" data-id="A3"></div>
-      <div class="tape-color" data-id="A4"></div>
-      <div class="tape-color" data-id="A5"></div>
-      <!-- riga B -->
-      <div class="tape-color" data-id="B1"></div>
-      <div class="tape-color" data-id="B2"></div>
-      <div class="tape-color" data-id="B3"></div>
-      <div class="tape-color" data-id="B4"></div>
-      <div class="tape-color" data-id="B5"></div>
-      <!-- riga C -->
-      <div class="tape-color" data-id="C1"></div>
-      <div class="tape-color" data-id="C2"></div>
-      <div class="tape-color" data-id="C3"></div>
-      <div class="tape-color" data-id="C4"></div>
-      <div class="tape-color" data-id="C5"></div>
+      <div class="shelf-colors" id="shelfColors">
+        <div class="tape-color" data-id="A1"></div>
+        <div class="tape-color" data-id="A2"></div>
+        <div class="tape-color" data-id="A3"></div>
+        <div class="tape-color" data-id="A4"></div>
+        <div class="tape-color" data-id="A5"></div>
+        <div class="tape-color" data-id="B1"></div>
+        <div class="tape-color" data-id="B2"></div>
+        <div class="tape-color" data-id="B3"></div>
+        <div class="tape-color" data-id="B4"></div>
+        <div class="tape-color" data-id="B5"></div>
+        <div class="tape-color" data-id="C1"></div>
+        <div class="tape-color" data-id="C2"></div>
+        <div class="tape-color" data-id="C3"></div>
+        <div class="tape-color" data-id="C4"></div>
+        <div class="tape-color" data-id="C5"></div>
+      </div>
+
+      <img src="tapes120x70.png" alt="Cassette" class="tapes">
     </div>
-
-    <!-- livello 4: overlay con tutte le cassette “bucate” -->
-    <img src="tapes120x70.png" alt="Cassette" class="tapes">
   </div>
 
   <div class="controls">
     <h2>Colori cassette</h2>
-    <p>Clicca sulle cassette o usa le tendine. Colori: nero, blu, giallo, rosso, arancio, rosa, viola, verde.</p>
+    <p>Clicca sulle cassette o usa le tendine.</p>
     <div class="tape-controls" id="tapeControls"></div>
     <button id="printBtn">Stampa carta</button>
   </div>
 </div>
 
 <script>
-  // palette fissa
   const palette = [
     { name:'Nero',   value:'#000000' },
     { name:'Blu',    value:'#0047AB' },
@@ -184,12 +186,11 @@
   const controlsContainer = document.getElementById('tapeControls');
 
   tapeColors.forEach((tape) => {
-    let colorIndex = 2; // giallo iniziale
+    let colorIndex = 2;
     tape.dataset.colorIndex = colorIndex;
     tape.style.backgroundColor = palette[colorIndex].value;
 
     const id = tape.dataset.id;
-
     const label = document.createElement('label');
     label.textContent = id;
 
@@ -204,7 +205,6 @@
       select.appendChild(opt);
     });
 
-    // cambio da tendina
     select.addEventListener('change', (e) => {
       const selectedId = e.target.dataset.id;
       const idx = parseInt(e.target.value, 10);
@@ -213,7 +213,6 @@
       t.style.backgroundColor = palette[idx].value;
     });
 
-    // click sulla cassetta → cicla i colori
     tape.addEventListener('click', () => {
       let idx = parseInt(tape.dataset.colorIndex, 10);
       idx = (idx + 1) % palette.length;
