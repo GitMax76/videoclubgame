@@ -33,6 +33,14 @@
     box-shadow:0 0 8px rgba(0,0,0,.6);
   }
 
+ /* scala tutto ciò che c'è dentro la carta */
+.card-inner {
+  position:absolute;
+  inset:0;
+  transform-origin: center center;
+  transform: scale(0.7);   /* 70%: riduci/aumenta questo valore */
+}
+
   /* livello 1: sfondo completo */
   .bg,
   .shelf,
