@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<title>VHS Card - Editor di Precisione</title>
+<style>
+  /* --- RESET E BASE --- */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem;
+    background: #1a1a1a;
+    color: #fff;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    text-align: center;
+    user-select: none; /* Evita selezioni di testo accidentali mentre clicchi */
+  }
+
+  .app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  /* --- CARTA --- */
+  .card {
+    position: relative;
+    width: 60vw;  
+    aspect-ratio: 120 / 70;
+    background: #fff;
+    border-radius: 1vw;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    margin: 0 auto;
+  }
+
+  /* --- LIVELLI --- */
+  .bg, .shelf, .tapes-img {
+    position: absolute;
+    pointer-events: none;
+    display: block;
+  }
+
+  .bg {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+  }
+
+  .shelf {
+    z-index: 2;
+    width: 70%;
+    height: auto;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* --- GRUPPO CASSETTE --- */
+  .tape-group {
+    position: absolute;
+    z-index: 4;
+    width: 68%; 
+    aspect-ratio: 405 / 215; 
+    top: 62%;
+    left: 57%;
+    transform: translate(-50%, -50%);
+    /* Bordo temporaneo per vedere l'area del gruppo (rimuovi se vuoi) */
+    /* border: 1px dashed rgba(255,255,255,0.3); */
+  }
+
+  .tapes-img {
+    position: relative; 
+    width: 80%;
+    height: 90%;
+    z-index: 5; 
+  }
+
+  /* --- CONTAINER COLORI (Ora Relative, non più Grid) --- */
+  .shelf-colors {
+    position: absolute;
+    z-index: 3;
+    top: 0;       
+    left: 0;
+    width: 100%;   
+    height: 100%;
+    /* Rimosso display: grid per permettere movimento libero */
+  }
+
+  /* --- SINGOLA CASELLA COLORE --- */
+  .tape-color {
+    position: absolute; /* Fondamentale per muoverle singolarmente */
+    background: #FFD800;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: box-shadow 0.1s;
+  }
+
+  /* Effetto quando una casella è SELEZIONATA */
+  .tape-color.selected {
+    box-shadow: 0 0 0 2px #fff, 0 0 10px #ff0000; /* Bordo evidente */
+    z-index: 10; /* Porta in primo piano */
+  }
+
+  /* --- CONTROLLI --- */
+  .controls {
+    background: #2a2a2a;
+    padding: 1rem;
+    border-radius: 12px;
+    width: 60vw;
+    border: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .info-panel {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 0.5rem;
+  }
+  .selected-info {
+    color: #ffd400;
+    font-weight: bold;
+  }
+
+  /* Griglia pulsanti editor */
+  .editor-tools {
+    display: none; /* Nascosto se nulla è selezionato */
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #444;
+  }
+  
+  .editor-tools.active {
+    display: grid;
+  }
+
+  .tool-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .pad {
+    display: grid;
+    grid-template-columns: 30px 30px 30px;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pad button, .size-btn {
+    background: #444;
+    color: #fff;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .pad button:hover, .size-btn:hover { background: #666; }
+  .pad button:active { background: #ffd400; color: #000; }
+
+  button#printBtn {
+    margin-top: 0.5rem;
+    padding: 12px;
+    background: #ffd400;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  /* --- STAMPA --- */
+  @media print {
+    body {
+      margin: 0; padding: 0; background: none;
+      display: flex; justify-content: center; align-items: center; height: 100vh;
+    }
+    .controls { display: none; }
+    .card {
+      width: 120mm !important;
+      height: 70mm !important;
+      box-shadow: none;
+      border: none;
+      border-radius: 0 !important;
+    }
+    .tape-color.selected { box-shadow: none; } /* Nasconde la selezione in stampa */
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  
+  <div class="card">
+    <img src="https://i.postimg.cc/50BPLjqN/sfondo120x70.png" class="bg" alt="">
+    <img src="https://i.postimg.cc/DZrCLmQ9/shelf120x70.png" class="shelf" alt="">
+
+    <div class="tape-group">
+      <div class="shelf-colors" id="shelfColors">
+        <div class="tape-color" data-id="A1"></div><div class="tape-color" data-id="A2"></div><div class="tape-color" data-id="A3"></div><div class="tape-color" data-id="A4"></div><div class="tape-color" data-id="A5"></div>
+        <div class="tape-color" data-id="B1"></div><div class="tape-color" data-id="B2"></div><div class="tape-color" data-id="B3"></div><div class="tape-color" data-id="B4"></div><div class="tape-color" data-id="B5"></div>
+        <div class="tape-color" data-id="C1"></div><div class="tape-color" data-id="C2"></div><div class="tape-color" data-id="C3"></div><div class="tape-color" data-id="C4"></div><div class="tape-color" data-id="C5"></div>
+      </div>
+      <img src="https://i.postimg.cc/tT3rW7dv/tapes120x70.png" class="tapes-img" alt="">
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="info-panel">
+      Seleziona una cassetta per modificarla.<br>
+      <span id="statusText" class="selected-info">Nessuna selezione</span>
+    </div>
+
+    <div class="editor-tools" id="editorTools">
+      
+      <div class="tool-group">
+        <small>Posizione</small>
+        <div class="pad">
+          <div></div><button onclick="adjust('y', -0.2)">▲</button><div></div>
+          <button onclick="adjust('x', -0.2)">◄</button><div></div><button onclick="adjust('x', 0.2)">►</button>
+          <div></div><button onclick="adjust('y', 0.2)">▼</button><div></div>
+        </div>
+      </div>
+
+      <div class="tool-group">
+        <small>Dimensione</small>
+        <div style="display:flex; gap:5px; margin-bottom:5px;">
+          <button class="size-btn" onclick="adjust('w', -0.2)">Stretta</button>
+          <button class="size-btn" onclick="adjust('w', 0.2)">Larga</button>
+        </div>
+        <div style="display:flex; gap:5px;">
+          <button class="size-btn" onclick="adjust('h', -0.2)">Bassa</button>
+          <button class="size-btn" onclick="adjust('h', 0.2)">Alta</button>
+        </div>
+      </div>
+
+    </div>
+
+    <button id="printBtn">Stampa</button>
+  </div>
+
+</div>
+
+<script>
+  // --- CONFIGURAZIONE COLORI ---
+  const palette = [
+    { name:'Nero',   value:'#000000' },
+    { name:'Blu',    value:'#0047AB' },
+    { name:'Giallo', value:'#FFD800' },
+    { name:'Rosso',  value:'#E52020' },
+    { name:'Arancio',value:'#FF8C00' },
+    { name:'Rosa',   value:'#FF66CC' },
+    { name:'Viola',  value:'#8A2BE2' },
+    { name:'Verde',  value:'#1E9E47' }
+  ];
+
+  // --- INIT VARIABILI ---
+  let selectedTape = null;
+  const tapes = document.querySelectorAll('.tape-color');
+  const statusText = document.getElementById('statusText');
+  const editorTools = document.getElementById('editorTools');
+
+  // --- 1. POSIZIONAMENTO INIZIALE (Simuliamo la griglia via JS) ---
+  // Questo serve a dare una posizione iniziale a tutti i div assoluti
+  // così non devi scriverli uno a uno nel CSS.
+  function initPositions() {
+    // Parametri iniziali (modifica questi se vuoi cambiare il layout di partenza)
+    const startX = 0.8; // % left
+    const startY = 3.2; // % top
+    const gapX = 13.8;  // % distanza orizzontale
+    const gapY = 28;    // % distanza verticale
+    const w = 12.8;     // % larghezza casella
+    const h = 26;       // % altezza casella
+
+    tapes.forEach((tape, i) => {
+      // Calcola riga e colonna (0-4 col, 0-2 row)
+      const row = Math.floor(i / 5);
+      const col = i % 5;
+
+      tape.style.left = (startX + (col * gapX)) + '%';
+      tape.style.top = (startY + (row * gapY)) + '%';
+      tape.style.width = w + '%';
+      tape.style.height = h + '%';
+      
+      // Imposta colore default (Giallo)
+      tape.dataset.colorIndex = 2;
+      tape.style.backgroundColor = palette[2].value;
+      
+      // Listener Click
+      tape.addEventListener('click', (e) => handleTapeClick(e, tape));
+    });
+  }
+
+  // --- 2. LOGICA CLICK ---
+  function handleTapeClick(e, tape) {
+    e.stopPropagation(); // Evita di cliccare lo sfondo
+
+    if (selectedTape === tape) {
+      // 2° Click sulla stessa: CAMBIA COLORE
+      let idx = parseInt(tape.dataset.colorIndex, 10);
+      idx = (idx + 1) % palette.length;
+      tape.dataset.colorIndex = idx;
+      tape.style.backgroundColor = palette[idx].value;
+      updateStatus(`Cassetta ${tape.dataset.id}: Colore ${palette[idx].name}`);
+    } else {
+      // 1° Click su nuova: SELEZIONA
+      selectTape(tape);
+    }
+  }
+
+  function selectTape(tape) {
+    // Rimuovi selezione precedente
+    if (selectedTape) selectedTape.classList.remove('selected');
+    
+    selectedTape = tape;
+    selectedTape.classList.add('selected');
+    
+    editorTools.classList.add('active');
+    updateStatus(`Cassetta ${tape.dataset.id} selezionata. Usa le frecce.`);
+  }
+
+  // Deseleziona se clicchi fuori
+  document.body.addEventListener('click', (e) => {
+    if(!e.target.closest('.tape-color') && !e.target.closest('.controls')) {
+      if (selectedTape) selectedTape.classList.remove('selected');
+      selectedTape = null;
+      editorTools.classList.remove('active');
+      updateStatus("Nessuna selezione");
+    }
+  });
+
+  // --- 3. FUNZIONE DI SPOSTAMENTO E RIDIMENSIONAMENTO ---
+  // type: 'x', 'y', 'w' (width), 'h' (height)
+  // amount: quanto cambiare in % (es. 0.2 o -0.2)
+  window.adjust = function(type, amount) {
+    if (!selectedTape) return;
+
+    let currentVal;
+    
+    switch(type) {
+      case 'x':
+        currentVal = parseFloat(selectedTape.style.left) || 0;
+        selectedTape.style.left = (currentVal + amount) + '%';
+        break;
+      case 'y':
+        currentVal = parseFloat(selectedTape.style.top) || 0;
+        selectedTape.style.top = (currentVal + amount) + '%';
+        break;
+      case 'w':
+        currentVal = parseFloat(selectedTape.style.width) || 0;
+        selectedTape.style.width = (currentVal + amount) + '%';
+        break;
+      case 'h':
+        currentVal = parseFloat(selectedTape.style.height) || 0;
+        selectedTape.style.height = (currentVal + amount) + '%';
+        break;
+    }
+  }
+
+  function updateStatus(msg) {
+    statusText.textContent = msg;
+  }
+
+  // Avvia posizioni
+  initPositions();
+
+  // Stampa
+  document.getElementById('printBtn').addEventListener('click', () => {
+    window.print();
+  });
+</script>
+</body>
+</html>
