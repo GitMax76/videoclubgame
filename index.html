@@ -2,177 +2,216 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<title>Carte VHS 120x70 - Fix Totale</title>
+<title>VHS Card - Layout Separato</title>
 <style>
-  /* Reset di base */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
+  /* --- RESET E BASE --- */
+  * { box-sizing: border-box; }
   body {
-    background: #222;
+    margin: 0;
+    padding: 2rem;
+    background: #1a1a1a;
     color: #fff;
     font-family: sans-serif;
+    text-align: center;
+  }
+
+  .app {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 2rem;
-    min-height: 100vh;
+    gap: 2rem;
   }
 
-  /* --- CARTA: Il Contenitore Sacro --- */
+  /* --- 1. LA CARTA (Il contenitore principale) --- */
   .card {
     position: relative;
-    /* Dimensioni fisse e inviolabili */
-    width: 120mm;
-    height: 70mm;
-    background: #fff;
-    /* Fondamentale: nasconde tutto ciò che sborda */
-    overflow: hidden; 
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
     
-    /* Centrata nello schermo */
-    margin-bottom: 2rem;
+    /* SCHERMO: Usiamo vw così scala con la finestra */
+    width: 60vw;  
+    /* Manteniamo il rapporto aspetto 120x70 (120/70 = 1.714) */
+    aspect-ratio: 120 / 70;
+    
+    background: #fff;
+    border-radius: 1vw; /* Arrotondamento scalabile */
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    margin: 0 auto;
   }
 
-  /* --- IMMAGINI: Costrette a riempire la carta --- */
-  .bg, .shelf, .tapes {
+  /* --- 2. LIVELLI IMMAGINI (Classi Separate) --- */
+  
+  /* Immagini comuni: posizionamento assoluto */
+  .bg, .shelf, .tapes-img {
     position: absolute;
-    top: 0;
-    left: 0;
-    /* Devono essere larghe quanto la carta, non quanto i loro pixel */
-    width: 100% !important;
-    height: 100% !important;
-    /* Le forza a riempire tutto lo spazio disponibile */
-    object-fit: fill; 
     pointer-events: none;
     display: block;
   }
-  
-  .bg    { z-index: 1; }
-  .shelf { z-index: 2; }
-  .tapes { z-index: 4; } /* L'overlay coi buchi */
 
+  /* SFONDO: Copre tutto */
+  .bg {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+  }
 
-  /* --- GRIGLIA COLORI: Centrata Matematicamente --- */
-  .shelf-colors {
-    position: absolute;
-    z-index: 3;
+  /* SCAFFALE: Centrato e largo quasi quanto la carta */
+  .shelf {
+    z-index: 2;
+    width: 100%; /* O regola in % se lo vuoi più piccolo, es: 95% */
+    height: auto;
     
-    /* Dimensioni della griglia (le tue misure originali) */
-    width: 71mm;
-    height: 42.5mm;
-
-    /* TECNICA DI CENTRATURA PERFETTA */
-    /* Mettiamo l'angolo in alto a sinistra al centro della carta (50%, 50%) */
+    /* Centratura perfetta */
     top: 50%;
     left: 50%;
-    /* Spostiamo indietro il blocco del 50% della sua grandezza */
     transform: translate(-50%, -50%);
-    
-    /* NOTA BENE: Se la finestra delle cassette non è esattamente al centro,
-       modifica i valori "margin" qui sotto per spostare il blocco.
-       Esempio: margin-top: -5mm (sposta su), margin-left: 2mm (sposta a destra)
-    */
-    margin-top: 0mm; 
-    margin-left: 0mm;
+  }
 
-    /* La griglia */
+  /* --- 3. GRUPPO CASSETTE (Colori + Overlay) --- */
+  /* Questo contenitore tiene insieme i colori e l'immagine frontale 
+     Così non si "scollano" mai. */
+  .tape-group {
+    position: absolute;
+    z-index: 4;
+    
+    /* QUI regoli la grandezza delle cassette rispetto alla carta! */
+    width: 80%; /* Occupa l'80% della larghezza della carta */
+    /* Se l'immagine tapes è 688x218, manterrà quella proporzione automaticamente */
+    aspect-ratio: 688 / 218; 
+    
+    /* Centrato nella carta */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* L'immagine PNG delle cassette ("tapes") */
+  .tapes-img {
+    position: relative; /* Relativo al gruppo */
+    width: 100%;
+    height: 100%;
+    z-index: 5; /* Sopra i colori */
+  }
+
+  /* La griglia dei colori (Dietro l'immagine tapes) */
+  .shelf-colors {
+    position: absolute;
+    z-index: 3; /* Sotto l'overlay */
+    
+    /* Coordinate relative AL GRUPPO .tape-group, non alla carta! 
+       Molto più facile da centrare. Regola questi % per centrare i colori nei buchi */
+    top: 2%;      
+    left: 1.5%;
+    width: 97%;   
+    height: 96%;
+
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    column-gap: 5.3mm;
-    row-gap: 3mm;
+    
+    /* Gap in % relativi al gruppo */
+    column-gap: 2%; 
+    row-gap: 2%;
   }
 
   .tape-color {
-    background: #FFD800; /* Giallo default */
+    background: #FFD800;
     cursor: pointer;
-    /* Per debug: se togli il commento vedi i bordi delle caselle */
-    /* outline: 1px solid red; */
+    border-radius: 2px;
   }
 
   /* --- CONTROLLI --- */
   .controls {
     background: #333;
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 8px;
-    width: 120mm; /* Stessa larghezza carta */
+    width: 60vw;
   }
-
   .tape-controls {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 1rem;
-  }
-
-  .ctrl-item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
   }
-
   button#printBtn {
-    width: 100%;
-    padding: 10px;
+    margin-top: 1rem;
+    padding: 10px 20px;
     background: #ffd400;
     border: none;
     font-weight: bold;
     cursor: pointer;
   }
 
-  /* --- STAMPA --- */
+  /* --- STAMPA (Override per dimensioni reali mm) --- */
   @media print {
     body {
-      background: white;
+      margin: 0;
+      padding: 0;
+      background: none;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 0;
-      margin: 0;
+      height: 100vh;
     }
     .controls { display: none; }
+    
     .card {
+      /* Qui forziamo le dimensioni fisiche reali */
+      width: 120mm !important;
+      height: 70mm !important;
       box-shadow: none;
-      margin: 0;
-      page-break-inside: avoid;
-      /* Assicura che le dimensioni siano rispettate al mm */
-      print-color-adjust: exact; 
-      -webkit-print-color-adjust: exact;
+      border: 1px solid #ccc;
+    }
+    
+    /* Rimuoviamo i bordi arrotondati in stampa per taglio netto */
+    .card, .card * {
+      border-radius: 0 !important;
     }
   }
 </style>
 </head>
 <body>
 
-<div class="card">
-  <img src="sfondo120x70.png" class="bg">
-  <img src="shelf120x70.png" class="shelf">
+<div class="app">
+  
+  <div class="card">
+    <img src="sfondo120x70.png" class="bg" alt="Sfondo">
+    
+    <img src="shelf120x70.png" class="shelf" alt="Scaffale">
 
-  <div class="shelf-colors" id="shelfColors">
-    <div class="tape-color" data-id="A1"></div>
-    <div class="tape-color" data-id="A2"></div>
-    <div class="tape-color" data-id="A3"></div>
-    <div class="tape-color" data-id="A4"></div>
-    <div class="tape-color" data-id="A5"></div>
-    <div class="tape-color" data-id="B1"></div>
-    <div class="tape-color" data-id="B2"></div>
-    <div class="tape-color" data-id="B3"></div>
-    <div class="tape-color" data-id="B4"></div>
-    <div class="tape-color" data-id="B5"></div>
-    <div class="tape-color" data-id="C1"></div>
-    <div class="tape-color" data-id="C2"></div>
-    <div class="tape-color" data-id="C3"></div>
-    <div class="tape-color" data-id="C4"></div>
-    <div class="tape-color" data-id="C5"></div>
+    <div class="tape-group">
+      
+      <div class="shelf-colors" id="shelfColors">
+        <div class="tape-color" data-id="A1"></div>
+        <div class="tape-color" data-id="A2"></div>
+        <div class="tape-color" data-id="A3"></div>
+        <div class="tape-color" data-id="A4"></div>
+        <div class="tape-color" data-id="A5"></div>
+        <div class="tape-color" data-id="B1"></div>
+        <div class="tape-color" data-id="B2"></div>
+        <div class="tape-color" data-id="B3"></div>
+        <div class="tape-color" data-id="B4"></div>
+        <div class="tape-color" data-id="B5"></div>
+        <div class="tape-color" data-id="C1"></div>
+        <div class="tape-color" data-id="C2"></div>
+        <div class="tape-color" data-id="C3"></div>
+        <div class="tape-color" data-id="C4"></div>
+        <div class="tape-color" data-id="C5"></div>
+      </div>
+
+      <img src="tapes120x70.png" class="tapes-img" alt="Cassette">
+    </div>
+
   </div>
 
-  <img src="tapes120x70.png" class="tapes">
-</div>
+  <div class="controls">
+    <h3>Configurazione</h3>
+    <div class="tape-controls" id="tapeControls"></div>
+    <button id="printBtn">Stampa</button>
+  </div>
 
-<div class="controls">
-  <div class="tape-controls" id="tapeControls"></div>
-  <button id="printBtn">STAMPA</button>
 </div>
 
 <script>
@@ -188,55 +227,24 @@
   ];
 
   const tapeColors = document.querySelectorAll('.tape-color');
-  const controlsContainer = document.getElementById('tapeControls');
-
+  
+  // Generiamo i controlli (solo click per semplicità, o tendina se preferisci)
   tapeColors.forEach((tape) => {
-    let colorIndex = 2; 
+    let colorIndex = 2; // Giallo
     tape.dataset.colorIndex = colorIndex;
     tape.style.backgroundColor = palette[colorIndex].value;
 
-    const id = tape.dataset.id;
-    
-    // UI Creation
-    const div = document.createElement('div');
-    div.className = 'ctrl-item';
-    
-    const label = document.createElement('span');
-    label.innerText = id;
-    
-    const select = document.createElement('select');
-    select.dataset.id = id;
-
-    palette.forEach((c, idx) => {
-      const opt = document.createElement('option');
-      opt.value = idx;
-      opt.textContent = c.name;
-      if(idx === colorIndex) opt.selected = true;
-      select.appendChild(opt);
-    });
-
-    select.addEventListener('change', (e) => {
-      const val = parseInt(e.target.value);
-      const t = document.querySelector(`.tape-color[data-id="${id}"]`);
-      t.dataset.colorIndex = val;
-      t.style.backgroundColor = palette[val].value;
-    });
-
     tape.addEventListener('click', () => {
-      let idx = parseInt(tape.dataset.colorIndex);
+      let idx = parseInt(tape.dataset.colorIndex, 10);
       idx = (idx + 1) % palette.length;
       tape.dataset.colorIndex = idx;
       tape.style.backgroundColor = palette[idx].value;
-      select.value = idx;
     });
-
-    div.appendChild(label);
-    div.appendChild(select);
-    controlsContainer.appendChild(div);
   });
 
-  document.getElementById('printBtn').addEventListener('click', () => window.print());
+  document.getElementById('printBtn').addEventListener('click', () => {
+    window.print();
+  });
 </script>
-
 </body>
 </html>
