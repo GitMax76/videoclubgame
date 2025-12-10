@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
@@ -60,11 +59,11 @@
   /* SCAFFALE: Centrato e largo quasi quanto la carta */
   .shelf {
     z-index: 2;
-    width: 100%; /* O regola in % se lo vuoi più piccolo, es: 95% */
+    width: 70%; /* O regola in % se lo vuoi più piccolo, es: 95% */
     height: auto;
     
     /* Centratura perfetta */
-    top: 50%;
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
@@ -77,21 +76,21 @@
     z-index: 4;
     
     /* QUI regoli la grandezza delle cassette rispetto alla carta! */
-    width: 80%; /* Occupa l'80% della larghezza della carta */
+    width: 68%; /* Occupa l'80% della larghezza della carta */
     /* Se l'immagine tapes è 688x218, manterrà quella proporzione automaticamente */
-    aspect-ratio: 688 / 218; 
+    aspect-ratio: 405 / 215; 
     
     /* Centrato nella carta */
-    top: 50%;
-    left: 50%;
+    top: 62%;
+    left: 57%;
     transform: translate(-50%, -50%);
   }
 
   /* L'immagine PNG delle cassette ("tapes") */
   .tapes-img {
     position: relative; /* Relativo al gruppo */
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 90%;
     z-index: 5; /* Sopra i colori */
   }
 
@@ -102,18 +101,18 @@
     
     /* Coordinate relative AL GRUPPO .tape-group, non alla carta! 
        Molto più facile da centrare. Regola questi % per centrare i colori nei buchi */
-    top: 2%;      
-    left: 1.5%;
-    width: 97%;   
-    height: 96%;
+    top: 3.2%;      
+    left: 0.8%;
+    width: 70%;   
+    height: 80%;
 
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(3, 1fr);
     
     /* Gap in % relativi al gruppo */
-    column-gap: 2%; 
-    row-gap: 2%;
+    column-gap: 9%; 
+    row-gap: 9%;
   }
 
   .tape-color {
@@ -177,9 +176,9 @@
 <div class="app">
   
   <div class="card">
-    <img src="sfondo120x70.png" class="bg" alt="Sfondo">
+    <img src="https://i.postimg.cc/50BPLjqN/sfondo120x70.png" class="bg" alt="Sfondo">
     
-    <img src="shelf120x70.png" class="shelf" alt="Scaffale">
+    <img src="https://i.postimg.cc/DZrCLmQ9/shelf120x70.png" class="shelf" alt="Scaffale">
 
     <div class="tape-group">
       
@@ -201,7 +200,7 @@
         <div class="tape-color" data-id="C5"></div>
       </div>
 
-      <img src="tapes120x70.png" class="tapes-img" alt="Cassette">
+      <img src="https://i.postimg.cc/tT3rW7dv/tapes120x70.png" class="tapes-img" alt="Cassette">
     </div>
 
   </div>
