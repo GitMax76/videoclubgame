@@ -1,0 +1,660 @@
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<title>VHS Card - Editor Definitivo (Hardcoded)</title>
+<style>
+  /* --- STILI ORIGINALI --- */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem; background: #1a1a1a; color: #fff;
+    font-family: 'Segoe UI', system-ui, sans-serif; text-align: center;
+    user-select: none; -webkit-user-select: none;
+  }
+  .app { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+
+  /* --- CARTA --- */
+  .card {
+    position: relative;
+    width: 60vw;  
+    aspect-ratio: 120 / 70;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    margin: 0 auto;
+  }
+
+  /* --- CORNICE BIANCA DI SICUREZZA --- */
+  .card::after, .print-card-clone::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 999;
+    pointer-events: none;
+    border: 3mm solid #ffffff; 
+    border-radius: 4mm; 
+    box-sizing: border-box;
+  }
+
+  /* --- LIVELLI --- */
+  .bg, .shelf {
+    position: absolute;
+    pointer-events: none;
+    display: block;
+  }
+
+  .bg { z-index: 1; width: 100%; height: 100%; top: 0; left: 0; object-fit: cover; }
+  
+  .shelf { 
+    z-index: 2; width: 70%; height: auto; top: 60%; left: 50%; 
+    transform: translate(-50%, -50%); 
+  }
+
+  .tape-group {
+    position: absolute; z-index: 4; width: 68%; aspect-ratio: 405 / 215; 
+    top: 62%; left: 57%; transform: translate(-50%, -50%);
+  }
+
+  .tape-row {
+    position: absolute;
+    z-index: 5;
+    width: 83%; 
+    height: auto;
+    left: -1%; 
+    pointer-events: none; 
+  }
+  
+  .char-img {
+    position: absolute;
+    z-index: 6; 
+    width: 25%;
+    height: auto;
+    cursor: grab;
+    min-height: 50px; 
+    min-width: 50px;
+  }
+  .char-img:active { cursor: grabbing; }
+
+  .char-img[src=""], .char-img:not([src]) {
+      border: 2px dashed red;
+      background: rgba(255,0,0,0.2);
+  }
+
+  .shelf-colors { position: absolute; z-index: 3; top: 0; left: 0; width: 100%; height: 100%; }
+
+  .tape-color { position: absolute; background: #FFD800; cursor: grab; border-radius: 2px; }
+  .tape-color:active { cursor: grabbing; }
+
+  /* --- CONTROLLI --- */
+  .controls {
+    background: #2a2a2a; padding: 1rem; border-radius: 12px; width: 60vw;
+    border: 1px solid #444; display: flex; flex-direction: column; gap: 1rem;
+  }
+  .info-panel { font-size: 0.9rem; color: #aaa; margin-bottom: 0.5rem; }
+  .selected-info { color: #ffd400; font-weight: bold; }
+
+  .layer-select-btns { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; padding-bottom: 1rem; border-bottom: 1px solid #444; }
+  .layer-btn { background: #444; color: #ccc; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+  .layer-btn:hover { background: #555; }
+  .layer-btn.active { background: #ffd400; color: #000; font-weight: bold; }
+  .selected { outline: 2px dashed #ffd400; }
+
+  .editor-tools { display: none; grid-template-columns: repeat(6, 1fr); gap: 0.5rem; padding-top: 1rem; }
+  .editor-tools.active { display: grid; }
+
+  .tool-group { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  small { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+
+  .pad { display: grid; grid-template-columns: 25px 25px 25px; gap: 3px; }
+  .pad button, .tool-btn { background: #444; color: #fff; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-weight: bold; min-width: 28px; font-size: 0.8rem; }
+  .pad button:hover, .tool-btn:hover { background: #666; }
+  .pad button:active, .tool-btn:active { background: #ffd400; color: #000; }
+  
+  .color-actions { display: none; justify-content: center; margin-top: 5px;}
+  .btn-change-col { background: linear-gradient(90deg, #f00, #ff0, #00f); border:none; padding: 6px 15px; border-radius: 20px; font-weight:bold; cursor: pointer; color: #fff; text-shadow: 0 1px 2px #000;}
+
+  /* --- LIBRERIA --- */
+  .library-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #555; text-align: left; }
+  .library-input-group { display: flex; gap: 10px; margin-bottom: 10px; }
+  .library-input-group input { flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #555; background: #333; color: #fff; }
+  .btn-save-lib { background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+  
+  .saved-list { max-height: 150px; overflow-y: auto; background: #222; border: 1px solid #444; border-radius: 4px; margin-bottom: 10px; }
+  .saved-item { display: flex; align-items: center; padding: 8px 10px; border-bottom: 1px solid #333; }
+  .saved-item:hover { background: #333; }
+  .item-checkbox { margin-right: 10px; transform: scale(1.2); cursor: pointer; }
+  .saved-name { cursor: pointer; flex: 1; text-align: left; font-size: 0.9rem; }
+  .btn-del-item { background: #d93025; color: white; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 0.8rem; margin-left: 10px;}
+  
+  .io-group { display: flex; gap: 10px; justify-content: space-between; margin-top: 5px; flex-wrap: wrap; }
+  .btn-io { flex: 1; padding: 8px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+  .btn-dev { flex: 1; padding: 8px; background: #e83e8c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: bold; min-width: 150px; }
+  .file-input { position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor: pointer; }
+
+  .btn-print-multi { width: 100%; padding: 12px; background: #6f42c1; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+  .btn-print-multi:hover { background: #5a32a3; }
+
+  .actions { display: flex; gap: 10px; margin-top: 1rem; }
+  button#printBtn { flex: 2; padding: 12px; background: #ffd400; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+  button#resetBtn { flex: 1; padding: 12px; background: #d93025; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+
+  /* Modal Dev */
+  .dev-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center; flex-direction:column; }
+  .dev-modal.active { display:flex; }
+  .dev-modal textarea { width:80%; height:60%; background:#222; color:#0f0; padding:10px; font-family:monospace; border:1px solid #444; font-size: 12px; }
+  .dev-modal-head { color:#fff; margin-bottom:10px; font-size:1.2rem; max-width: 80%; text-align: center; }
+  .dev-modal-close { margin-top:10px; padding:10px 20px; background:#fff; border:none; cursor:pointer; font-weight:bold; }
+
+  #print-grid-area { display: none; }
+
+  @media print {
+    body { margin: 0; padding: 0; background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body:not(.printing-grid) .controls { display: none; }
+    body:not(.printing-grid) .card { 
+      width: 120mm !important; height: 70mm !important; 
+      box-shadow: none; border: none; margin: 0;
+      overflow: hidden;
+    }
+    body.printing-grid .app { display: none !important; }
+    body.printing-grid #print-grid-area {
+      display: grid !important;
+      grid-template-columns: 120mm 120mm;
+      grid-template-rows: 70mm 70mm;
+      column-gap: 5mm; row-gap: 5mm;
+      justify-content: center; align-content: start;
+      width: 100%; height: 100vh;
+      padding-top: 10mm;
+    }
+    .print-card-clone { position: relative; width: 120mm; height: 70mm; overflow: hidden; outline: 1px dashed #bbb; background: white; page-break-inside: avoid; }
+    .print-card-clone .bg { z-index: 1; width: 100%; height: 100%; top: 0; left: 0; object-fit: cover; position: absolute; }
+    .print-card-clone .shelf { z-index: 2; width: 70%; height: auto; top: 60%; left: 50%; transform: translate(-50%, -50%); position: absolute; }
+    .print-card-clone .tape-group { z-index: 4; width: 68%; aspect-ratio: 405/215; top: 62%; left: 57%; transform: translate(-50%, -50%); position: absolute; }
+    .print-card-clone .tape-row { position: absolute; z-index: 5; width: 83%; height: auto; left: -1%; }
+    .print-card-clone .char-img { position: absolute; z-index: 6; width: 25%; height: auto; }
+    .print-card-clone .shelf-colors { z-index: 3; top: 0; left: 0; width: 100%; height: 100%; position: absolute; }
+    .print-card-clone .tape-color { position: absolute; background-color: #FFD800; border-radius: 1px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="card">
+    <img src="sfondo120x70.png" class="bg layer-selectable" id="layer-bg">
+    <img src="shelf120x70.png" class="shelf layer-selectable" id="layer-shelf">
+
+    <div class="tape-group layer-selectable" id="layer-group">
+      <div class="shelf-colors" id="shelfColors">
+        <div class="tape-color" data-id="A1"></div><div class="tape-color" data-id="A2"></div><div class="tape-color" data-id="A3"></div><div class="tape-color" data-id="A4"></div><div class="tape-color" data-id="A5"></div>
+        <div class="tape-color" data-id="B1"></div><div class="tape-color" data-id="B2"></div><div class="tape-color" data-id="B3"></div><div class="tape-color" data-id="B4"></div><div class="tape-color" data-id="B5"></div>
+        <div class="tape-color" data-id="C1"></div><div class="tape-color" data-id="C2"></div><div class="tape-color" data-id="C3"></div><div class="tape-color" data-id="C4"></div><div class="tape-color" data-id="C5"></div>
+      </div>
+      <img src="rowA.png" class="tape-row layer-selectable" id="layer-row-a" style="top: 0%;">
+      <img src="rowB.png" class="tape-row layer-selectable" id="layer-row-b" style="top: 32%;">
+      <img src="rowC.png" class="tape-row layer-selectable" id="layer-row-c" style="top: 64%;">
+    </div>
+
+    <img src="char1.png" class="char-img layer-selectable" id="layer-char-left" style="top: 40%; left: 2%;" data-char-index="0">
+    <img src="char2.png" class="char-img layer-selectable" id="layer-char-right" style="top: 40%; left: 73%;" data-char-index="1">
+  </div>
+
+  <div class="controls">
+    <div class="info-panel"><span id="statusText" class="selected-info">Seleziona un elemento</span></div>
+
+    <div class="layer-select-btns">
+      <button class="layer-btn" onclick="selectLayer('layer-bg')">Sfondo</button>
+      <button class="layer-btn" onclick="selectLayer('layer-shelf')">Scaffale</button>
+      <button class="layer-btn" onclick="selectLayer('layer-group')">Gruppo</button>
+      <button class="layer-btn" onclick="selectLayer('layer-char-left')">Pers. SX</button>
+      <button class="layer-btn" onclick="selectLayer('layer-char-right')">Pers. DX</button>
+    </div>
+
+    <div class="editor-tools" id="editorTools">
+      <div class="tool-group"><small>Pos</small><div class="pad"><div></div><button onclick="adjust('y', -0.5)">▲</button><div></div><button onclick="adjust('x', -0.5)">◄</button><div></div><button onclick="adjust('x', 0.5)">►</button><div></div><button onclick="adjust('y', 0.5)">▼</button><div></div></div></div>
+      <div class="tool-group"><small>Dim</small><div style="display:flex; gap:3px; margin-bottom:3px;"><button class="tool-btn" onclick="adjust('w', -0.5)">W-</button><button class="tool-btn" onclick="adjust('w', 0.5)">W+</button></div><div style="display:flex; gap:3px;"><button class="tool-btn" onclick="adjust('h', -0.5)">H-</button><button class="tool-btn" onclick="adjust('h', 0.5)">H+</button></div></div>
+      <div class="tool-group"><small>Scala</small><div style="display:flex; gap:3px; align-items:center; height:100%;"><button class="tool-btn" onclick="adjust('s', -2)">S-</button><button class="tool-btn" onclick="adjust('s', 2)">S+</button></div></div>
+      <div class="tool-group"><small>Rot</small><div style="display:flex; gap:3px; align-items:center; height:100%;"><button class="tool-btn" onclick="adjust('r', -1)">↺</button><button class="tool-btn" onclick="adjust('r', 1)">↻</button></div></div>
+      <div class="tool-group"><small>Flip</small><button class="tool-btn" onclick="toggleMirror()" style="height:100%; font-size: 1.2rem;">↔</button></div>
+    </div>
+    
+    <div class="color-actions" id="colorAction">
+        <button class="btn-change-col" onclick="cycleColorSelected()">Cambia Colore</button>
+    </div>
+
+    <div class="library-section">
+        <div class="library-input-group">
+            <input type="text" id="configName" placeholder="Nome configurazione...">
+            <button class="btn-save-lib" onclick="saveToLibrary()">Salva in Libreria</button>
+        </div>
+        <div class="saved-list" id="savedList"></div>
+        <button class="btn-print-multi" onclick="printSelectedSheets()">🖨️ Stampa Selezionate</button>
+        <div class="io-group">
+            <button class="btn-io" onclick="downloadJSON()">⬇ Esporta JSON</button>
+            <button class="btn-io import" style="position:relative;">⬆ Importa JSON <input type="file" id="fileInput" class="file-input" accept=".json" onchange="uploadJSON()"></button>
+            
+            <button class="btn-dev" onclick="exportCharMemory()">💾 Genera Codice Memoria</button>
+            <button class="btn-dev" onclick="exportDefaults()">⚙️ Genera Default Base</button>
+        </div>
+    </div>
+
+    <div class="actions">
+      <button id="resetBtn">Reset Totale</button>
+      <button id="printBtn" onclick="printSingle()">Stampa Editor</button>
+    </div>
+  </div>
+</div>
+
+<div id="devModal" class="dev-modal">
+    <div class="dev-modal-head" id="devModalTitle">Titolo</div>
+    <textarea id="devOutput" readonly></textarea>
+    <button class="dev-modal-close" onclick="document.getElementById('devModal').classList.remove('active')">Chiudi</button>
+</div>
+
+<div id="print-grid-area"></div>
+
+<script>
+  const STORAGE_KEY = 'vhs_freedom_v24_hardcoded'; 
+  const LIBRARY_KEY = 'vhs_lib_v9';
+  const palette = [{name:'Nero',value:'#000000'},{name:'Blu',value:'#0047AB'},{name:'Giallo',value:'#FFD800'},{name:'Rosso',value:'#E52020'},{name:'Arancio',value:'#FF8C00'},{name:'Rosa',value:'#FF66CC'},{name:'Viola',value:'#8A2BE2'},{name:'Verde',value:'#1E9E47'},{name:'Bianco',value:'#FFFFFF'}];
+  
+  const charImages = [
+    "char1.png", "char2.png", "char3.png", "char4.png",
+    "char5.png", "hchar6.png", "char7.png", "char8.png",
+    "char10.png", "char11.png", "char12.png", "char13.png",
+    "char14.png", "char16.png", "char15.png", "char17.png",
+    "char18.png", "char19.png", "char20.png", "char21.png",
+    "char22.png", "char23.png"
+  ];
+
+  /* * ====================================================================================
+   * AREA DI CONFIGURAZIONE HARDCODED
+   * Incolla qui sotto il codice generato dal pulsante "Genera Codice Memoria"
+   * ====================================================================================
+   */
+  const HARDCODED_CHAR_MEMORY = {
+    "layer-char-left": {},
+    "layer-char-right": {}
+  };
+  /* ==================================================================================== */
+
+  const fixedPositions = {"A1":{"left":"-0.593522%","top":"2.12335%","width":"9.2%","height":"21%","rotation":2},"A2":{"left":"17.8872%","top":"2.5994%","width":"9.8%","height":"21.4%","rotation":2},"A3":{"left":"37.172%","top":"1.9988%","width":"8.6%","height":"22%","rotation":0},"A4":{"left":"53.7022%","top":"2.22425%","width":"10.1%","height":"21.4%","rotation":-1},"A5":{"left":"70.6346%","top":"2.14851%","width":"10.2%","height":"21.2%","rotation":-1},"B1":{"left":"-0.897228%","top":"33.377%","width":"9%","height":"23%","rotation":2},"B2":{"left":"18.0069%","top":"34.0533%","width":"9.2%","height":"22.4%","rotation":2},"B3":{"left":"37.1719%","top":"33.6024%","width":"8.8%","height":"22.4%","rotation":0},"B4":{"left":"54.0432%","top":"34.4539%","width":"10%","height":"21.8%","rotation":-1},"B5":{"left":"70.3733%","top":"33.8278%","width":"10.3%","height":"21.4%","rotation":0},"C1":{"left":"-0.596071%","top":"66.032%","width":"9.4%","height":"22.4%","rotation":2},"C2":{"left":"17.7282%","top":"65.8569%","width":"8.6%","height":"23%","rotation":1},"C3":{"left":"37.4904%","top":"66.0329%","width":"8.9%","height":"23.2%","rotation":2},"C4":{"left":"54.0026%","top":"65.5063%","width":"10%","height":"22.4%","rotation":0},"C5":{"left":"70.5547%","top":"64.88%","width":"9.8%","height":"21.8%","rotation":-1}};
+  
+  const defaultLayerStates = {"layer-bg":{"rotation":0,"opacity":1,"transform":"none"},"layer-shelf":{"rotation":0,"opacity":1,"transform":"translate(-50%, -50%)"},"layer-group":{"rotation":0,"opacity":1,"transform":"translate(-50%, -50%)"},"layer-row-a":{"rotation":0,"opacity":1,"transform":"none","top":"0%"},"layer-row-b":{"rotation":0,"opacity":1,"transform":"none","top":"32%"},"layer-row-c":{"rotation":0,"opacity":1,"transform":"none","top":"64%"},"layer-char-left":{"rotation":0,"opacity":1,"transform":"none","top":"27.5791%","left":"7.82684%","width":"13.5%","height":"auto","mirror":-1,"charIndex":0},"layer-char-right":{"rotation":0,"opacity":1,"transform":"none","top":"35.0334%","left":"74.0912%","width":"25%","charIndex":1}};
+  
+  let selectedElement = null;
+  const tapes = document.querySelectorAll('.tape-color');
+  
+  const layers = [
+      document.getElementById('layer-bg'), 
+      document.getElementById('layer-shelf'), 
+      document.getElementById('layer-group'),
+      document.getElementById('layer-row-a'),
+      document.getElementById('layer-row-b'),
+      document.getElementById('layer-row-c'),
+      document.getElementById('layer-char-left'),
+      document.getElementById('layer-char-right')
+  ];
+
+  const statusText = document.getElementById('statusText');
+  const editorTools = document.getElementById('editorTools');
+  const layerBtns = document.querySelectorAll('.layer-btn');
+  const colorAction = document.getElementById('colorAction');
+  
+  let savedLibrary = [];
+  
+  // Questa variabile verrà popolata da HARDCODED_CHAR_MEMORY o dal localStorage
+  let charStates = { "layer-char-left": {}, "layer-char-right": {} };
+
+  function init() {
+    // 1. Carica prima la memoria hardcoded (base solida)
+    charStates = JSON.parse(JSON.stringify(HARDCODED_CHAR_MEMORY));
+
+    // 2. Sovrascrivi con eventuali salvataggi recenti (se l'utente sta lavorando)
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    if (savedData) {
+        applyState(JSON.parse(savedData));
+    } else {
+        applyDefaults();
+    }
+
+    const libData = localStorage.getItem(LIBRARY_KEY);
+    if (libData) savedLibrary = JSON.parse(libData);
+    renderLibrary();
+
+    tapes.forEach(tape => enableDragAndClick(tape));
+    layers.forEach(layer => {
+        if(layer.classList.contains('char-img')) {
+            enableDragAndClick(layer, true); 
+        } else {
+            enableDrag(layer);
+        }
+    });
+  }
+
+  function applyDefaults() {
+    for (const [id, data] of Object.entries(fixedPositions)) {
+      const tape = document.querySelector(`.tape-color[data-id="${id}"]`);
+      if (tape) applyTapeStyle(tape, {...data, opacity:1, colorIndex:2});
+    }
+    for (const [id, data] of Object.entries(defaultLayerStates)) {
+        const el = document.getElementById(id);
+        if(el) applyLayerStyle(el, data);
+    }
+  }
+
+  function applyState(data) {
+    // Se nel salvataggio c'è una memoria stati più recente, uniscila
+    if(data.charStates) {
+        // Facciamo un merge deep per non perdere chiavi hardcoded se non presenti nel localstorage
+        charStates["layer-char-left"] = { ...charStates["layer-char-left"], ...data.charStates["layer-char-left"] };
+        charStates["layer-char-right"] = { ...charStates["layer-char-right"], ...data.charStates["layer-char-right"] };
+    }
+
+    if(data.tapes) {
+        tapes.forEach(tape => {
+            const id = tape.dataset.id;
+            const s = data.tapes[id] || fixedPositions[id];
+            if(s.colorIndex === undefined) s.colorIndex = 2;
+            applyTapeStyle(tape, s);
+        });
+    } else applyDefaults();
+
+    if(data.layers) {
+        layers.forEach(layer => {
+            const s = data.layers[layer.id];
+            if(s) applyLayerStyle(layer, s);
+        });
+    }
+  }
+
+  function updateElementTransform(el) {
+      let rot = parseFloat(el.dataset.rotation) || 0;
+      let mirror = parseFloat(el.dataset.mirror) || 1;
+      let baseTrans = '';
+      if(defaultLayerStates[el.id] && defaultLayerStates[el.id].transform && defaultLayerStates[el.id].transform !== 'none') {
+          baseTrans = defaultLayerStates[el.id].transform; 
+      }
+      el.style.transform = `${baseTrans} rotate(${rot}deg) scaleX(${mirror})`;
+  }
+
+  function applyTapeStyle(el, data) {
+      el.style.left = data.left; el.style.top = data.top;
+      el.style.width = data.width; 
+      if (data.height !== undefined) el.style.height = data.height;
+      else el.style.removeProperty('height');
+      el.style.opacity = data.opacity !== undefined ? data.opacity : 1;
+      el.dataset.rotation = data.rotation || 0;
+      el.dataset.mirror = data.mirror || 1;
+      updateElementTransform(el);
+      if(data.colorIndex !== undefined) {
+          el.dataset.colorIndex = data.colorIndex;
+          el.style.backgroundColor = palette[data.colorIndex].value;
+      }
+  }
+
+  function applyLayerStyle(el, data) {
+      if(data.left) el.style.left = data.left;
+      if(data.top) el.style.top = data.top;
+      if(data.width) el.style.width = data.width;
+      if(data.height) el.style.height = data.height;
+      el.style.opacity = data.opacity !== undefined ? data.opacity : 1;
+      el.dataset.rotation = data.rotation || 0;
+      el.dataset.mirror = data.mirror || 1;
+      updateElementTransform(el);
+      if(el.classList.contains('char-img') && data.charIndex !== undefined) {
+          el.dataset.charIndex = data.charIndex;
+          el.src = charImages[data.charIndex];
+      }
+  }
+
+  function getCurrentStateObject() {
+    const data = { tapes: {}, layers: {}, charStates: charStates };
+    tapes.forEach(tape => data.tapes[tape.dataset.id] = getElementState(tape));
+    layers.forEach(layer => data.layers[layer.id] = getElementState(layer));
+    return data;
+  }
+
+  function saveCurrentState() {
+    if(selectedElement && selectedElement.classList.contains('char-img')) {
+        saveSpecificCharState(selectedElement);
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(getCurrentStateObject()));
+  }
+
+  function saveSpecificCharState(el) {
+      const idx = el.dataset.charIndex;
+      if(!charStates[el.id]) charStates[el.id] = {};
+      charStates[el.id][idx] = getElementState(el);
+  }
+  
+  function getElementState(el) {
+      let h = el.style.height;
+      if(!h || h === 'auto') h = undefined;
+      const state = {
+        left: el.style.left, top: el.style.top, width: el.style.width, height: h,
+        rotation: parseFloat(el.dataset.rotation) || 0, 
+        mirror: parseFloat(el.dataset.mirror) || 1,
+        opacity: parseFloat(el.style.opacity) || 1
+      };
+      if(el.classList.contains('tape-color')) state.colorIndex = el.dataset.colorIndex ? parseInt(el.dataset.colorIndex, 10) : undefined;
+      if(el.classList.contains('char-img')) state.charIndex = el.dataset.charIndex ? parseInt(el.dataset.charIndex, 10) : 0;
+      return state;
+  }
+
+  function changeCharacter(charEl) {
+      saveSpecificCharState(charEl); // Salva stato attuale
+      let idx = parseInt(charEl.dataset.charIndex, 10);
+      if(isNaN(idx)) idx = 0;
+      idx = (idx + 1) % charImages.length;
+      charEl.dataset.charIndex = idx;
+      charEl.src = charImages[idx];
+
+      if(charStates[charEl.id] && charStates[charEl.id][idx]) {
+          applyLayerStyle(charEl, charStates[charEl.id][idx]);
+      }
+      updateStatus(`Personaggio cambiato`);
+      saveCurrentState();
+  }
+
+  // --- LIBRERIA ---
+  window.saveToLibrary = function() {
+      const name = document.getElementById('configName').value.trim();
+      if(!name) { alert("Nome richiesto."); return; }
+      savedLibrary.push({ name: name, data: getCurrentStateObject(), selected: false });
+      updateLibraryStorage();
+      renderLibrary();
+      document.getElementById('configName').value = ""; 
+  }
+  window.loadFromLibrary = function(index) {
+      if(confirm("Caricare?")) { applyState(savedLibrary[index].data); saveCurrentState(); }
+  }
+  window.deleteFromLibrary = function(index) {
+      if(confirm("Eliminare?")) { savedLibrary.splice(index, 1); updateLibraryStorage(); renderLibrary(); }
+  }
+  window.toggleSelection = function(index) {
+      savedLibrary[index].selected = !savedLibrary[index].selected;
+      updateLibraryStorage();
+      renderLibrary();
+  }
+  function updateLibraryStorage() { localStorage.setItem(LIBRARY_KEY, JSON.stringify(savedLibrary)); }
+  function renderLibrary() {
+      const list = document.getElementById('savedList');
+      list.innerHTML = savedLibrary.length ? "" : "<div style='padding:5px;color:#666;'>Nessun salvataggio</div>";
+      savedLibrary.forEach((item, idx) => {
+          const div = document.createElement('div');
+          div.className = 'saved-item';
+          const checked = item.selected ? 'checked' : '';
+          div.innerHTML = `<div style="display:flex; align-items:center;"><input type="checkbox" class="item-checkbox" ${checked} onchange="toggleSelection(${idx})"><span class="saved-name" onclick="loadFromLibrary(${idx})">📁 ${item.name}</span></div><button class="btn-del-item" onclick="deleteFromLibrary(${idx})">X</button>`;
+          list.appendChild(div);
+      });
+  }
+
+  // --- STAMPA MULTIPLA ---
+  window.printSelectedSheets = function() {
+      const selected = savedLibrary.filter(i => i.selected);
+      if(selected.length === 0) { alert("Seleziona almeno una carta."); return; }
+      if(selected.length > 4) { alert("Massimo 4 carte per foglio."); return; }
+
+      const container = document.getElementById('print-grid-area');
+      container.innerHTML = "";
+      selected.forEach(item => {
+          const data = item.data;
+          const clone = document.createElement('div');
+          clone.className = 'print-card-clone';
+          
+          let tapesHtml = '<div class="shelf-colors">';
+          for(let r of ['A','B','C']) {
+              for(let c=1; c<=5; c++) { tapesHtml += `<div class="tape-color" data-clone-id="${r+c}"></div>`; }
+          }
+          tapesHtml += `</div>
+            <img src="rowA.png" class="tape-row" id="clone-row-a" style="top: 0%;">
+            <img src="rowB.png" class="tape-row" id="clone-row-b" style="top: 32%;">
+            <img src="rowC.png" class="tape-row" id="clone-row-c" style="top: 64%;">`;
+
+          clone.innerHTML = `
+            <img src="sfondo120x70.png" class="bg layer-obj" id="c-bg">
+            <img src="shelf120x70.png" class="shelf layer-obj" id="c-shelf">
+            <div class="tape-group layer-obj" id="c-group">${tapesHtml}</div>
+            <img src="" class="char-img layer-obj" id="clone-char-left">
+            <img src="" class="char-img layer-obj" id="clone-char-right">
+          `;
+          container.appendChild(clone);
+
+          // Helper applicazione stili clone
+          const applyCloneStyle = (el, d) => {
+             if(!d) return;
+             if(d.left) el.style.left = d.left;
+             if(d.top) el.style.top = d.top;
+             if(d.width) el.style.width = d.width;
+             if(d.height) el.style.height = d.height;
+             el.style.opacity = d.opacity;
+             let rot = d.rotation || 0; let mirror = d.mirror || 1;
+             let baseTrans = (el.id.includes('shelf') || el.id.includes('group')) ? 'translate(-50%, -50%)' : '';
+             el.style.transform = `${baseTrans} rotate(${rot}deg) scaleX(${mirror})`;
+             if(el.classList.contains('char-img') && d.charIndex !== undefined) el.src = charImages[d.charIndex];
+          };
+
+          if(data.layers['layer-bg']) applyCloneStyle(clone.querySelector('#c-bg'), data.layers['layer-bg']);
+          if(data.layers['layer-shelf']) applyCloneStyle(clone.querySelector('#c-shelf'), data.layers['layer-shelf']);
+          if(data.layers['layer-group']) applyCloneStyle(clone.querySelector('#c-group'), data.layers['layer-group']);
+          applyCloneStyle(clone.querySelector('#clone-row-a'), data.layers['layer-row-a']);
+          applyCloneStyle(clone.querySelector('#clone-row-b'), data.layers['layer-row-b']);
+          applyCloneStyle(clone.querySelector('#clone-row-c'), data.layers['layer-row-c']);
+          applyCloneStyle(clone.querySelector('#clone-char-left'), data.layers['layer-char-left']);
+          applyCloneStyle(clone.querySelector('#clone-char-right'), data.layers['layer-char-right']);
+
+          clone.querySelectorAll('.tape-color').forEach(ct => {
+              const id = ct.getAttribute('data-clone-id');
+              const tData = data.tapes[id];
+              if(tData) {
+                  ct.style.left = tData.left; ct.style.top = tData.top; ct.style.width = tData.width;
+                  if(tData.height) ct.style.height = tData.height;
+                  ct.style.opacity = tData.opacity;
+                  ct.style.transform = `rotate(${tData.rotation||0}deg) scaleX(${tData.mirror||1})`;
+                  if(tData.colorIndex !== undefined) ct.style.backgroundColor = palette[tData.colorIndex].value;
+              }
+          });
+      });
+
+      document.body.classList.add('printing-grid');
+      setTimeout(() => { window.print(); setTimeout(() => document.body.classList.remove('printing-grid'), 1000); }, 700);
+  }
+
+  window.printSingle = function() { document.body.classList.remove('printing-grid'); window.print(); }
+
+  // --- EXPORT TOOLS ---
+  window.downloadJSON = function() {
+      if(!savedLibrary.length) { alert("Libreria vuota."); return; }
+      const a = document.createElement('a');
+      a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedLibrary));
+      a.download = "vhs_library.json";
+      document.body.appendChild(a); a.click(); a.remove();
+  }
+  window.uploadJSON = function() {
+      const f = document.getElementById('fileInput').files[0];
+      if(!f) return;
+      const r = new FileReader();
+      r.onload = (e) => { try { const d = JSON.parse(e.target.result); if(Array.isArray(d)) { savedLibrary = savedLibrary.concat(d); updateLibraryStorage(); renderLibrary(); alert("OK"); } } catch(e){alert("Err");} };
+      r.readAsText(f);
+  }
+
+  // NUOVO EXPORT: MEMORIA PERSONAGGI
+  window.exportCharMemory = function() {
+      const output = `const HARDCODED_CHAR_MEMORY = ${JSON.stringify(charStates)};`;
+      document.getElementById('devModalTitle').textContent = "1. Copia questo codice. 2. Incollalo sopra 'const HARDCODED_CHAR_MEMORY' nell'HTML.";
+      document.getElementById('devOutput').value = output;
+      document.getElementById('devModal').classList.add('active');
+  }
+
+  window.exportDefaults = function() {
+    let newDefaults = {};
+    const layerIds = ['layer-bg', 'layer-shelf', 'layer-group', 'layer-row-a', 'layer-row-b', 'layer-row-c', 'layer-char-left', 'layer-char-right'];
+    layerIds.forEach(id => {
+        let el = document.getElementById(id);
+        if(el) {
+            let st = getElementState(el);
+            let baseTrans = (id.includes('shelf') || id.includes('group')) ? 'translate(-50%, -50%)' : 'none';
+            let obj = { rotation: st.rotation, opacity: st.opacity, transform: baseTrans };
+            if(el.style.top) obj.top = el.style.top;
+            if(el.style.left) obj.left = el.style.left;
+            if(el.style.width) obj.width = el.style.width;
+            if(el.style.height) obj.height = el.style.height;
+            if(st.mirror !== 1) obj.mirror = st.mirror;
+            if(st.charIndex !== undefined) obj.charIndex = st.charIndex;
+            newDefaults[id] = obj;
+        }
+    });
+    const output = `const defaultLayerStates = ${JSON.stringify(newDefaults)};`;
+    document.getElementById('devModalTitle').textContent = "Copia e sostituisci 'const defaultLayerStates'";
+    document.getElementById('devOutput').value = output;
+    document.getElementById('devModal').classList.add('active');
+  }
+
+  // --- UI ---
+  function selectTape(tape) { deselectAll(); selectedElement = tape; selectedElement.classList.add('selected'); editorTools.classList.add('active'); colorAction.style.display = 'flex'; updateStatus(`Cassetta ${tape.dataset.id}`); }
+  window.selectLayer = function(layerId) {
+    deselectAll(); selectedElement = document.getElementById(layerId);
+    if(selectedElement) {
+        selectedElement.classList.add('selected'); editorTools.classList.add('active');
+        layerBtns.forEach(btn => btn.classList.toggle('active', btn.getAttribute('onclick').includes(layerId)));
+        colorAction.style.display = 'none'; updateStatus(layerId);
+    }
+  }
+  function deselectAll() { if (selectedElement) selectedElement.classList.remove('selected'); selectedElement = null; editorTools.classList.remove('active'); layerBtns.forEach(btn => btn.classList.remove('active')); colorAction.style.display = 'none'; updateStatus("Seleziona elemento"); }
+  function updateStatus(msg) { statusText.textContent = msg; }
+  document.body.addEventListener('mousedown', (e) => { if(!e.target.closest('.tape-color') && !e.target.closest('.controls') && !e.target.closest('.layer-selectable') && !e.target.closest('.saved-list') && !e.target.closest('.dev-modal')) deselectAll(); });
+  function enableDragAndClick(tape, isChar = false) { setupDrag(tape, (moved) => { if(!moved) { if(isChar) changeCharacter(tape); else changeColor(tape); } }); }
+  function enableDrag(layer) { setupDrag(layer, null); }
+  function setupDrag(el, onUpCallback) {
+    let isDragging = false, startX, startY, initL, initT, pW, pH, hasMoved = false;
+    el.addEventListener('mousedown', (e) => {
+      if (el.classList.contains('layer-selectable') && !el.classList.contains('tape-color') && !el.classList.contains('char-img')) { if (selectedElement !== el) return; }
+      e.preventDefault(); e.stopPropagation(); isDragging = true; hasMoved = false;
+      if(el.classList.contains('tape-color')) selectTape(el); else if(el.classList.contains('char-img')) selectLayer(el.id);
+      startX = e.clientX; startY = e.clientY; initL = parseFloat(el.style.left) || 0; initT = parseFloat(el.style.top) || 0;
+      const rect = el.parentElement.getBoundingClientRect(); pW = rect.width; pH = rect.height;
+      document.addEventListener('mousemove', onMove); document.addEventListener('mouseup', onUp);
+    });
+    function onMove(e) { if (!isDragging) return; if (Math.abs(e.clientX - startX) > 3 || Math.abs(e.clientY - startY) > 3) hasMoved = true; el.style.left = (initL + ((e.clientX - startX) / pW) * 100) + '%'; el.style.top = (initT + ((e.clientY - startY) / pH) * 100) + '%'; }
+    function onUp() { if(!isDragging) return; isDragging = false; document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); if (hasMoved) saveCurrentState(); else if (onUpCallback) onUpCallback(hasMoved); }
+  }
+  function changeColor(tape) { let idx = parseInt(tape.dataset.colorIndex, 10); if(isNaN(idx)) idx = 1; idx = (idx + 1) % palette.length; tape.dataset.colorIndex = idx; tape.style.backgroundColor = palette[idx].value; updateStatus(`Colore: ${palette[idx].name}`); saveCurrentState(); }
+  window.cycleColorSelected = function() { if(selectedElement && selectedElement.classList.contains('tape-color')) changeColor(selectedElement); }
+  window.toggleMirror = function() { if(!selectedElement) return; let m = parseFloat(selectedElement.dataset.mirror) || 1; selectedElement.dataset.mirror = m * -1; updateElementTransform(selectedElement); saveCurrentState(); updateStatus(m * -1 === -1 ? "Specchiato" : "Normale"); }
+  window.adjust = function(type, amount) {
+    if (!selectedElement) return; let el = selectedElement;
+    switch(type) {
+      case 'x': el.style.left = (parseFloat(el.style.left)||0) + amount + '%'; break;
+      case 'y': el.style.top = (parseFloat(el.style.top)||0) + amount + '%'; break;
+      case 'w': el.style.width = (parseFloat(el.style.width)|| (el.offsetWidth/el.parentElement.offsetWidth*100)) + amount + '%'; break;
+      case 'h': let currentH = parseFloat(el.style.height); if(isNaN(currentH)) currentH = (el.offsetHeight / el.parentElement.offsetHeight) * 100; el.style.height = (currentH + amount) + '%'; break;
+      case 's': let cW = parseFloat(el.style.width) || (el.offsetWidth/el.parentElement.offsetWidth*100); el.style.width = (cW + amount) + '%'; if(el.classList.contains('char-img') || el.tagName === 'IMG') { el.style.height = 'auto'; } else { let cH = parseFloat(el.style.height) || (el.offsetHeight/el.parentElement.offsetHeight*100); el.style.height = (cH + amount) + '%'; } break;
+      case 'r': let newRot = (parseFloat(el.dataset.rotation)||0) + amount; el.dataset.rotation = newRot; updateElementTransform(el); break;
+      case 'o': let newOp = (parseFloat(el.style.opacity)||1) + amount; newOp = Math.min(Math.max(newOp, 0), 1); el.style.opacity = newOp; break;
+    }
+    saveCurrentState(); 
+  }
+  document.getElementById('resetBtn').addEventListener('click', () => { if(confirm("Vuoi resettare tutto?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } });
+  init();
+</script>
+</body>
+</html>
