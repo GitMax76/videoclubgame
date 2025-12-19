@@ -1,7 +1,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<title>VHS Card - Editor Finale v33 (Deselect All)</title>
+<title>VHS Card - Editor Finale v34 (Sel/Desel Tutto)</title>
 <style>
   /* --- STILI ORIGINALI --- */
   * { box-sizing: border-box; }
@@ -96,23 +96,27 @@
   .saved-name { cursor: pointer; flex: 1; text-align: left; font-size: 0.9rem; }
   .btn-del-item { background: #d93025; color: white; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 0.8rem; margin-left: 10px;}
   
-  /* Buttons Libreria */
-  .btn-deselect { width: 100%; padding: 6px; background: #444; color: #ccc; border: 1px solid #555; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-bottom: 10px; }
-  .btn-deselect:hover { background: #555; color: #fff; }
+  /* Gruppo bottoni selezione */
+  .select-actions { display: flex; gap: 5px; margin-bottom: 10px; }
+  .btn-sel-opt { flex: 1; padding: 6px; background: #444; color: #ccc; border: 1px solid #555; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+  .btn-sel-opt:hover { background: #555; color: #fff; }
 
   .btn-print-multi { width: 100%; padding: 12px; background: #6f42c1; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
   .btn-print-multi:hover { background: #5a32a3; }
 
   .io-group { display: flex; gap: 10px; justify-content: space-between; margin-top: 5px; flex-wrap: wrap; }
   .btn-io { flex: 1; padding: 8px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+  
   .btn-del-all { flex: 1; padding: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
   .btn-del-all:hover { background: #c82333; }
+
   .btn-dev { flex: 2; padding: 8px; background: #e83e8c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: bold; min-width: 200px; }
   .file-input { position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor: pointer; }
 
   .actions { display: flex; gap: 10px; margin-top: 1rem; }
   button#printBtn { flex: 2; padding: 12px; background: #ffd400; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; }
   button#resetBtn { flex: 1; padding: 12px; background: #d93025; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+  
   button#layoutBtn { flex: 1; padding: 12px; background: #17a2b8; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; }
   button#layoutBtn:hover { background: #138496; }
 
@@ -199,8 +203,13 @@
             <button class="btn-save-lib" onclick="saveToLibrary()">Salva in Libreria</button>
         </div>
         <div class="saved-list" id="savedList"></div>
-        <button class="btn-deselect" onclick="deselectAllLibraryItems()">☒ Deseleziona Tutto</button>
-        <button class="btn-print-multi" onclick="printSelectedSheets()">🖨️ Stampa Selezionate (Illimitato)</button>
+        
+        <div class="select-actions">
+            <button class="btn-sel-opt" onclick="selectAllLibraryItems()">☑ Seleziona Tutto</button>
+            <button class="btn-sel-opt" onclick="deselectAllLibraryItems()">☒ Deseleziona Tutto</button>
+        </div>
+
+        <button class="btn-print-multi" onclick="printSelectedSheets()">🖨️ Stampa Selezionate (4 x Foglio)</button>
         <div class="io-group">
             <button class="btn-io" onclick="downloadJSON()">⬇ Esporta JSON</button>
             <button class="btn-io import" style="position:relative;">⬆ Importa JSON <input type="file" id="fileInput" class="file-input" accept=".json" onchange="uploadJSON()"></button>
@@ -226,7 +235,7 @@
 <div id="print-grid-area"></div>
 
 <script>
-  const STORAGE_KEY = 'vhs_freedom_v33_deselect'; 
+  const STORAGE_KEY = 'vhs_freedom_v34_selectall'; 
   const LIBRARY_KEY = 'vhs_lib_v9';
   const palette = [{name:'Nero',value:'#000000'},{name:'Blu',value:'#0047AB'},{name:'Giallo',value:'#FFD800'},{name:'Rosso',value:'#E52020'},{name:'Arancio',value:'#FF8C00'},{name:'Rosa',value:'#FF66CC'},{name:'Viola',value:'#8A2BE2'},{name:'Verde',value:'#1E9E47'},{name:'Bianco',value:'#FFFFFF'}];
   
@@ -468,10 +477,17 @@ const defaultLayerStates = {"layer-bg":{"rotation":0,"opacity":1,"transform":"no
       }
   }
   
-  // --- DESELECT ALL ---
+  // --- DESELECT ALL / SELECT ALL ---
   window.deselectAllLibraryItems = function() {
       if(savedLibrary.length === 0) return;
       savedLibrary.forEach(item => item.selected = false);
+      updateLibraryStorage();
+      renderLibrary();
+  }
+
+  window.selectAllLibraryItems = function() {
+      if(savedLibrary.length === 0) return;
+      savedLibrary.forEach(item => item.selected = true);
       updateLibraryStorage();
       renderLibrary();
   }
