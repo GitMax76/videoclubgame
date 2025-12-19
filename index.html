@@ -1,7 +1,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<title>VHS Card - Editor Finale v31 (Stampa Illimitata)</title>
+<title>VHS Card - Editor Finale v32 (Stampa A4 4xFoglio)</title>
 <style>
   /* --- STILI ORIGINALI --- */
   * { box-sizing: border-box; }
@@ -11,113 +11,54 @@
     user-select: none; -webkit-user-select: none;
   }
   
-  /* CONTENITORE PRINCIPALE (con transizione fluida) */
   .app { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    gap: 2rem; 
+    display: flex; flex-direction: column; align-items: center; gap: 2rem; 
     transition: all 0.3s ease;
   }
 
-  /* --- MODALITÀ ORIZZONTALE (ROW) --- */
   .app.layout-row {
-    flex-direction: row;
-    align-items: flex-start; 
-    justify-content: center;
-    flex-wrap: wrap; 
+    flex-direction: row; align-items: flex-start; justify-content: center; flex-wrap: wrap; 
   }
 
-  /* --- CARTA --- */
   .card {
-    position: relative;
-    width: 60vw; 
-    aspect-ratio: 120 / 70;
-    background: #fff;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
-    margin: 0 auto;
+    position: relative; width: 60vw; aspect-ratio: 120 / 70;
+    background: #fff; overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8); margin: 0 auto;
     transition: width 0.3s ease;
   }
 
-  .app.layout-row .card {
-    width: 50vw; 
-    margin: 0;
-  }
+  .app.layout-row .card { width: 50vw; margin: 0; }
 
-  /* --- CORNICE BIANCA DI SICUREZZA --- */
   .card::after, .print-card-clone::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 999;
-    pointer-events: none;
-    border: 3mm solid #ffffff; 
-    border-radius: 4mm; 
-    box-sizing: border-box;
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 999; pointer-events: none;
+    border: 3mm solid #ffffff; border-radius: 4mm; box-sizing: border-box;
   }
 
   /* --- LIVELLI --- */
-  .bg, .shelf {
-    position: absolute;
-    pointer-events: none;
-    display: block;
-  }
-
+  .bg, .shelf { position: absolute; pointer-events: none; display: block; }
   .bg { z-index: 1; width: 100%; height: 100%; top: 0; left: 0; object-fit: cover; }
-  
-  .shelf { 
-    z-index: 2; width: 70%; height: auto; top: 60%; left: 50%; 
-    transform: translate(-50%, -50%); 
-  }
-
-  .tape-group {
-    position: absolute; z-index: 4; width: 68%; aspect-ratio: 405 / 215; 
-    top: 62%; left: 57%; transform: translate(-50%, -50%);
-  }
-
-  .tape-row {
-    position: absolute;
-    z-index: 5;
-    width: 83%; 
-    height: auto;
-    left: -1%; 
-    pointer-events: none; 
-  }
+  .shelf { z-index: 2; width: 70%; height: auto; top: 60%; left: 50%; transform: translate(-50%, -50%); }
+  .tape-group { position: absolute; z-index: 4; width: 68%; aspect-ratio: 405 / 215; top: 62%; left: 57%; transform: translate(-50%, -50%); }
+  .tape-row { position: absolute; z-index: 5; width: 83%; height: auto; left: -1%; pointer-events: none; }
   
   .char-img {
-    position: absolute;
-    z-index: 6; 
-    width: 25%;
-    height: auto;
-    cursor: grab;
-    min-height: 50px; 
-    min-width: 50px;
-    transition: opacity 0.1s ease; 
+    position: absolute; z-index: 6; width: 25%; height: auto; cursor: grab;
+    min-height: 50px; min-width: 50px; transition: opacity 0.1s ease; 
   }
   .char-img:active { cursor: grabbing; }
-
-  .char-img[src=""], .char-img:not([src]) {
-      border: 2px dashed red;
-      background: rgba(255,0,0,0.2);
-  }
+  .char-img[src=""], .char-img:not([src]) { border: 2px dashed red; background: rgba(255,0,0,0.2); }
 
   .shelf-colors { position: absolute; z-index: 3; top: 0; left: 0; width: 100%; height: 100%; }
-
   .tape-color { position: absolute; background: #FFD800; cursor: grab; border-radius: 2px; }
   .tape-color:active { cursor: grabbing; }
 
   /* --- CONTROLLI --- */
   .controls {
-    background: #2a2a2a; padding: 1rem; border-radius: 12px; 
-    width: 60vw; 
-    border: 1px solid #444; display: flex; flex-direction: column; gap: 1rem;
-    transition: width 0.3s ease;
+    background: #2a2a2a; padding: 1rem; border-radius: 12px; width: 60vw;
+    border: 1px solid #444; display: flex; flex-direction: column; gap: 1rem; transition: width 0.3s ease;
   }
-
-  .app.layout-row .controls {
-    width: 35vw;
-  }
+  .app.layout-row .controls { width: 35vw; }
 
   .info-panel { font-size: 0.9rem; color: #aaa; margin-bottom: 0.5rem; }
   .selected-info { color: #ffd400; font-weight: bold; }
@@ -184,6 +125,12 @@
   #print-grid-area { display: none; }
 
   @media print {
+    /* FORZA ORIZZONTALE (LANDSCAPE) */
+    @page { 
+      size: A4 landscape; 
+      margin: 0; 
+    }
+
     body { margin: 0; padding: 0; background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     
     body:not(.printing-grid) .controls { display: none; }
@@ -195,33 +142,38 @@
 
     body.printing-grid .app { display: none !important; }
     
-    /* GRIGLIA DI STAMPA ILLIMITATA */
+    /* CONTENITORE PRINCIPALE DI STAMPA */
     body.printing-grid #print-grid-area {
-      display: grid !important;
-      grid-template-columns: repeat(2, 120mm); /* 2 Colonne fisse */
-      grid-auto-rows: max-content; /* Le righe si creano da sole */
-      column-gap: 5mm; 
-      row-gap: 5mm;
-      justify-content: center; 
-      align-content: start;
-      width: 100%; 
-      height: auto; /* Altezza automatica per permettere più pagine */
-      padding-top: 10mm;
-      padding-bottom: 10mm;
+      display: block !important; /* Non più grid, ma blocchi sequenziali */
+      width: 100%;
+      height: auto;
     }
 
+    /* IL FOGLIO FISICO */
+    .print-sheet {
+      width: 297mm; /* Larghezza A4 Landscape */
+      height: 210mm; /* Altezza A4 Landscape */
+      display: grid;
+      grid-template-columns: 120mm 120mm;
+      grid-template-rows: 70mm 70mm;
+      justify-content: center;
+      align-content: center;
+      column-gap: 10mm; /* Spazio orizzontale tra le carte */
+      row-gap: 10mm;    /* Spazio verticale tra le carte */
+      page-break-after: always; /* OBBLIGA NUOVA PAGINA DOPO OGNI SHEET */
+      break-after: page;
+      overflow: hidden;
+    }
+
+    /* CLONE DELLA CARTA */
     .print-card-clone { 
       position: relative; 
       width: 120mm; 
       height: 70mm; 
       overflow: hidden; 
-      outline: 1px dashed #bbb; 
+      outline: 1px dashed #ccc; /* Linea di taglio sottile */
       background: white; 
-      
-      /* GESTIONE INTERRUZIONE PAGINA */
-      break-inside: avoid;       /* Standard moderno */
-      page-break-inside: avoid;  /* Compatibilità legacy */
-      margin-bottom: 0;          /* Gestito dal gap della griglia */
+      page-break-inside: avoid;
     }
 
     .print-card-clone .bg { z-index: 1; width: 100%; height: 100%; top: 0; left: 0; object-fit: cover; position: absolute; }
@@ -285,7 +237,7 @@
             <button class="btn-save-lib" onclick="saveToLibrary()">Salva in Libreria</button>
         </div>
         <div class="saved-list" id="savedList"></div>
-        <button class="btn-print-multi" onclick="printSelectedSheets()">🖨️ Stampa Selezionate (Illimitato)</button>
+        <button class="btn-print-multi" onclick="printSelectedSheets()">🖨️ Stampa Selezionate (4 x Foglio)</button>
         <div class="io-group">
             <button class="btn-io" onclick="downloadJSON()">⬇ Esporta JSON</button>
             <button class="btn-io import" style="position:relative;">⬆ Importa JSON <input type="file" id="fileInput" class="file-input" accept=".json" onchange="uploadJSON()"></button>
@@ -311,7 +263,7 @@
 <div id="print-grid-area"></div>
 
 <script>
-  const STORAGE_KEY = 'vhs_freedom_v31_unlimited'; 
+  const STORAGE_KEY = 'vhs_freedom_v32_paginated'; 
   const LIBRARY_KEY = 'vhs_lib_v9';
   const palette = [{name:'Nero',value:'#000000'},{name:'Blu',value:'#0047AB'},{name:'Giallo',value:'#FFD800'},{name:'Rosso',value:'#E52020'},{name:'Arancio',value:'#FF8C00'},{name:'Rosa',value:'#FF66CC'},{name:'Viola',value:'#8A2BE2'},{name:'Verde',value:'#1E9E47'},{name:'Bianco',value:'#FFFFFF'}];
   
@@ -324,9 +276,6 @@
     "char22.png", "char23.png"
   ];
 
-  /* ====================================================================================
-   * MEMORIA PERSONAGGI (HARDCODED)
-   * ==================================================================================== */
 const HARDCODED_CHAR_MEMORY = {"layer-char-left":{"0":{"left":"7.82684%","top":"27.3839%","width":"13.5%","rotation":0,"mirror":-1,"opacity":1,"charIndex":0},"1":{"left":"10.1046%","top":"49.8362%","width":"13.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":1},"2":{"left":"9.19349%","top":"47.8838%","width":"17.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":2},"3":{"left":"11.1296%","top":"33.4362%","width":"13.5%","rotation":0,"mirror":-1,"opacity":1,"charIndex":3},"4":{"left":"10.674%","top":"41.6362%","width":"15.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":4},"5":{"left":"10.3323%","top":"40.2695%","width":"19.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":5},"6":{"left":"5.66286%","top":"33.6314%","width":"21.5%","rotation":0,"mirror":-1,"opacity":1,"charIndex":6},"7":{"left":"6.68785%","top":"29.3363%","width":"23.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":7},"8":{"left":"4.29619%","top":"38.3173%","width":"23.5%","rotation":0,"mirror":-1,"opacity":1,"charIndex":8},"9":{"left":"7.1434%","top":"34.0221%","width":"21.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":9},"10":{"left":"7.25729%","top":"31.8745%","width":"17.5%","rotation":0,"mirror":-1,"opacity":1,"charIndex":10},"11":{"left":"8.85173%","top":"32.265%","width":"17.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":11},"12":{"left":"7.48507%","top":"48.0792%","width":"19.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":12},"13":{"left":"6.68785%","top":"41.6364%","width":"23.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":13},"14":{"left":"7.71284%","top":"44.5649%","width":"21.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":14},"15":{"left":"7.82674%","top":"52.5696%","width":"15.5%","rotation":0,"mirror":-1,"opacity":1,"charIndex":15},"16":{"left":"8.1684%","top":"38.122%","width":"31.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":16},"17":{"left":"8.39618%","top":"36.7553%","width":"33.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":17},"18":{"left":"8.05452%","top":"42.4172%","width":"17.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":18},"19":{"left":"11.0156%","top":"37.9268%","width":"15.5%","rotation":0,"mirror":-1,"opacity":1,"charIndex":19},"20":{"left":"8.51004%","top":"26.603%","width":"29.5%","rotation":0,"mirror":1,"opacity":1,"charIndex":20},"21":{"left":"4.52402%","top":"30.8983%","width":"23.5%","rotation":0,"mirror":-1,"opacity":1,"charIndex":21}},"layer-char-right":{"0":{"left":"75.1165%","top":"28.2002%","width":"13%","rotation":0,"mirror":1,"opacity":1,"charIndex":0},"1":{"left":"74.7746%","top":"44.2096%","width":"15%","rotation":0,"mirror":-1,"opacity":1,"charIndex":1},"2":{"left":"72.9524%","top":"47.3334%","width":"17%","rotation":0,"mirror":-1,"opacity":1,"charIndex":2},"3":{"left":"75.1163%","top":"35.2287%","width":"13%","rotation":0,"mirror":1,"opacity":1,"charIndex":3},"4":{"left":"72.6108%","top":"42.062%","width":"15%","rotation":0,"mirror":-1,"opacity":1,"charIndex":4},"5":{"left":"69.4219%","top":"37.3763%","width":"21%","rotation":0,"mirror":-1,"opacity":1,"charIndex":5},"6":{"left":"71.5858%","top":"33.862%","width":"21%","rotation":0,"mirror":1,"opacity":1,"charIndex":6},"7":{"left":"69.0802%","top":"29.5667%","width":"23%","rotation":0,"mirror":-1,"opacity":1,"charIndex":7},"8":{"left":"70.9025%","top":"38.7428%","width":"23%","rotation":0,"mirror":1,"opacity":1,"charIndex":8},"9":{"left":"69.422%","top":"29.9572%","width":"23%","rotation":0,"mirror":-1,"opacity":1,"charIndex":9},"10":{"left":"72.9525%","top":"28.0048%","width":"19%","rotation":0,"mirror":1,"opacity":1,"charIndex":10},"11":{"left":"71.0164%","top":"29.762%","width":"19%","rotation":0,"mirror":-1,"opacity":1,"charIndex":11},"12":{"left":"71.6997%","top":"47.3334%","width":"19%","rotation":0,"mirror":-1,"opacity":1,"charIndex":12},"13":{"left":"67.7137%","top":"42.6477%","width":"23%","rotation":0,"mirror":-1,"opacity":1,"charIndex":13},"14":{"left":"71.3581%","top":"43.8191%","width":"21%","rotation":0,"mirror":-1,"opacity":1,"charIndex":14},"15":{"left":"75.5719%","top":"52.9954%","width":"15%","rotation":0,"mirror":1,"opacity":1,"charIndex":15},"16":{"left":"58.7165%","top":"36.205%","width":"33%","rotation":0,"mirror":-1,"opacity":1,"charIndex":16},"17":{"left":"52.1111%","top":"30.1525%","width":"37%","rotation":0,"mirror":-1,"opacity":1,"charIndex":17},"18":{"left":"71.1304%","top":"37.5715%","width":"19%","rotation":0,"mirror":-1,"opacity":1,"charIndex":18},"19":{"left":"72.611%","top":"38.9381%","width":"15%","rotation":0,"mirror":1,"opacity":1,"charIndex":19},"20":{"left":"62.8165%","top":"33.0811%","width":"27%","rotation":0,"mirror":-1,"opacity":1,"charIndex":20},"21":{"left":"67.3722%","top":"32.6906%","width":"23%","rotation":0,"mirror":1,"opacity":1,"charIndex":21}}};
 
 const fixedPositions = {"A1":{"left":"-0.593522%","top":"2.12335%","width":"9.2%","height":"21%","rotation":2},"A2":{"left":"17.8872%","top":"2.5994%","width":"9.8%","height":"21.4%","rotation":2},"A3":{"left":"37.172%","top":"1.9988%","width":"9.1%","height":"22%","rotation":2},"A4":{"left":"53.7022%","top":"2.22425%","width":"10.1%","height":"21.4%","rotation":-1},"A5":{"left":"70.6346%","top":"2.14851%","width":"10.2%","height":"21.2%","rotation":-1},"B1":{"left":"-0.897228%","top":"33.377%","width":"9%","height":"23%","rotation":2},"B2":{"left":"18.0069%","top":"34.0533%","width":"9.2%","height":"22.4%","rotation":2},"B3":{"left":"37.1719%","top":"33.6024%","width":"8.8%","height":"22.4%","rotation":0},"B4":{"left":"54.0432%","top":"34.4539%","width":"10%","height":"21.8%","rotation":-1},"B5":{"left":"70.3733%","top":"33.8278%","width":"10.3%","height":"21.4%","rotation":0},"C1":{"left":"-0.596071%","top":"66.032%","width":"9.4%","height":"22.4%","rotation":2},"C2":{"left":"17.7282%","top":"65.8569%","width":"8.6%","height":"23%","rotation":1},"C3":{"left":"37.4904%","top":"66.0329%","width":"8.9%","height":"23.2%","rotation":2},"C4":{"left":"54.0026%","top":"65.5063%","width":"10%","height":"22.4%","rotation":0},"C5":{"left":"70.5547%","top":"64.88%","width":"9.8%","height":"21.8%","rotation":-1}};
@@ -577,19 +526,30 @@ const defaultLayerStates = {"layer-bg":{"rotation":0,"opacity":1,"transform":"no
       });
   }
 
-  // --- STAMPA MULTIPLA ---
+  // --- STAMPA MULTIPLA (AGGIORNATA PER PAGINAZIONE AUTOMATICA) ---
   window.printSelectedSheets = function() {
       const selected = savedLibrary.filter(i => i.selected);
       if(selected.length === 0) { alert("Seleziona almeno una carta."); return; }
-      // RIMOSSO LIMITE DI 4 CARTE
 
       const container = document.getElementById('print-grid-area');
       container.innerHTML = "";
-      selected.forEach(item => {
+      
+      // Creiamo un contenitore "foglio" ogni 4 carte
+      let currentSheet = null;
+
+      selected.forEach((item, index) => {
+          // Ogni 4 carte, creiamo un nuovo foglio
+          if (index % 4 === 0) {
+              currentSheet = document.createElement('div');
+              currentSheet.className = 'print-sheet';
+              container.appendChild(currentSheet);
+          }
+
           const data = item.data;
           const clone = document.createElement('div');
           clone.className = 'print-card-clone';
           
+          // Costruisci il contenuto della card clonata
           let tapesHtml = '<div class="shelf-colors">';
           for(let r of ['A','B','C']) {
               for(let c=1; c<=5; c++) { tapesHtml += `<div class="tape-color" data-clone-id="${r+c}"></div>`; }
@@ -606,7 +566,9 @@ const defaultLayerStates = {"layer-bg":{"rotation":0,"opacity":1,"transform":"no
             <img src="" class="char-img layer-obj" id="clone-char-left">
             <img src="" class="char-img layer-obj" id="clone-char-right">
           `;
-          container.appendChild(clone);
+          
+          // Aggiungi la card al foglio corrente
+          currentSheet.appendChild(clone);
 
           // Helper applicazione stili clone
           const applyCloneStyle = (el, d) => {
