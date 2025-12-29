@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VideoClub: Save the Store!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        /* --- AESTHETICS: 90s/00s CARTOON STYLE --- */
+        :root {
+            --bb-blue: #101696;
+            --bb-yellow: #fdb900;
+            --toon-purple: #8800ff;
+            --toon-green: #ccff00;
+            --toon-bg: #e0e0e0;
+            --paper-white: #fdfdfd;
+        }
+
+        body {
+            font-family: 'Patrick Hand', cursive;
+            background-color: var(--toon-bg);
+            background-image: 
+                radial-gradient(var(--bb-yellow) 15%, transparent 16%),
+                radial-gradient(var(--bb-blue) 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        h1, h2, h3, .btn-font {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 1px;
+        }
+
+        /* The "Squiggle" Effect (Ed, Edd n Eddy style) */
+        .squiggle-box {
+            background: var(--paper-white);
+            border: 3px solid black;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.8);
+            transition: all 0.2s ease;
+            animation: boil 3s infinite;
+        }
+
+        @keyframes boil {
+            0% { border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
+            25% { border-radius: 20px 225px 15px 235px / 245px 10px 235px 15px; }
+            50% { border-radius: 235px 10px 245px 15px / 20px 235px 15px 245px; }
+            75% { border-radius: 15px 245px 15px 235px / 235px 15px 255px 20px; }
+            100% { border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
+        }
+
+        /* OCTAGON SHAPE for the Desk */
+        .octagon-shape {
+            clip-path: polygon(29.29% 0%, 70.71% 0%, 100% 29.29%, 100% 70.71%, 70.71% 100%, 29.29% 100%, 0% 70.71%, 0% 29.29%);
+        }
+
+        /* CRT Filter Overlay */
+        .crt-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.3;
+        }
+        
+        /* VHS Glitch Text */
+        .glitch {
+            position: relative;
+            color: var(--bb-yellow);
+            text-shadow: 2px 2px var(--bb-blue);
+        }
+        
+        /* Interactive Elements */
+        .vhs-tape {
+            width: 40px;
+            height: 60px;
+            border: 2px solid black;
+            border-radius: 2px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.7rem;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+        .vhs-tape:hover { transform: scale(1.1) rotate(-5deg); }
+        .vhs-tape::after {
+            content: '';
+            position: absolute;
+            top: 10%; left: 10%; right: 10%; height: 20%;
+            background: rgba(255,255,255,0.8);
+        }
+        
+        /* Genres */
+        .tape-red { background: #e53935; } /* Action */
+        .tape-blue { background: #1e88e5; } /* Family */
+        .tape-yellow { background: #fdd835; color: black; } /* Comedy */
+        .tape-black { background: #212121; } /* Horror */
+
+        /* Board Elements */
+        .slot {
+            background: #ddd;
+            border: 2px dashed #999;
+            height: 64px;
+            width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* MEEPLE STYLING */
+        .meeple {
+            width: 40px; height: 40px;
+            position: absolute;
+            transition: all 0.5s ease;
+            z-index: 30;
+            /* Drop shadow handled in SVG filter or div shadow */
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.8));
+        }
+
+        /* CARDS STYLING */
+        .obj-card-common {
+            background: #fff9c4; /* Post-it yellow */
+            border: 1px solid #fbc02d;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            font-family: 'Patrick Hand', cursive;
+            transform: rotate(-2deg);
+        }
+        .obj-card-personal {
+            background: #e3f2fd; /* Light blue folder */
+            border: 2px solid #1565c0;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
+            font-family: 'Patrick Hand', cursive;
+            transform: rotate(1deg);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bb-blue); }
+        ::-webkit-scrollbar-thumb { background: var(--bb-yellow); border: 2px solid black; }
+
+        .tab-btn.active {
+            background: var(--bb-yellow);
+            color: var(--bb-blue);
+            transform: translateY(-5px);
+            box-shadow: 3px 3px 0 black;
+        }
+
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="crt-overlay"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
+
+        <!-- HEADER -->
+        <div class="lg:col-span-12 text-center mb-4">
+            <h1 class="glitch text-6xl md:text-8xl transform -rotate-2">VideoClub</h1>
+            <p class="text-xl md:text-2xl text-white bg-blue-900 inline-block px-6 py-2 transform rotate-1 border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] rounded-sm font-bangers tracking-wide">
+                Collaboriamo per non chiudere... Competiamo per dirigere!
+            </p>
+        </div>
+
+        <!-- LEFT COLUMN: RULES & LORE (Scrollable TV Guide style) -->
+        <div class="lg:col-span-4 flex flex-col gap-4">
+            <!-- Navigation -->
+            <div class="flex flex-wrap gap-2 justify-center">
+                <button onclick="switchTab('intro')" id="btn-intro" class="tab-btn active btn-font bg-blue-900 text-white px-4 py-2 rounded border-2 border-black hover:bg-yellow-400 hover:text-blue-900 transition-all">Intro & Idea</button>
+                <button onclick="switchTab('turn')" id="btn-turn" class="tab-btn btn-font bg-blue-900 text-white px-4 py-2 rounded border-2 border-black hover:bg-yellow-400 hover:text-blue-900 transition-all">Il Turno</button>
+                <button onclick="switchTab('win')" id="btn-win" class="tab-btn btn-font bg-blue-900 text-white px-4 py-2 rounded border-2 border-black hover:bg-yellow-400 hover:text-blue-900 transition-all">Vittoria/Sconfitta</button>
+                <!-- NEW BUTTON LINK TO EDITOR -->
+                <a href="cardseditor.html" class="tab-btn btn-font bg-purple-700 text-white px-4 py-2 rounded border-2 border-black hover:bg-purple-500 hover:scale-105 transition-all text-center no-underline flex items-center shadow-md">
+                    🎨 Editor Carte
+                </a>
+            </div>
+
+            <div class="squiggle-box p-6 flex-grow h-[600px] overflow-y-auto relative bg-white">
+                <!-- CONTENT: INTRO -->
+                <div id="content-intro" class="block">
+                    <h2 class="text-3xl text-blue-800 mb-2">📼 Ambientazione</h2>
+                    <p class="mb-4 text-lg">Siete i commessi dell'ultimo negozio della catena <strong>VideoClub</strong>. Le cassette arrivano sul <strong>desk centrale</strong> ottagonale. Lo <strong>Store Manager</strong> vi osserva...</p>
+                    <p class="mb-4 text-lg">Il gioco è <strong>semi-cooperativo</strong>: dovete collaborare per tenere a galla il negozio (Obiettivi Comuni), ma alla fine vincerà chi ha lo scaffale personale migliore!</p>
+                    
+                    <h3 class="text-2xl text-purple-700 mt-4 mb-2">📦 Componenti</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-lg">
+                        <li><strong>Desk Ottagonale</strong>: 8 lati, 8 pile di cassette (le ore del turno).</li>
+                        <li><strong>Store Manager</strong>: Il meeple che gira intorno al desk.</li>
+                        <li><strong>Cassette</strong>: <span class="text-red-600 font-bold">Azione</span>, <span class="text-blue-600 font-bold">Family</span>, <span class="text-yellow-600 font-bold bg-black px-1">Commedia</span>, <span class="font-bold">Horror</span>.</li>
+                        <li><strong>Scaffale Personale</strong>: 3x5 slot. Il tuo regno.</li>
+                        <li><strong>Scaffale Condiviso</strong>: 3x2 slot. Tra te e il vicino.</li>
+                        <li><strong>Box Riconsegna</strong>: Dove finiscono gli scarti (Attenti al limite!).</li>
+                    </ul>
+                </div>
+
+                <!-- CONTENT: TURN -->
+                <div id="content-turn" class="hidden">
+                    <h2 class="text-3xl text-blue-800 mb-2">🔄 Struttura del Turno</h2>
+                    <ol class="list-decimal pl-5 space-y-4 text-lg">
+                        <li>
+                            <strong>Muovi il Manager</strong>: 
+                            Sposta il meeple di 1 o 2 lati in senso orario. Si ferma davanti a una pila precisa (su un lato dell'ottagono).
+                        </li>
+                        <li>
+                            <strong>Preleva la Pila</strong>: 
+                            Prendi TUTTE le cassette dal lato su cui si trova il manager. Se è vuoto... turno a vuoto!
+                        </li>
+                        <li>
+                            <strong>Piazza sugli Scaffali</strong>:
+                            <ul class="list-disc pl-5 mt-2 text-base">
+                                <li><strong>2 Cassette</strong> sul TUO scaffale personale.</li>
+                                <li><strong>1 Cassetta</strong> sullo scaffale condiviso a SINISTRA (Colonna B).</li>
+                                <li><strong>1 Cassetta</strong> sullo scaffale condiviso a DESTRA (Colonna A).</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Scarta</strong>: 
+                            Tutto ciò che avanza va nel <em>Box di Riconsegna</em>. Se il box esplode -> MALUS!
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- CONTENT: WIN/LOSE -->
+                <div id="content-win" class="hidden">
+                    <h2 class="text-3xl text-blue-800 mb-2">🏆 Fine Partita</h2>
+                    
+                    <div class="p-4 bg-green-100 border-2 border-green-600 rounded-lg mb-4 transform rotate-1">
+                        <h3 class="text-xl font-bold text-green-800">Negozio Salvo!</h3>
+                        <p>Accumulate <strong>5 Obiettivi Comuni</strong> completati.</p>
+                        <p class="text-sm mt-2">Poi si contano i punti personali. Chi ha lavorato meglio vince!</p>
+                    </div>
+
+                    <div class="p-4 bg-red-100 border-2 border-red-600 rounded-lg transform -rotate-1">
+                        <h3 class="text-xl font-bold text-red-800">Negozio CHIUSO!</h3>
+                        <p>Se accumulate <strong>3 Fallimenti</strong> (Obiettivi falliti o Box pieno troppe volte)...</p>
+                        <p class="text-xl font-bold mt-2 text-center uppercase">Game Over per tutti!</p>
+                    </div>
+
+                    <h3 class="text-2xl text-purple-700 mt-6 mb-2">🎯 Obiettivi</h3>
+                    <p class="mb-2"><strong>Personali:</strong> Pattern sul tuo 3x5 (righe colore diverso, diagonali, etc).</p>
+                    <p><strong>Comuni:</strong> Richiedono cooperazione sugli scaffali condivisi (es. "Nessuna riga vuota tra vicini").</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: INTERACTIVE SIMULATOR -->
+        <div class="lg:col-span-8 flex flex-col gap-4">
+            
+            <!-- SIMULATOR CONTROLS -->
+            <div class="bg-yellow-400 border-4 border-black p-4 rounded-xl shadow-[8px_8px_0_rgba(0,0,0,1)] flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="text-xl font-bold font-bangers">SIMULATORE:</div>
+                    <button onclick="toggleMusic()" id="btn-music" class="text-xs bg-slate-800 text-white px-2 py-1 rounded border border-gray-500 hover:bg-slate-700">🎵 Muzak: OFF</button>
+                </div>
+                
+                <div class="flex gap-2">
+                    <button onclick="simMoveManager()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold border-2 border-black hover:bg-blue-500 shadow-md active:translate-y-1">1. Muovi</button>
+                    <button onclick="simTakePile()" class="bg-purple-600 text-white px-4 py-2 rounded font-bold border-2 border-black hover:bg-purple-500 shadow-md active:translate-y-1">2. Prendi</button>
+                    <button onclick="simAutoPlace()" class="bg-green-600 text-white px-4 py-2 rounded font-bold border-2 border-black hover:bg-green-500 shadow-md active:translate-y-1">3. Piazza</button>
+                    <button onclick="resetSim()" class="bg-red-500 text-white px-2 py-2 rounded border-2 border-black hover:bg-red-400">Reset</button>
+                </div>
+            </div>
+            
+            <div id="game-status" class="bg-black text-green-400 font-mono px-4 py-2 rounded w-full text-sm border-2 border-gray-600 shadow-lg">
+                STATUS: In attesa...
+            </div>
+
+            <!-- BOARD AREA -->
+            <div class="squiggle-box p-4 bg-slate-200 relative min-h-[600px] flex flex-col items-center justify-center overflow-hidden">
+                
+                <!-- THE OCTAGON DESK -->
+                <div class="relative w-80 h-80 mb-8 flex-shrink-0">
+                    <!-- Desk Surface (Octagon Shape) -->
+                    <div class="absolute inset-0 bg-[#8d6e63] border-[6px] border-[#5d4037] octagon-shape flex items-center justify-center shadow-xl">
+                        <!-- Inner Octagon for decoration -->
+                        <div class="w-full h-full border-[20px] border-[#795548] octagon-shape flex items-center justify-center">
+                            <span class="text-[#3e2723] font-bold text-3xl opacity-50 rotate-[-15deg]">DESK</span>
+                        </div>
+                    </div>
+
+                    <!-- Piles -->
+                    <div id="pile-0" class="absolute top-[-25px] left-1/2 -translate-x-1/2 pile-container z-20"></div>
+                    <div id="pile-1" class="absolute top-[14.6%] right-[14.6%] translate-x-[50%] translate-y-[-50%] rotate-[45deg] pile-container z-20 origin-center"></div>
+                    <div id="pile-2" class="absolute top-1/2 right-[-25px] -translate-y-1/2 rotate-90 pile-container z-20 origin-center"></div>
+                    <div id="pile-3" class="absolute bottom-[14.6%] right-[14.6%] translate-x-[50%] translate-y-[50%] rotate-[135deg] pile-container z-20 origin-center"></div>
+                    <div id="pile-4" class="absolute bottom-[-25px] left-1/2 -translate-x-1/2 rotate-180 pile-container z-20 origin-center"></div>
+                    <div id="pile-5" class="absolute bottom-[14.6%] left-[14.6%] translate-x-[-50%] translate-y-[50%] rotate-[225deg] pile-container z-20 origin-center"></div>
+                    <div id="pile-6" class="absolute top-1/2 left-[-25px] -translate-y-1/2 rotate-[270deg] pile-container z-20 origin-center"></div>
+                    <div id="pile-7" class="absolute top-[14.6%] left-[14.6%] translate-x-[-50%] translate-y-[-50%] rotate-[315deg] pile-container z-20 origin-center"></div>
+
+                    <!-- Store Manager Meeple (SVG Replaced) -->
+                    <div id="manager-meeple" class="meeple top-[-40px] left-1/2 -translate-x-1/2 z-30">
+                        <svg viewBox="0 0 512 512" class="w-full h-full drop-shadow-md">
+                            <path d="M256,0C199.6,0,153.8,45.8,153.8,102.2c0,18.1,4.9,35,13.5,49.8L53.6,281.3c-14.7,16.7-18,41-8.2,60.8 c9.8,19.8,30.3,32.4,52.4,32.4h316.4c22.1,0,42.6-12.6,52.4-32.4c9.8-19.8,6.5-44.1-8.2-60.8L344.7,152c8.6-14.8,13.5-31.7,13.5-49.8 C358.2,45.8,312.4,0,256,0z" fill="#8800ff" stroke="black" stroke-width="20"/>
+                            <!-- Little tie/details -->
+                            <path d="M256,120 L240,180 L256,220 L272,180 Z" fill="#ccff00" stroke="black" stroke-width="5"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- CARDS & PLAYER AREA CONTAINER -->
+                <div class="w-full flex justify-between items-end gap-2 mt-4 relative">
+                    
+                    <!-- Shared Left -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-sm font-bold bg-white px-2 border border-black mb-1 -rotate-3">Shared SX</div>
+                        <div class="bg-orange-200 border-2 border-black p-1 grid grid-cols-2 gap-1 w-[100px]">
+                            <!-- Col A (Neighbor) -->
+                            <div class="flex flex-col gap-1 opacity-50 bg-gray-300"><div class="slot h-8 w-full"></div><div class="slot h-8 w-full"></div><div class="slot h-8 w-full"></div></div>
+                            <!-- Col B (Yours) -->
+                            <div class="flex flex-col gap-1" id="shelf-shared-left"><div class="slot h-8 w-full"></div><div class="slot h-8 w-full"></div><div class="slot h-8 w-full"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Shelf & Cards Column -->
+                    <div class="flex flex-col items-center flex-grow max-w-[300px]">
+                        
+                        <!-- COMMON OBJECTIVE CARD (Placed above shelf) -->
+                        <div class="obj-card-common w-full mb-2 p-2 relative">
+                            <!-- Tape effect -->
+                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-4 bg-red-500 opacity-80 rotate-3"></div>
+                            
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-xs font-bold text-red-600 block">MEMO DEL BOSS (Comune)</span>
+                                    <span class="text-sm leading-none">"Voglio almeno 1 cassetta Horror su ogni scaffale condiviso!"</span>
+                                </div>
+                                <div class="w-6 h-6 bg-black border border-white rounded-sm flex items-center justify-center text-[10px] text-white font-bold ml-1 flex-shrink-0">
+                                    HOR
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-sm font-bold bg-yellow-300 px-4 border-2 border-black mb-1 rotate-2 shadow-md">IL TUO SCAFFALE</div>
+                        <div class="bg-amber-100 border-4 border-amber-800 p-2 grid grid-cols-5 gap-1 w-full shadow-inner" id="shelf-personal">
+                            <!-- Generated by JS -->
+                        </div>
+                        
+                        <!-- Hand / Buffer -->
+                        <div class="mt-2 min-h-[70px] w-full bg-slate-800 rounded border-2 border-gray-500 p-2 flex gap-2 justify-center items-center" id="player-hand">
+                            <span class="text-gray-500 text-xs italic">La tua mano (Prendi dal desk)</span>
+                        </div>
+
+                        <!-- PERSONAL OBJECTIVE CARD (Placed below hand) -->
+                        <div class="obj-card-personal w-full mt-2 p-2 flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full border-2 border-red-800 flex items-center justify-center transform -rotate-12 bg-white flex-shrink-0">
+                                <span class="text-[8px] font-bold text-red-800 text-center leading-none">TOP<br>SECRET</span>
+                            </div>
+                            <div class="flex-grow">
+                                <span class="text-xs font-bold text-blue-800 block">OBIETTIVO PERSONALE</span>
+                                <span class="text-sm leading-none">Colonna centrale tutta Family (Blu)</span>
+                            </div>
+                            <div class="w-4 h-12 border border-black bg-blue-200 flex flex-col gap-px p-px">
+                                <div class="bg-blue-600 h-1/3 w-full"></div>
+                                <div class="bg-blue-600 h-1/3 w-full"></div>
+                                <div class="bg-blue-600 h-1/3 w-full"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Shared Right -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-sm font-bold bg-white px-2 border border-black mb-1 rotate-3">Shared DX</div>
+                        <div class="bg-orange-200 border-2 border-black p-1 grid grid-cols-2 gap-1 w-[100px]">
+                            <!-- Col A (Yours) -->
+                            <div class="flex flex-col gap-1" id="shelf-shared-right"><div class="slot h-8 w-full"></div><div class="slot h-8 w-full"></div><div class="slot h-8 w-full"></div></div>
+                            <!-- Col B (Neighbor) -->
+                            <div class="flex flex-col gap-1 opacity-50 bg-gray-300"><div class="slot h-8 w-full"></div><div class="slot h-8 w-full"></div><div class="slot h-8 w-full"></div></div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <!-- Discard Box (Moved below shelves, right aligned) -->
+                <div class="w-full flex justify-end px-4 mt-4">
+                    <div class="w-24 h-24 border-4 border-black bg-gray-800 text-white flex flex-col items-center justify-center rounded-lg shadow-lg rotate-6">
+                        <span class="text-xs uppercase font-bold">Resi</span>
+                        <span id="discard-count" class="text-3xl font-bangers text-red-500">0/10</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- AUDIO HINT (Visual) -->
+    <div id="sound-effect" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl font-bangers text-yellow-500 shadow-black drop-shadow-lg pointer-events-none opacity-0 transition-opacity duration-200 z-50">
+        CLUNK!
+    </div>
+
+    <script>
+        // --- GAME DATA & STATE ---
+        const genres = [
+            { id: 'act', name: 'Action', color: 'tape-red' },
+            { id: 'fam', name: 'Family', color: 'tape-blue' },
+            { id: 'com', name: 'Comedy', color: 'tape-yellow' },
+            { id: 'hor', name: 'Horror', color: 'tape-black' }
+        ];
+
+        let state = {
+            managerPos: 0, // 0-7
+            piles: [], // Array of arrays of tapes
+            hand: [],
+            personalShelf: Array(15).fill(null),
+            sharedLeft: Array(3).fill(null), // Only controlling Col B
+            sharedRight: Array(3).fill(null), // Only controlling Col A
+            discardCount: 0,
+            step: 0 // 0: Move, 1: Take, 2: Place
+        };
+
+        // --- MUSIC SYNTH (Web Audio API) ---
+        let audioCtx = null;
+        let isPlaying = false;
+        let nextNoteTime = 0;
+        let timerID = null;
+        let noteIndex = 0;
+        
+        // Simple Elevator / Shop Loop
+        // Cmaj7 -> Dm7 loop
+        const melody = [
+            {f: 261.63, d: 0.5}, {f: 329.63, d: 0.5}, {f: 392.00, d: 0.5}, {f: 493.88, d: 1.0}, // C E G B
+            {f: 392.00, d: 0.5}, {f: 329.63, d: 0.5}, // G E
+            {f: 293.66, d: 0.5}, {f: 349.23, d: 0.5}, {f: 440.00, d: 0.5}, {f: 523.25, d: 1.0}, // D F A C
+            {f: 440.00, d: 0.5}, {f: 349.23, d: 0.5}  // A F
+        ];
+
+        function toggleMusic() {
+            const btn = document.getElementById('btn-music');
+            if(!isPlaying) {
+                if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if(audioCtx.state === 'suspended') audioCtx.resume();
+                isPlaying = true;
+                noteIndex = 0;
+                nextNoteTime = audioCtx.currentTime;
+                scheduler();
+                btn.innerText = "🎵 Muzak: ON";
+                btn.classList.remove('bg-slate-800');
+                btn.classList.add('bg-green-600');
+            } else {
+                isPlaying = false;
+                clearTimeout(timerID);
+                btn.innerText = "🎵 Muzak: OFF";
+                btn.classList.add('bg-slate-800');
+                btn.classList.remove('bg-green-600');
+            }
+        }
+
+        function scheduler() {
+            if(!isPlaying) return;
+            while (nextNoteTime < audioCtx.currentTime + 0.1) {
+                playNote(melody[noteIndex]);
+                nextNoteTime += melody[noteIndex].d * 0.6; // Tempo multiplier (0.6 makes it faster)
+                noteIndex = (noteIndex + 1) % melody.length;
+            }
+            timerID = setTimeout(scheduler, 25);
+        }
+
+        function playNote(note) {
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.type = 'triangle'; // Soft, lo-fi synth sound
+            osc.frequency.value = note.f;
+            
+            // Envelope
+            gainNode.gain.setValueAtTime(0, nextNoteTime);
+            gainNode.gain.linearRampToValueAtTime(0.05, nextNoteTime + 0.05); // Low volume background
+            gainNode.gain.exponentialRampToValueAtTime(0.001, nextNoteTime + note.d * 0.6 - 0.05);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.start(nextNoteTime);
+            osc.stop(nextNoteTime + note.d * 0.6);
+        }
+
+        // --- INIT ---
+        function initGame() {
+            // Fill piles randomly
+            state.piles = [];
+            for(let i=0; i<8; i++) {
+                let pile = [];
+                let count = Math.floor(Math.random() * 3) + 2; // 2 to 4 tapes
+                for(let j=0; j<count; j++) {
+                    pile.push(genres[Math.floor(Math.random() * genres.length)]);
+                }
+                state.piles.push(pile);
+            }
+            state.personalShelf = Array(15).fill(null);
+            state.sharedLeft = Array(3).fill(null);
+            state.sharedRight = Array(3).fill(null);
+            state.hand = [];
+            state.managerPos = 0;
+            state.discardCount = 0;
+            state.step = 0;
+            
+            renderBoard();
+            updateStatus("Inizia il turno! Muovi lo Store Manager.");
+        }
+
+        // --- RENDER FUNCTIONS ---
+        function renderBoard() {
+            // Render Piles
+            for(let i=0; i<8; i++) {
+                const pileEl = document.getElementById(`pile-${i}`);
+                pileEl.innerHTML = '';
+                state.piles[i].forEach((tape, idx) => {
+                    const t = document.createElement('div');
+                    t.className = `absolute w-8 h-10 border border-black rounded shadow-sm ${tape.color}`;
+                    // Add slight rotation for messy look
+                    const rot = (idx % 2 === 0) ? -3 : 3;
+                    t.style.top = `${-idx * 4}px`; // Stack vertically slightly
+                    t.style.left = `${idx * 2}px`;
+                    t.style.transform = `rotate(${rot}deg)`;
+                    pileEl.appendChild(t);
+                });
+            }
+
+            // Render Manager Position
+            // Mapping 8 positions for the OCTAGON
+            // Center is 160, 160 (since w-80 is 320px)
+            // Sides are 0 (Top), 1 (TR), 2 (R), etc.
+            const manager = document.getElementById('manager-meeple');
+            const radius = 130; // Radius for Meeple placement
+            const center = 160;
+            const meepleWidth = 40; // Updated size
+            const meepleHeight = 40;
+
+            // Angle for each side (0=Top, 1=TopRight...)
+            // Top is -90 deg. 
+            // 8 segments. 360/8 = 45 deg per segment.
+            // Pos 0 (Top) = -90
+            // Pos 1 (TopRight) = -45
+            const angleDeg = (state.managerPos * 45) - 90;
+            const angleRad = angleDeg * (Math.PI / 180);
+
+            const x = center + radius * Math.cos(angleRad) - (meepleWidth / 2);
+            const y = center + radius * Math.sin(angleRad) - (meepleHeight / 2);
+            
+            // Adjust meeple rotation to face center
+            const rotation = (state.managerPos * 45); 
+            
+            manager.style.left = `${x}px`;
+            manager.style.top = `${y}px`;
+            manager.style.transform = `rotate(${rotation}deg)`; // Rotate meeple to follow path
+
+            // Render Hand
+            const handEl = document.getElementById('player-hand');
+            if(state.hand.length === 0) {
+                handEl.innerHTML = '<span class="text-gray-500 text-xs italic">La tua mano è vuota</span>';
+            } else {
+                handEl.innerHTML = '';
+                state.hand.forEach(tape => {
+                    const t = document.createElement('div');
+                    t.className = `vhs-tape ${tape.color}`;
+                    t.innerText = tape.name.substring(0,3);
+                    handEl.appendChild(t);
+                });
+            }
+
+            // Render Personal Shelf
+            const pShelfEl = document.getElementById('shelf-personal');
+            pShelfEl.innerHTML = '';
+            state.personalShelf.forEach((slot, idx) => {
+                const d = document.createElement('div');
+                d.className = 'slot bg-white';
+                if(slot) {
+                    d.innerHTML = `<div class="vhs-tape ${slot.color} scale-75 cursor-default">${slot.name.substring(0,3)}</div>`;
+                }
+                pShelfEl.appendChild(d);
+            });
+
+            // Render Shared Shelves
+            renderSharedColumn('shelf-shared-left', state.sharedLeft);
+            renderSharedColumn('shelf-shared-right', state.sharedRight);
+
+            // Render Discard
+            document.getElementById('discard-count').innerText = `${state.discardCount}/10`;
+            if(state.discardCount >= 10) {
+                 document.getElementById('discard-count').classList.add('text-red-600', 'animate-pulse');
+            }
+        }
+
+        function renderSharedColumn(id, data) {
+            const el = document.getElementById(id);
+            el.innerHTML = '';
+            data.forEach(slot => {
+                const d = document.createElement('div');
+                d.className = 'slot h-8 w-full bg-white';
+                if(slot) {
+                    d.innerHTML = `<div class="w-full h-full ${slot.color} border border-black"></div>`;
+                }
+                el.appendChild(d);
+            });
+        }
+
+        // --- SIMULATION LOGIC ---
+
+        function playSound(text) {
+            const el = document.getElementById('sound-effect');
+            el.innerText = text;
+            el.style.opacity = 1;
+            el.style.transform = 'translate(-50%, -50%) scale(1.5) rotate(-10deg)';
+            setTimeout(() => {
+                el.style.opacity = 0;
+                el.style.transform = 'translate(-50%, -50%) scale(1) rotate(0deg)';
+            }, 500);
+        }
+
+        function updateStatus(msg) {
+            document.getElementById('game-status').innerText = `STATUS: ${msg}`;
+        }
+
+        function simMoveManager() {
+            if(state.step !== 0) {
+                shakeStatus(); return;
+            }
+            // Move 1 or 2 steps randomly for sim
+            const steps = Math.random() > 0.5 ? 2 : 1;
+            state.managerPos = (state.managerPos + steps) % 8;
+            playSound("STEP!");
+            renderBoard();
+            state.step = 1;
+            updateStatus("Manager arrivato. Ora 'Prendi Cassette'.");
+        }
+
+        function simTakePile() {
+            if(state.step !== 1) {
+                shakeStatus(); return;
+            }
+            const tapes = state.piles[state.managerPos];
+            if(tapes.length === 0) {
+                updateStatus("Pila vuota! Nessuna cassetta presa. Passa al piazzamento.");
+            } else {
+                state.hand = [...state.hand, ...tapes];
+                state.piles[state.managerPos] = []; // Empty the pile
+                playSound("GRAB!");
+            }
+            renderBoard();
+            state.step = 2;
+            updateStatus("Cassette in mano. Premi 'Piazza'.");
+        }
+
+        function simAutoPlace() {
+            if(state.step !== 2) {
+                shakeStatus(); return;
+            }
+            
+            // Logic: 
+            // 1. Try place 2 in Personal
+            let placedCount = 0;
+            for(let i=0; i<state.personalShelf.length; i++) {
+                if(state.personalShelf[i] === null && state.hand.length > 0 && placedCount < 2) {
+                    state.personalShelf[i] = state.hand.shift();
+                    placedCount++;
+                }
+            }
+
+            // 2. Place 1 in Shared Left
+            let placedLeft = false;
+            for(let i=0; i<3; i++) {
+                if(state.sharedLeft[i] === null && state.hand.length > 0) {
+                    state.sharedLeft[i] = state.hand.shift();
+                    placedLeft = true;
+                    break;
+                }
+            }
+
+            // 3. Place 1 in Shared Right
+            let placedRight = false;
+            for(let i=0; i<3; i++) {
+                if(state.sharedRight[i] === null && state.hand.length > 0) {
+                    state.sharedRight[i] = state.hand.shift();
+                    placedRight = true;
+                    break;
+                }
+            }
+
+            // 4. Discard Rest
+            const discarded = state.hand.length;
+            state.discardCount += discarded;
+            state.hand = [];
+            
+            playSound("SORTED!");
+            renderBoard();
+            
+            let msg = "Turno finito! ";
+            if(discarded > 0) msg += `${discarded} cassette scartate. `;
+            if(state.discardCount >= 10) msg += "BOX PIENO! MALUS!";
+            
+            updateStatus(msg);
+            
+            // Reset for next loop simulation after a delay or manual reset
+            setTimeout(() => {
+                 state.step = 0;
+                 updateStatus("Nuovo turno: Muovi il Manager.");
+            }, 2000);
+        }
+
+        function resetSim() {
+            initGame();
+        }
+
+        function shakeStatus() {
+            const el = document.getElementById('game-status');
+            el.classList.add('translate-x-2', 'bg-red-900');
+            setTimeout(() => el.classList.remove('translate-x-2', 'bg-red-900'), 200);
+        }
+
+        // --- UI TABS ---
+        function switchTab(tabId) {
+            // Hide all contents
+            ['intro', 'turn', 'win'].forEach(id => {
+                document.getElementById(`content-${id}`).classList.add('hidden');
+                document.getElementById(`btn-${id}`).classList.remove('active', 'bg-yellow-400', 'text-blue-900');
+                document.getElementById(`btn-${id}`).classList.add('bg-blue-900', 'text-white');
+            });
+
+            // Show selected
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            const btn = document.getElementById(`btn-${tabId}`);
+            btn.classList.add('active', 'bg-yellow-400', 'text-blue-900');
+            btn.classList.remove('bg-blue-900', 'text-white');
+        }
+
+        // Start
+        window.onload = initGame;
+
+    </script>
+</body>
+</html>
