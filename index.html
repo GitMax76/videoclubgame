@@ -1470,7 +1470,19 @@
 
         window.onload = () => {
             initGame();
-            initAudio();
+
+            // Check if we should skip splash (e.g. returning from Editor)
+            if (sessionStorage.getItem('skip_splash') === 'true') {
+                const splash = document.getElementById('splash-screen');
+                if (splash) splash.style.display = 'none';
+                switchTab('intro');
+                initAudio();
+
+                // Optional: Clear it so refresh shows splash, or keep it for session?
+                // Keeping it might be better for consistent "session" feel.
+            } else {
+                initAudio();
+            }
         };
     </script>
 </body>
