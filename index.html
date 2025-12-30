@@ -1469,18 +1469,16 @@
         generateBackgroundTapes();
 
         window.onload = () => {
-            initGame();
-
-            // Check if we should skip splash (e.g. returning from Editor)
+            // Check if we should skip splash immediately
             if (sessionStorage.getItem('skip_splash') === 'true') {
+                console.log("Skipping splash screen...");
                 const splash = document.getElementById('splash-screen');
-                if (splash) splash.style.display = 'none';
+                if (splash) splash.remove(); // Completely remove it
                 switchTab('intro');
+                initGame();
                 initAudio();
-
-                // Optional: Clear it so refresh shows splash, or keep it for session?
-                // Keeping it might be better for consistent "session" feel.
             } else {
+                initGame();
                 initAudio();
             }
         };
