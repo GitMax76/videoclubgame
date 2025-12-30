@@ -1419,13 +1419,16 @@ const defaultLayerStates = ${JSON.stringify(newDefaults)};
 
           // Attempt to auto-resume
           if (storedPlaying === 'true') {
-            scWidget.play();
-            isPlaying = true;
-            const btn = document.getElementById('btn-music');
-            if (btn) {
-              btn.innerText = "🎵 AUDIO: ON";
-              btn.style.background = "#28a745";
-            }
+            // Small delay to ensure seek completes and browser is ready
+            setTimeout(() => {
+              scWidget.play();
+              isPlaying = true;
+              const btn = document.getElementById('btn-music');
+              if (btn) {
+                btn.innerText = "🎵 AUDIO: ON";
+                btn.style.background = "#28a745";
+              }
+            }, 500);
           }
         });
 
