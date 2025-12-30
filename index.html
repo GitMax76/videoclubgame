@@ -601,6 +601,12 @@
     </div>
     <div class="crt-overlay"></div>
 
+    <!-- SOUNDCLOUD WIDGET (HIDDEN) -->
+    <iframe id="sc-widget" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/synthwave80s/sets/dreams&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"
+        style="display:none;">
+    </iframe>
+
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
 
         <!-- HEADER -->
@@ -619,10 +625,14 @@
                     class="tab-btn active btn-font bg-blue-900 text-white px-3 py-2 rounded border-2 border-black hover:bg-yellow-400 hover:text-blue-900 transition-all text-sm">Intro</button>
                 <button onclick="switchTab('turn')" id="btn-turn"
                     class="tab-btn btn-font bg-blue-900 text-white px-3 py-2 rounded border-2 border-black hover:bg-yellow-400 hover:text-blue-900 transition-all text-sm">Regole</button>
-                <button onclick="toggleMusic()" id="btn-music"
-                    class="tab-btn btn-font bg-slate-800 text-white px-3 py-2 rounded border-2 border-black hover:bg-slate-700 active:scale-95 transition-all text-sm flex items-center gap-1">
-                    🎵 AUDIO: OFF
-                </button>
+
+                <div class="flex flex-col items-center">
+                    <button onclick="toggleMusic()" id="btn-music"
+                        class="tab-btn btn-font bg-slate-800 text-white px-3 py-2 rounded border-2 border-black hover:bg-slate-700 active:scale-95 transition-all text-sm flex items-center gap-1">
+                        🎵 AUDIO: OFF
+                    </button>
+                    <span class="text-[10px] text-gray-500 font-bold mt-1">Music by: Synthwave80s</span>
+                </div>
                 <!-- BUTTON TO EDITOR -->
                 <a href="cardseditor.html"
                     class="tab-btn btn-font bg-purple-700 text-white px-3 py-2 rounded border-2 border-black hover:bg-purple-500 hover:scale-105 transition-all text-center no-underline flex items-center shadow-md text-sm">
@@ -1292,89 +1302,49 @@
             }
         }
 
-        // --- ROBUST AUDIO ENGINE (MOBILE SAFE) ---
-        let audioCtx = null;
+        // --- SOUNDCLOUD AUDIO ENGINE ---
+        let scWidget = null;
         let isPlaying = false;
-        let nextNoteTime = 0;
-        let timerID = null;
-        let noteIndex = 0;
 
-        const melody = [
-            { f: 261.63, d: 0.5 }, { f: 329.63, d: 0.5 }, { f: 392.00, d: 0.5 }, { f: 493.88, d: 1.0 },
-            { f: 392.00, d: 0.5 }, { f: 329.63, d: 0.5 },
-            { f: 293.66, d: 0.5 }, { f: 349.23, d: 0.5 }, { f: 440.00, d: 0.5 }, { f: 523.25, d: 1.0 },
-            { f: 440.00, d: 0.5 }, { f: 349.23, d: 0.5 }
-        ];
+        function initAudio() {
+            // Load SoundCloud Widget API
+            const script = document.createElement('script');
+            script.src = "https://w.soundcloud.com/player/api.js";
+            script.onload = () => {
+                const iframe = document.getElementById('sc-widget');
+                scWidget = SC.Widget(iframe);
 
-        async function toggleMusic() {
+                // Bind events
+                scWidget.bind(SC.Widget.Events.READY, () => {
+                    console.log('Audio Ready');
+                });
+                scWidget.bind(SC.Widget.Events.FINISH, () => {
+                    console.log('Track Finished');
+                });
+            };
+            document.head.appendChild(script);
+        }
+
+        function toggleMusic() {
             const btn = document.getElementById('btn-music');
 
-            // 1. Initialize AudioContext ON CLICK (Crucial for Mobile)
-            if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioContext();
-            }
+            if (!scWidget) return;
 
-            // 2. Resume if suspended (Browser policy) - WAIT FOR IT
-            if (audioCtx.state === 'suspended') {
-                await audioCtx.resume();
-            }
-
-            if (!isPlaying) {
-                // 3. Force audio unlock with a silent oscillator (iOS Hack)
-                try {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    gain.gain.value = 0; // Silent
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(0);
-                    osc.stop(0.01);
-                } catch (e) { console.log("Audio unlock attempted"); }
-
-                isPlaying = true;
-                noteIndex = 0;
-                nextNoteTime = audioCtx.currentTime + 0.1;
-                scheduler();
-                btn.innerText = "🎵 AUDIO: ON";
-                btn.classList.add('bg-green-600');
-                btn.classList.remove('bg-slate-800');
-            } else {
-                isPlaying = false;
-                if (timerID) clearTimeout(timerID);
-                btn.innerText = "🎵 AUDIO: OFF";
-                btn.classList.remove('bg-green-600');
-                btn.classList.add('bg-slate-800');
-            }
-        }
-
-        function scheduler() {
-            if (!isPlaying) return;
-            // Schedule ahead
-            while (nextNoteTime < audioCtx.currentTime + 0.1) {
-                playNote(melody[noteIndex]);
-                nextNoteTime += melody[noteIndex].d * 0.6;
-                noteIndex = (noteIndex + 1) % melody.length;
-            }
-            timerID = setTimeout(scheduler, 25);
-        }
-
-        function playNote(note) {
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-
-            osc.type = 'triangle';
-            osc.frequency.value = note.f;
-
-            gainNode.gain.setValueAtTime(0, nextNoteTime);
-            gainNode.gain.linearRampToValueAtTime(0.05, nextNoteTime + 0.05);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, nextNoteTime + note.d * 0.6 - 0.05);
-
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            osc.start(nextNoteTime);
-            osc.stop(nextNoteTime + note.d * 0.6);
+            scWidget.isPaused((paused) => {
+                if (paused) {
+                    scWidget.play();
+                    isPlaying = true;
+                    btn.innerText = "🎵 AUDIO: ON";
+                    btn.classList.add('bg-green-600');
+                    btn.classList.remove('bg-slate-800');
+                } else {
+                    scWidget.pause();
+                    isPlaying = false;
+                    btn.innerText = "🎵 AUDIO: OFF";
+                    btn.classList.remove('bg-green-600');
+                    btn.classList.add('bg-slate-800');
+                }
+            });
         }
 
         // --- SPLASH SCREEN LOGIC ---
@@ -1382,11 +1352,15 @@
             const splash = document.getElementById('splash-screen');
             if (!splash) return;
 
-            // Unlock Audio immediately
-            toggleMusic().then(() => {
-                // Play specific start chime
-                playSplashJingle();
-            });
+            // Start Audio
+            if (scWidget) {
+                scWidget.play();
+                isPlaying = true;
+                const btn = document.getElementById('btn-music');
+                btn.innerText = "🎵 AUDIO: ON";
+                btn.classList.add('bg-green-600');
+                btn.classList.remove('bg-slate-800');
+            }
 
             // Initialize UI State
             switchTab('intro');
@@ -1398,33 +1372,7 @@
         }
 
         function playSplashJingle() {
-            if (!audioCtx) return;
-            const now = audioCtx.currentTime;
-
-            // Retro "Sega" style or "Power On" chord
-            const osc1 = audioCtx.createOscillator();
-            const osc2 = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            osc1.type = 'sawtooth';
-            osc1.frequency.setValueAtTime(110, now); // A2
-            osc1.frequency.exponentialRampToValueAtTime(440, now + 0.5); // Sweep up
-
-            osc2.type = 'square';
-            osc2.frequency.setValueAtTime(220, now); // A3
-            osc2.frequency.exponentialRampToValueAtTime(880, now + 0.5);
-
-            gain.gain.setValueAtTime(0.1, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
-
-            osc1.connect(gain);
-            osc2.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            osc1.start(now);
-            osc2.start(now);
-            osc1.stop(now + 1.5);
-            osc2.stop(now + 1.5);
+            // Deprecated - Audio now handled by SoundCloud auto-start
         }
 
         // --- SPLASH BACKGROUND GENERATOR ---
@@ -1482,7 +1430,10 @@
 
         generateBackgroundTapes();
 
-        window.onload = initGame;
+        window.onload = () => {
+            initGame();
+            initAudio();
+        };
     </script>
 </body>
 
