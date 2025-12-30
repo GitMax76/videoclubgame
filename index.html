@@ -1305,6 +1305,7 @@
         // --- SOUNDCLOUD AUDIO ENGINE ---
         let scWidget = null;
         let isPlaying = false;
+        let currentPos = 0;
 
         function initAudio() {
             // Load SoundCloud Widget API
@@ -1317,12 +1318,46 @@
                 // Bind events
                 scWidget.bind(SC.Widget.Events.READY, () => {
                     console.log('Audio Ready');
+
+                    // --- RESTORE STATE ---
+                    const storedPos = sessionStorage.getItem('audio_pos');
+                    const storedPlaying = sessionStorage.getItem('audio_playing');
+
+                    if (storedPos) {
+                        currentPos = parseFloat(storedPos);
+                        scWidget.seekTo(currentPos);
+                    }
+
+                    // Attempt to auto-resume if it was playing
+                    if (storedPlaying === 'true') {
+                        scWidget.play();
+                        isPlaying = true;
+                        // Update UI
+                        const btn = document.getElementById('btn-music');
+                        if (btn) {
+                            btn.innerText = "🎵 AUDIO: ON";
+                            btn.classList.add('bg-green-600');
+                            btn.classList.remove('bg-slate-800');
+                        }
+                    }
                 });
+
                 scWidget.bind(SC.Widget.Events.FINISH, () => {
                     console.log('Track Finished');
                 });
+
+                // Track progress
+                scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
+                    currentPos = data.currentPosition;
+                });
             };
             document.head.appendChild(script);
+
+            // --- SAVE STATE ON UNLOAD ---
+            window.addEventListener('beforeunload', () => {
+                sessionStorage.setItem('audio_pos', currentPos);
+                sessionStorage.setItem('audio_playing', isPlaying);
+            });
         }
 
         function toggleMusic() {
