@@ -825,21 +825,28 @@
         <button onclick="window.location.href='index.html'"
           style="flex: 1; padding: 12px; background: #6c757d; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">🏠
           Home</button>
+        <button onclick="document.getElementById('contacts-footer').scrollIntoView({behavior: 'smooth'})"
+          style="flex: 1; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">
+          📞 Contatti
+        </button>
         <button id="printBtn" onclick="printSingle()">Stampa Editor</button>
       </div>
     </div>
   </div>
 
-  <footer
-    style="width: 100%; text-align: center; margin-top: 3rem; margin-bottom: 1rem; padding: 1rem; border-top: 1px dashed #444; color: #888; font-size: 0.9rem;">
-    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+  <footer id="contacts-footer"
+    style="width: 100%; text-align: center; margin-top: 3rem; margin-bottom: 2rem; padding: 1.5rem; background: #222; border-top: 3px solid #555; color: #fff;">
+    <h3 style="margin-bottom: 1rem; font-size: 1.5rem; color: #ffd400;">👋 PARLIAMO?</h3>
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; font-size: 1.1rem;">
       <a href="mailto:massi.sabato@gmail.com"
-        style="color: #ccc; text-decoration: none; display: flex; align-items: center; gap: 5px;">📧
+        style="color: #ccc; text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid #444; border-radius: 5px; transition: all 0.2s;">📧
         massi.sabato@gmail.com</a>
       <a href="https://wa.me/393295644852" target="_blank"
-        style="color: #ccc; text-decoration: none; display: flex; align-items: center; gap: 5px;">💬 WhatsApp</a>
+        style="color: #4caf50; text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid #444; border-radius: 5px; transition: all 0.2s;">💬
+        WhatsApp</a>
       <a href="https://linktr.ee/JustMax76" target="_blank"
-        style="color: #ccc; text-decoration: none; display: flex; align-items: center; gap: 5px;">🌲 Linktree</a>
+        style="color: #e040fb; text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid #444; border-radius: 5px; transition: all 0.2s;">🌲
+        Linktree</a>
     </div>
   </footer>
 
