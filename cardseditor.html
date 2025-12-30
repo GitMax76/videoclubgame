@@ -714,6 +714,12 @@
 <body>
 
   <div class="app" id="mainApp">
+
+    <!-- SOUNDCLOUD WIDGET (HIDDEN) -->
+    <iframe id="sc-widget" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+      src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/synthwave80s/sets/dreams&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"
+      style="display:none;">
+    </iframe>
     <div class="card">
       <img src="sfondo120x70.png" class="bg layer-selectable" id="layer-bg">
       <img src="shelf120x70.png" class="shelf layer-selectable" id="layer-shelf">
@@ -822,6 +828,15 @@
       <div class="actions">
         <button id="resetBtn">Reset Totale</button>
         <button id="layoutBtn" onclick="toggleLayout()">Layout: ↕ Verticale</button>
+
+        <div style="display:flex; flex-direction:column; align-items:center; flex:1;">
+          <button onclick="toggleMusic()" id="btn-music"
+            style="width:100%; padding: 12px; background: #334155; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">
+            🎵 AUDIO: OFF
+          </button>
+          <span style="font-size:10px; color:#888; font-weight:bold; margin-top:2px;">Music by: Synthwave80s</span>
+        </div>
+
         <button onclick="window.location.href='index.html'"
           style="flex: 1; padding: 12px; background: #6c757d; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">🏠
           Home</button>
@@ -1378,6 +1393,46 @@ const defaultLayerStates = ${JSON.stringify(newDefaults)};
     }
     document.getElementById('resetBtn').addEventListener('click', () => { if (confirm("Vuoi resettare tutto?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } });
     init();
+    // --- SOUNDCLOUD AUDIO ENGINE ---
+    let scWidget = null;
+    let isPlaying = false;
+
+    function initAudio() {
+      const script = document.createElement('script');
+      script.src = "https://w.soundcloud.com/player/api.js";
+      script.onload = () => {
+        const iframe = document.getElementById('sc-widget');
+        scWidget = SC.Widget(iframe);
+        scWidget.bind(SC.Widget.Events.READY, () => {
+          console.log('Audio Ready');
+        });
+      };
+      document.head.appendChild(script);
+    }
+
+    function toggleMusic() {
+      const btn = document.getElementById('btn-music');
+      if (!scWidget) return;
+
+      scWidget.isPaused((paused) => {
+        if (paused) {
+          scWidget.play();
+          isPlaying = true;
+          btn.innerText = "🎵 AUDIO: ON";
+          btn.style.background = "#28a745"; // Green
+        } else {
+          scWidget.pause();
+          isPlaying = false;
+          btn.innerText = "🎵 AUDIO: OFF";
+          btn.style.background = "#334155"; // Slate
+        }
+      });
+    }
+
+    // Initialize Audio on Load
+    window.onload = () => {
+      initAudio();
+    };
   </script>
 </body>
 
