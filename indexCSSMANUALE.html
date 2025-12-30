@@ -1,0 +1,249 @@
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<title>VHS Card - Layout Separato</title>
+<style>
+  /* --- RESET E BASE --- */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem;
+    background: #1a1a1a;
+    color: #fff;
+    font-family: sans-serif;
+    text-align: center;
+  }
+
+  .app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  /* --- 1. LA CARTA (Il contenitore principale) --- */
+  .card {
+    position: relative;
+    
+    /* SCHERMO: Usiamo vw così scala con la finestra */
+    width: 60vw;  
+    /* Manteniamo il rapporto aspetto 120x70 (120/70 = 1.714) */
+    aspect-ratio: 120 / 70;
+    
+    background: #fff;
+    border-radius: 1vw; /* Arrotondamento scalabile */
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    margin: 0 auto;
+  }
+
+  /* --- 2. LIVELLI IMMAGINI (Classi Separate) --- */
+  
+  /* Immagini comuni: posizionamento assoluto */
+  .bg, .shelf, .tapes-img {
+    position: absolute;
+    pointer-events: none;
+    display: block;
+  }
+
+  /* SFONDO: Copre tutto */
+  .bg {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+  }
+
+  /* SCAFFALE: Centrato e largo quasi quanto la carta */
+  .shelf {
+    z-index: 2;
+    width: 70%; /* O regola in % se lo vuoi più piccolo, es: 95% */
+    height: auto;
+    
+    /* Centratura perfetta */
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* --- 3. GRUPPO CASSETTE (Colori + Overlay) --- */
+  /* Questo contenitore tiene insieme i colori e l'immagine frontale 
+     Così non si "scollano" mai. */
+  .tape-group {
+    position: absolute;
+    z-index: 4;
+    
+    /* QUI regoli la grandezza delle cassette rispetto alla carta! */
+    width: 68%; /* Occupa l'80% della larghezza della carta */
+    /* Se l'immagine tapes è 688x218, manterrà quella proporzione automaticamente */
+    aspect-ratio: 405 / 215; 
+    
+    /* Centrato nella carta */
+    top: 62%;
+    left: 57%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* L'immagine PNG delle cassette ("tapes") */
+  .tapes-img {
+    position: relative; /* Relativo al gruppo */
+    width: 80%;
+    height: 90%;
+    z-index: 5; /* Sopra i colori */
+  }
+
+  /* La griglia dei colori (Dietro l'immagine tapes) */
+  .shelf-colors {
+    position: absolute;
+    z-index: 3; /* Sotto l'overlay */
+    
+    /* Coordinate relative AL GRUPPO .tape-group, non alla carta! 
+       Molto più facile da centrare. Regola questi % per centrare i colori nei buchi */
+    top: 3.2%;      
+    left: 0.8%;
+    width: 70%;   
+    height: 80%;
+
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    
+    /* Gap in % relativi al gruppo */
+    column-gap: 9%; 
+    row-gap: 9%;
+  }
+
+  .tape-color {
+    background: #FFD800;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+
+  /* --- CONTROLLI --- */
+  .controls {
+    background: #333;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 60vw;
+  }
+  .tape-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  button#printBtn {
+    margin-top: 1rem;
+    padding: 10px 20px;
+    background: #ffd400;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  /* --- STAMPA (Override per dimensioni reali mm) --- */
+  @media print {
+    body {
+      margin: 0;
+      padding: 0;
+      background: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .controls { display: none; }
+    
+    .card {
+      /* Qui forziamo le dimensioni fisiche reali */
+      width: 120mm !important;
+      height: 70mm !important;
+      box-shadow: none;
+      border: 1px solid #ccc;
+    }
+    
+    /* Rimuoviamo i bordi arrotondati in stampa per taglio netto */
+    .card, .card * {
+      border-radius: 0 !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  
+  <div class="card">
+    <img src="https://i.postimg.cc/50BPLjqN/sfondo120x70.png" class="bg" alt="Sfondo">
+    
+    <img src="https://i.postimg.cc/DZrCLmQ9/shelf120x70.png" class="shelf" alt="Scaffale">
+
+    <div class="tape-group">
+      
+      <div class="shelf-colors" id="shelfColors">
+        <div class="tape-color" data-id="A1"></div>
+        <div class="tape-color" data-id="A2"></div>
+        <div class="tape-color" data-id="A3"></div>
+        <div class="tape-color" data-id="A4"></div>
+        <div class="tape-color" data-id="A5"></div>
+        <div class="tape-color" data-id="B1"></div>
+        <div class="tape-color" data-id="B2"></div>
+        <div class="tape-color" data-id="B3"></div>
+        <div class="tape-color" data-id="B4"></div>
+        <div class="tape-color" data-id="B5"></div>
+        <div class="tape-color" data-id="C1"></div>
+        <div class="tape-color" data-id="C2"></div>
+        <div class="tape-color" data-id="C3"></div>
+        <div class="tape-color" data-id="C4"></div>
+        <div class="tape-color" data-id="C5"></div>
+      </div>
+
+      <img src="https://i.postimg.cc/tT3rW7dv/tapes120x70.png" class="tapes-img" alt="Cassette">
+    </div>
+
+  </div>
+
+  <div class="controls">
+    <h3>Configurazione</h3>
+    <div class="tape-controls" id="tapeControls"></div>
+    <button id="printBtn">Stampa</button>
+  </div>
+
+</div>
+
+<script>
+  const palette = [
+    { name:'Nero',   value:'#000000' },
+    { name:'Blu',    value:'#0047AB' },
+    { name:'Giallo', value:'#FFD800' },
+    { name:'Rosso',  value:'#E52020' },
+    { name:'Arancio',value:'#FF8C00' },
+    { name:'Rosa',   value:'#FF66CC' },
+    { name:'Viola',  value:'#8A2BE2' },
+    { name:'Verde',  value:'#1E9E47' }
+  ];
+
+  const tapeColors = document.querySelectorAll('.tape-color');
+  
+  // Generiamo i controlli (solo click per semplicità, o tendina se preferisci)
+  tapeColors.forEach((tape) => {
+    let colorIndex = 2; // Giallo
+    tape.dataset.colorIndex = colorIndex;
+    tape.style.backgroundColor = palette[colorIndex].value;
+
+    tape.addEventListener('click', () => {
+      let idx = parseInt(tape.dataset.colorIndex, 10);
+      idx = (idx + 1) % palette.length;
+      tape.dataset.colorIndex = idx;
+      tape.style.backgroundColor = palette[idx].value;
+    });
+  });
+
+  document.getElementById('printBtn').addEventListener('click', () => {
+    window.print();
+  });
+</script>
+</body>
+</html>
