@@ -1478,6 +1478,9 @@
             // Check if we should skip splash immediately
             if (sessionStorage.getItem('skip_splash') === 'true') {
                 console.log("Skipping splash screen...");
+                // CONSUME THE FLAG so it doesn't persist on refresh
+                sessionStorage.removeItem('skip_splash');
+
                 const splash = document.getElementById('splash-screen');
                 if (splash) splash.remove(); // Completely remove it
                 switchTab('intro');
