@@ -269,6 +269,24 @@
             display: block;
         }
 
+        @media (max-width: 640px) {
+            .logo-main {
+                font-size: 5rem;
+                /* Reduced for mobile */
+                text-shadow: 3px 3px 0 var(--bb-blue), -2px -2px 0 var(--toon-purple);
+            }
+
+            .logo-top {
+                font-size: 2rem;
+                margin-left: -50px;
+            }
+
+            .logo-sub {
+                font-size: 1rem;
+                margin-right: -50px;
+            }
+        }
+
         .logo-sub {
             font-family: 'Courier New', monospace;
             font-weight: bold;
@@ -1342,7 +1360,6 @@
 
                     if (storedPos) {
                         currentPos = parseFloat(storedPos);
-                        scWidget.seekTo(currentPos);
                     }
 
                     // Attempt to auto-resume if it was playing
