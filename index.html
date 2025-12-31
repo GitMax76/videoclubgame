@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="it">
-<!-- Boardgame v1.1 - Mobile UX Release -->
 
 <head>
     <meta charset="UTF-8">
@@ -749,291 +748,283 @@
                                 cerca un sostituto...
                             </p>
 
-                            <h3 class="font-bold text-yellow-800 text-xl font-bangers">Semi-Cooperativo?</h3>
-                            <p class="text-lg">Esatto! Se il negozio fallisce (troppi clienti insoddisfatti),
-                                <strong>tutti perdono il lavoro</strong>. Ma se si salva... solo chi ha lavorato
-                                meglio otterrà la promozione a <strong>Manager</strong>!
+                            <div
+                                class="bg-yellow-100 p-4 border-l-8 border-yellow-500 mb-6 transform -rotate-1 shadow-sm">
+                                <h3 class="font-bold text-yellow-800 text-xl font-bangers">Semi-Cooperativo?</h3>
+                                <p class="text-lg">Esatto! Se il negozio fallisce (troppi clienti insoddisfatti),
+                                    <strong>tutti perdono il lavoro</strong>. Ma se si salva... solo chi ha lavorato
+                                    meglio otterrà la promozione a <strong>Manager</strong>!
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-1 bg-slate-100 p-4 rounded border-2 border-dashed border-gray-400">
+                            <h3 class="text-2xl text-purple-700 font-bold font-bangers">La vostra missione:</h3>
+                            <ul class="list-disc pl-5 space-y-2 mt-2 text-lg">
+                                <li><strong>Collaborare</strong>: (Richieste dello Store Manager) riempiendo gli
+                                    scaffali condivisi con i vostri vicini.</li>
+                                <li><strong>Competere</strong>: Organizzate il vostro scaffale personale per soddisfare
+                                    le richieste dei clienti (Richieste Clienti).</li>
+                                <li><strong>Attenti al Tempo</strong>: Ogni pila sul tavolo rappresenta un'ora del
+                                    turno. Quando finiscono, il negozio chiude!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- RULES -->
+                <!-- RULES -->
+                <div id="content-turn" class="hidden">
+                    <div class="space-y-6">
+                        <!-- SECTION 1: GOAL -->
+                        <div class="bg-blue-100 p-4 rounded border-2 border-blue-400 shadow-sm transform rotate-1">
+                            <h2 class="text-3xl text-blue-900 mb-2 font-bangers">🏆 Scopo del Gioco</h2>
+                            <p class="text-lg leading-snug">
+                                <strong>Semi-Cooperativo:</strong> Il Videoclub si salva se completate <strong>5
+                                    Obiettivi Comuni</strong>.
+                                Se fallite <strong>3 Obiettivi</strong>, il negozio chiude e <strong>tutti
+                                    perdono</strong>.
+                                <br><span class="text-sm italic text-blue-700">(Se il negozio è salvo, vince chi ha più
+                                    punti personali!)</span>
                             </p>
                         </div>
 
-                        <!-- PDF DOWNLOAD -->
-                        <div class="text-center md:text-left">
-                            <a href="Regolamento VideoClub.pdf" target="_blank"
-                                class="inline-flex items-center gap-2 bg-red-600 text-white border-2 border-black px-4 py-2 rounded shadow-[2px_2px_0_black] hover:bg-red-500 hover:translate-y-1 hover:shadow-none transition-all font-bold">
-                                📄 Scarica Regolamento PDF
-                            </a>
+                        <!-- SECTION 2: TURN STRUCTURE -->
+                        <div>
+                            <h3
+                                class="text-2xl text-purple-800 font-bangers mb-2 border-b-4 border-purple-300 inline-block">
+                                ⏱️ Il Tuo Turno</h3>
+                            <ol class="list-decimal pl-5 space-y-3 text-lg font-bold text-gray-800">
+                                <li>
+                                    <span class="text-purple-700">MUOVI MANAGER:</span>
+                                    <span class="font-normal block text-base text-gray-600">Sposta il Manager di
+                                        <strong>1 o 2 spazi</strong> in senso orario.</span>
+                                </li>
+                                <li>
+                                    <span class="text-purple-700">PRENDI PILA:</span>
+                                    <span class="font-normal block text-base text-gray-600">Prendi
+                                        <strong>TUTTE</strong> le cassette dalla pila scelta.</span>
+                                </li>
+                                <li>
+                                    <span class="text-purple-700">PIAZZA:</span>
+                                    <ul class="list-disc pl-5 font-normal text-base text-gray-700 mt-1 space-y-1">
+                                        <li><strong>2 Cassette</strong> sul TUO Scaffale Personale.</li>
+                                        <li><strong>1 Cassetta</strong> sullo Scaffale a <strong>SINISTRA</strong> (tua
+                                            colonna B).</li>
+                                        <li><strong>1 Cassetta</strong> sullo Scaffale a <strong>DESTRA</strong> (tua
+                                            colonna A).</li>
+                                        <li class="text-red-600 italic">Il resto si scarta nel Box! (Attento al limite)
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ol>
                         </div>
-                    </div>
-                    <div class="flex-1 bg-slate-100 p-4 rounded border-2 border-dashed border-gray-400">
-                        <h3 class="text-2xl text-purple-700 font-bold font-bangers">La vostra missione:</h3>
-                        <ul class="list-disc pl-5 space-y-2 mt-2 text-lg">
-                            <li><strong>Collaborare</strong>: (Richieste dello Store Manager) riempiendo gli
-                                scaffali condivisi con i vostri vicini.</li>
-                            <li><strong>Competere</strong>: Organizzate il vostro scaffale personale per soddisfare
-                                le richieste dei clienti (Richieste Clienti).</li>
-                            <li><strong>Attenti al Tempo</strong>: Ogni pila sul tavolo rappresenta un'ora del
-                                turno. Quando finiscono, il negozio chiude!</li>
-                        </ul>
+
+                        <!-- SECTION 3: END GAME -->
+                        <div class="bg-red-50 p-3 rounded border-l-4 border-red-500">
+                            <h4 class="text-lg font-bold text-red-900 font-bangers">⚠️ Fine Giro (8 Ore)</h4>
+                            <p class="text-sm">Quando il Manager completa un giro, si controllano gli <strong>Obiettivi
+                                    Comuni</strong>.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- RULES -->
-            <!-- RULES -->
-            <div id="content-turn" class="hidden">
-                <div class="space-y-6">
-                    <!-- PDF DOWNLOAD (Kept) -->
-                    <div class="text-center md:text-left">
-                        <a href="Regolamento VideoClub.pdf" target="_blank"
-                            class="inline-flex items-center gap-2 bg-red-600 text-white border-2 border-black px-4 py-2 rounded shadow-[2px_2px_0_black] hover:bg-red-500 hover:translate-y-1 hover:shadow-none transition-all font-bold">
-                            📄 Scarica Regolamento PDF
-                        </a>
-                    </div>
+        </div>
 
-                    <!-- SECTION 1: GOAL -->
-                    <div class="bg-blue-100 p-4 rounded border-2 border-blue-400 shadow-sm transform rotate-1">
-                        <h2 class="text-3xl text-blue-900 mb-2 font-bangers">🏆 Scopo del Gioco</h2>
-                        <p class="text-lg leading-snug">
-                            <strong>Semi-Cooperativo:</strong> Il Videoclub si salva se completate <strong>5
-                                Obiettivi Comuni</strong>.
-                            Se fallite <strong>3 Obiettivi</strong>, il negozio chiude e <strong>tutti
-                                perdono</strong>.
-                            <br><span class="text-sm italic text-blue-700">(Se il negozio è salvo, vince chi ha più
-                                punti personali!)</span>
-                        </p>
-                    </div>
+        <!-- RIGHT COLUMN: INTERACTIVE GAME -->
+        <div id="right-column" class="lg:col-span-8 flex flex-col gap-4">
 
-                    <!-- SECTION 2: TURN STRUCTURE (Classic Vertical) -->
+            <!-- SIMULATOR HEADER (New) -->
+            <div id="simulator-header"
+                class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-3 rounded-lg border-2 border-black shadow-md flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">📼</span>
                     <div>
-                        <h3
-                            class="text-2xl text-purple-800 font-bangers mb-2 border-b-4 border-purple-300 inline-block">
-                            ⏱️ Il Tuo Turno</h3>
-                        <ol class="list-decimal pl-5 space-y-3 text-lg font-bold text-gray-800">
-                            <li>
-                                <span class="text-purple-700">MUOVI MANAGER:</span>
-                                <span class="font-normal block text-base text-gray-600">Sposta il Manager di
-                                    <strong>1 o 2 spazi</strong> in senso orario.</span>
-                            </li>
-                            <li>
-                                <span class="text-purple-700">PRENDI PILA:</span>
-                                <span class="font-normal block text-base text-gray-600">Prendi
-                                    <strong>TUTTE</strong> le cassette dalla pila scelta.</span>
-                            </li>
-                            <li>
-                                <span class="text-purple-700">PIAZZA:</span>
-                                <ul class="list-disc pl-5 font-normal text-base text-gray-700 mt-1 space-y-1">
-                                    <li><strong>2 Cassette</strong> sul TUO Scaffale Personale.</li>
-                                    <li><strong>1 Cassetta</strong> sullo Scaffale a <strong>SINISTRA</strong> (tua
-                                        colonna B).</li>
-                                    <li><strong>1 Cassetta</strong> sullo Scaffale a <strong>DESTRA</strong> (tua
-                                        colonna A).</li>
-                                    <li class="text-red-600 italic">Il resto si scarta nel Box! (Attento al limite)
-                                    </li>
-                                </ul>
-                            </li>
-                        </ol>
-                    </div>
-
-                    <!-- SECTION 3: END GAME -->
-                    <div class="bg-red-50 p-3 rounded border-l-4 border-red-500">
-                        <h4 class="text-lg font-bold text-red-900 font-bangers">⚠️ Fine Giro (8 Ore)</h4>
-                        <p class="text-sm">Quando il Manager completa un giro, si controllano gli <strong>Obiettivi
-                                Comuni</strong>.</p>
+                        <h3 class="font-bangers text-xl leading-none tracking-wide text-yellow-300">PROVA A GIOCARE
+                            SUBITO!</h3>
+                        <p class="text-xs font-bold text-blue-100">SIMULA UN TURNO PER CAPIRE LE REGOLE</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- RIGHT COLUMN: INTERACTIVE GAME -->
-    <div id="right-column" class="lg:col-span-8 flex flex-col gap-4">
+            <!-- TURN SEQUENCE PROGRESS BAR -->
+            <div id="turn-sequence-bar"
+                class="flex items-center justify-between bg-white border-2 border-black rounded-lg p-2 shadow-sm text-xs md:text-sm">
+                <!-- Step 1: Muovi -->
+                <div id="seq-step-0" class="flex flex-col items-center opacity-40 transition-opacity font-bold">
+                    <span
+                        class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center mb-1">1</span>
+                    <span class="text-blue-900">MUOVI</span>
+                </div>
+                <div class="flex-grow border-t-2 border-dashed border-gray-400 mx-2"></div>
 
-        <!-- SIMULATOR HEADER (New) -->
-        <div id="simulator-header"
-            class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-3 rounded-lg border-2 border-black shadow-md flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="text-2xl">📼</span>
-                <div>
-                    <h3 class="font-bangers text-xl leading-none tracking-wide text-yellow-300">PROVA A GIOCARE
-                        SUBITO!</h3>
-                    <p class="text-xs font-bold text-blue-100">SIMULA UN TURNO PER CAPIRE LE REGOLE</p>
+                <!-- Step 2: Prendi -->
+                <div id="seq-step-1" class="flex flex-col items-center opacity-40 transition-opacity font-bold">
+                    <span
+                        class="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center mb-1">2</span>
+                    <span class="text-purple-900">PRENDI</span>
+                </div>
+                <div class="flex-grow border-t-2 border-dashed border-gray-400 mx-2"></div>
+
+                <!-- Step 3: Piazza -->
+                <div id="seq-step-2" class="flex flex-col items-center opacity-40 transition-opacity font-bold">
+                    <span
+                        class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center mb-1">3</span>
+                    <span class="text-amber-800">PIAZZA</span>
+                </div>
+                <div class="flex-grow border-t-2 border-dashed border-gray-400 mx-2"></div>
+
+                <!-- Step 4: Passa -->
+                <div id="seq-step-3" class="flex flex-col items-center opacity-40 transition-opacity font-bold">
+                    <span
+                        class="bg-green-600 text-white w-6 h-6 rounded-full flex items-center justify-center mb-1">4</span>
+                    <span class="text-green-900">PASSA</span>
                 </div>
             </div>
-        </div>
 
-        <!-- TURN SEQUENCE PROGRESS BAR -->
-        <div id="turn-sequence-bar"
-            class="flex items-center justify-between bg-white border-2 border-black rounded-lg p-2 shadow-sm text-xs md:text-sm">
-            <!-- Step 1: Muovi -->
-            <div id="seq-step-0" class="flex flex-col items-center opacity-40 transition-opacity font-bold">
-                <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center mb-1">1</span>
-                <span class="text-blue-900">MUOVI</span>
-            </div>
-            <div class="flex-grow border-t-2 border-dashed border-gray-400 mx-2"></div>
+            <!-- CONTROLS PANEL (Dynamic) -->
+            <div
+                class="bg-yellow-400 border-4 border-black p-4 rounded-xl shadow-[8px_8px_0_rgba(0,0,0,1)] flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="text-xl font-bold font-bangers">AZIONI:</div>
+                </div>
 
-            <!-- Step 2: Prendi -->
-            <div id="seq-step-1" class="flex flex-col items-center opacity-40 transition-opacity font-bold">
-                <span
-                    class="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center mb-1">2</span>
-                <span class="text-purple-900">PRENDI</span>
-            </div>
-            <div class="flex-grow border-t-2 border-dashed border-gray-400 mx-2"></div>
-
-            <!-- Step 3: Piazza -->
-            <div id="seq-step-2" class="flex flex-col items-center opacity-40 transition-opacity font-bold">
-                <span
-                    class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center mb-1">3</span>
-                <span class="text-amber-800">PIAZZA</span>
-            </div>
-            <div class="flex-grow border-t-2 border-dashed border-gray-400 mx-2"></div>
-
-            <!-- Step 4: Passa -->
-            <div id="seq-step-3" class="flex flex-col items-center opacity-40 transition-opacity font-bold">
-                <span
-                    class="bg-green-600 text-white w-6 h-6 rounded-full flex items-center justify-center mb-1">4</span>
-                <span class="text-green-900">PASSA</span>
-            </div>
-        </div>
-
-        <!-- CONTROLS PANEL (Dynamic) -->
-        <div
-            class="bg-yellow-400 border-4 border-black p-4 rounded-xl shadow-[8px_8px_0_rgba(0,0,0,1)] flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2">
-                <div class="text-xl font-bold font-bangers">AZIONI:</div>
+                <div id="controls-container" class="flex gap-2 flex-wrap justify-center">
+                    <!-- Buttons injected by JS based on phase -->
+                </div>
             </div>
 
-            <div id="controls-container" class="flex gap-2 flex-wrap justify-center">
-                <!-- Buttons injected by JS based on phase -->
+            <div id="game-status"
+                class="bg-black text-green-400 font-mono px-4 py-2 rounded w-full text-sm border-2 border-gray-600 shadow-lg text-center md:text-left">
+                STATUS: Caricamento...
             </div>
-        </div>
 
-        <div id="game-status"
-            class="bg-black text-green-400 font-mono px-4 py-2 rounded w-full text-sm border-2 border-gray-600 shadow-lg text-center md:text-left">
-            STATUS: Caricamento...
-        </div>
+            <!-- BOARD AREA -->
+            <div
+                class="squiggle-box p-2 md:p-4 bg-slate-200 relative min-h-[600px] flex flex-col items-center justify-center overflow-hidden select-none">
 
-        <!-- BOARD AREA -->
-        <div
-            class="squiggle-box p-2 md:p-4 bg-slate-200 relative min-h-[600px] flex flex-col items-center justify-center overflow-hidden select-none">
-
-            <!-- THE OCTAGON DESK -->
-            <div class="relative w-72 h-72 md:w-80 md:h-80 mb-8 flex-shrink-0 transition-all duration-500">
-                <div
-                    class="absolute inset-0 bg-[#8d6e63] border-[6px] border-[#5d4037] octagon-shape flex items-center justify-center shadow-xl">
+                <!-- THE OCTAGON DESK -->
+                <div class="relative w-72 h-72 md:w-80 md:h-80 mb-8 flex-shrink-0 transition-all duration-500">
                     <div
-                        class="w-full h-full border-[20px] border-[#795548] octagon-shape flex items-center justify-center">
-                        <span class="text-[#3e2723] font-bold text-3xl opacity-50 rotate-[-15deg]">DESK</span>
-                    </div>
-                </div>
-
-                <!-- Piles -->
-                <div id="pile-0" class="absolute top-[-25px] left-1/2 -translate-x-1/2 pile-container z-20"></div>
-                <div id="pile-1"
-                    class="absolute top-[14.6%] right-[14.6%] translate-x-[50%] translate-y-[-50%] rotate-[45deg] pile-container z-20 origin-center">
-                </div>
-                <div id="pile-2"
-                    class="absolute top-1/2 right-[-25px] -translate-y-1/2 rotate-90 pile-container z-20 origin-center">
-                </div>
-                <div id="pile-3"
-                    class="absolute bottom-[14.6%] right-[14.6%] translate-x-[50%] translate-y-[50%] rotate-[135deg] pile-container z-20 origin-center">
-                </div>
-                <div id="pile-4"
-                    class="absolute bottom-[-25px] left-1/2 -translate-x-1/2 rotate-180 pile-container z-20 origin-center">
-                </div>
-                <div id="pile-5"
-                    class="absolute bottom-[14.6%] left-[14.6%] translate-x-[-50%] translate-y-[50%] rotate-[225deg] pile-container z-20 origin-center">
-                </div>
-                <div id="pile-6"
-                    class="absolute top-1/2 left-[-25px] -translate-y-1/2 rotate-[270deg] pile-container z-20 origin-center">
-                </div>
-                <div id="pile-7"
-                    class="absolute top-[14.6%] left-[14.6%] translate-x-[-50%] translate-y-[-50%] rotate-[315deg] pile-container z-20 origin-center">
-                </div>
-
-                <!-- Store Manager Meeple -->
-                <div id="manager-meeple" class="meeple top-[-40px] left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-                    <svg viewBox="0 0 512 512" class="w-full h-full drop-shadow-md">
-                        <path
-                            d="M256,0C199.6,0,153.8,45.8,153.8,102.2c0,18.1,4.9,35,13.5,49.8L53.6,281.3c-14.7,16.7-18,41-8.2,60.8 c9.8,19.8,30.3,32.4,52.4,32.4h316.4c22.1,0,42.6-12.6,52.4-32.4c9.8-19.8,6.5-44.1-8.2-60.8L344.7,152c8.6-14.8,13.5-31.7,13.5-49.8 C358.2,45.8,312.4,0,256,0z"
-                            fill="#8800ff" stroke="black" stroke-width="20" />
-                        <path d="M256,120 L240,180 L256,220 L272,180 Z" fill="#ccff00" stroke="black"
-                            stroke-width="5" />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- CARDS & PLAYER AREA -->
-            <div class="w-full flex flex-wrap md:flex-nowrap justify-between items-end gap-2 mt-4 relative">
-                <!-- Shared Left -->
-                <div class="flex flex-col items-center order-1 md:order-1">
-                    <div class="text-sm font-bold bg-white px-2 border border-black mb-1 -rotate-3">Shared SX</div>
-                    <div class="bg-orange-200 border-2 border-black p-1 grid grid-cols-2 gap-1 w-[80px] md:w-[100px]">
-                        <div class="flex flex-col gap-1 opacity-50 bg-gray-300">
-                            <div class="slot h-8 w-full"></div>
-                            <div class="slot h-8 w-full"></div>
-                            <div class="slot h-8 w-full"></div>
-                        </div>
-                        <div class="flex flex-col gap-1" id="shelf-shared-left"></div>
-                    </div>
-                </div>
-
-                <!-- Personal Shelf -->
-                <div class="flex flex-col items-center flex-grow max-w-[300px] order-3 md:order-2 w-full">
-                    <div class="obj-card-common w-full mb-2 p-2 relative">
-                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-4 bg-red-500 opacity-80 rotate-3">
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div><span class="text-xs font-bold text-red-600 block">MEMO BOSS</span><span
-                                    class="text-xs md:text-sm leading-none">"Almeno 1 Horror condiviso!"</span>
-                            </div>
-                            <div
-                                class="w-6 h-6 bg-black border border-white rounded-sm flex items-center justify-center text-[10px] text-white font-bold ml-1">
-                                HOR</div>
-                        </div>
-                    </div>
-
-                    <div class="text-sm font-bold bg-yellow-300 px-4 border-2 border-black mb-1 rotate-2 shadow-md">
-                        IL TUO SCAFFALE</div>
-                    <div class="bg-amber-100 border-4 border-amber-800 p-2 grid grid-cols-5 gap-1 w-full shadow-inner"
-                        id="shelf-personal"></div>
-
-                    <!-- HAND (Interactive) -->
-                    <div class="mt-2 min-h-[70px] w-full bg-slate-800 rounded border-2 border-gray-500 p-2 flex gap-2 justify-center items-center transition-all flex-wrap"
-                        id="player-hand"></div>
-
-                    <div class="obj-card-personal w-full mt-2 p-2 flex items-center gap-2">
+                        class="absolute inset-0 bg-[#8d6e63] border-[6px] border-[#5d4037] octagon-shape flex items-center justify-center shadow-xl">
                         <div
-                            class="w-8 h-8 rounded-full border-2 border-red-800 flex items-center justify-center transform -rotate-12 bg-white flex-shrink-0">
-                            <span class="text-[8px] font-bold text-red-800 leading-none">TOP<br>SECRET</span>
+                            class="w-full h-full border-[20px] border-[#795548] octagon-shape flex items-center justify-center">
+                            <span class="text-[#3e2723] font-bold text-3xl opacity-50 rotate-[-15deg]">DESK</span>
                         </div>
-                        <div class="flex-grow"><span class="text-xs font-bold text-blue-800 block">OBIETTIVO</span><span
-                                class="text-xs md:text-sm leading-none">Colonna centrale Family</span></div>
+                    </div>
+
+                    <!-- Piles -->
+                    <div id="pile-0" class="absolute top-[-25px] left-1/2 -translate-x-1/2 pile-container z-20"></div>
+                    <div id="pile-1"
+                        class="absolute top-[14.6%] right-[14.6%] translate-x-[50%] translate-y-[-50%] rotate-[45deg] pile-container z-20 origin-center">
+                    </div>
+                    <div id="pile-2"
+                        class="absolute top-1/2 right-[-25px] -translate-y-1/2 rotate-90 pile-container z-20 origin-center">
+                    </div>
+                    <div id="pile-3"
+                        class="absolute bottom-[14.6%] right-[14.6%] translate-x-[50%] translate-y-[50%] rotate-[135deg] pile-container z-20 origin-center">
+                    </div>
+                    <div id="pile-4"
+                        class="absolute bottom-[-25px] left-1/2 -translate-x-1/2 rotate-180 pile-container z-20 origin-center">
+                    </div>
+                    <div id="pile-5"
+                        class="absolute bottom-[14.6%] left-[14.6%] translate-x-[-50%] translate-y-[50%] rotate-[225deg] pile-container z-20 origin-center">
+                    </div>
+                    <div id="pile-6"
+                        class="absolute top-1/2 left-[-25px] -translate-y-1/2 rotate-[270deg] pile-container z-20 origin-center">
+                    </div>
+                    <div id="pile-7"
+                        class="absolute top-[14.6%] left-[14.6%] translate-x-[-50%] translate-y-[-50%] rotate-[315deg] pile-container z-20 origin-center">
+                    </div>
+
+                    <!-- Store Manager Meeple -->
+                    <div id="manager-meeple"
+                        class="meeple top-[-40px] left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+                        <svg viewBox="0 0 512 512" class="w-full h-full drop-shadow-md">
+                            <path
+                                d="M256,0C199.6,0,153.8,45.8,153.8,102.2c0,18.1,4.9,35,13.5,49.8L53.6,281.3c-14.7,16.7-18,41-8.2,60.8 c9.8,19.8,30.3,32.4,52.4,32.4h316.4c22.1,0,42.6-12.6,52.4-32.4c9.8-19.8,6.5-44.1-8.2-60.8L344.7,152c8.6-14.8,13.5-31.7,13.5-49.8 C358.2,45.8,312.4,0,256,0z"
+                                fill="#8800ff" stroke="black" stroke-width="20" />
+                            <path d="M256,120 L240,180 L256,220 L272,180 Z" fill="#ccff00" stroke="black"
+                                stroke-width="5" />
+                        </svg>
                     </div>
                 </div>
 
-                <!-- Shared Right -->
-                <div class="flex flex-col items-center order-2 md:order-3">
-                    <div class="text-sm font-bold bg-white px-2 border border-black mb-1 rotate-3">Shared DX</div>
-                    <div class="bg-orange-200 border-2 border-black p-1 grid grid-cols-2 gap-1 w-[80px] md:w-[100px]">
-                        <div class="flex flex-col gap-1" id="shelf-shared-right"></div>
-                        <div class="flex flex-col gap-1 opacity-50 bg-gray-300">
-                            <div class="slot h-8 w-full"></div>
-                            <div class="slot h-8 w-full"></div>
-                            <div class="slot h-8 w-full"></div>
+                <!-- CARDS & PLAYER AREA -->
+                <div class="w-full flex flex-wrap md:flex-nowrap justify-between items-end gap-2 mt-4 relative">
+                    <!-- Shared Left -->
+                    <div class="flex flex-col items-center order-1 md:order-1">
+                        <div class="text-sm font-bold bg-white px-2 border border-black mb-1 -rotate-3">Shared SX</div>
+                        <div
+                            class="bg-orange-200 border-2 border-black p-1 grid grid-cols-2 gap-1 w-[80px] md:w-[100px]">
+                            <div class="flex flex-col gap-1 opacity-50 bg-gray-300">
+                                <div class="slot h-8 w-full"></div>
+                                <div class="slot h-8 w-full"></div>
+                                <div class="slot h-8 w-full"></div>
+                            </div>
+                            <div class="flex flex-col gap-1" id="shelf-shared-left"></div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Shelf -->
+                    <div class="flex flex-col items-center flex-grow max-w-[300px] order-3 md:order-2 w-full">
+                        <div class="obj-card-common w-full mb-2 p-2 relative">
+                            <div
+                                class="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-4 bg-red-500 opacity-80 rotate-3">
+                            </div>
+                            <div class="flex justify-between items-start">
+                                <div><span class="text-xs font-bold text-red-600 block">MEMO BOSS</span><span
+                                        class="text-xs md:text-sm leading-none">"Almeno 1 Horror condiviso!"</span>
+                                </div>
+                                <div
+                                    class="w-6 h-6 bg-black border border-white rounded-sm flex items-center justify-center text-[10px] text-white font-bold ml-1">
+                                    HOR</div>
+                            </div>
+                        </div>
+
+                        <div class="text-sm font-bold bg-yellow-300 px-4 border-2 border-black mb-1 rotate-2 shadow-md">
+                            IL TUO SCAFFALE</div>
+                        <div class="bg-amber-100 border-4 border-amber-800 p-2 grid grid-cols-5 gap-1 w-full shadow-inner"
+                            id="shelf-personal"></div>
+
+                        <!-- HAND (Interactive) -->
+                        <div class="mt-2 min-h-[70px] w-full bg-slate-800 rounded border-2 border-gray-500 p-2 flex gap-2 justify-center items-center transition-all flex-wrap"
+                            id="player-hand"></div>
+
+                        <div class="obj-card-personal w-full mt-2 p-2 flex items-center gap-2">
+                            <div
+                                class="w-8 h-8 rounded-full border-2 border-red-800 flex items-center justify-center transform -rotate-12 bg-white flex-shrink-0">
+                                <span class="text-[8px] font-bold text-red-800 leading-none">TOP<br>SECRET</span>
+                            </div>
+                            <div class="flex-grow"><span
+                                    class="text-xs font-bold text-blue-800 block">OBIETTIVO</span><span
+                                    class="text-xs md:text-sm leading-none">Colonna centrale Family</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Shared Right -->
+                    <div class="flex flex-col items-center order-2 md:order-3">
+                        <div class="text-sm font-bold bg-white px-2 border border-black mb-1 rotate-3">Shared DX</div>
+                        <div
+                            class="bg-orange-200 border-2 border-black p-1 grid grid-cols-2 gap-1 w-[80px] md:w-[100px]">
+                            <div class="flex flex-col gap-1" id="shelf-shared-right"></div>
+                            <div class="flex flex-col gap-1 opacity-50 bg-gray-300">
+                                <div class="slot h-8 w-full"></div>
+                                <div class="slot h-8 w-full"></div>
+                                <div class="slot h-8 w-full"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Discard Box -->
-            <div class="w-full flex justify-end px-4 mt-4 order-4">
-                <div id="discard-box"
-                    class="discard-zone w-24 h-24 border-4 border-black bg-gray-800 text-white flex flex-col items-center justify-center rounded-lg shadow-lg rotate-6 transition-transform">
-                    <span class="text-xs uppercase font-bold text-center">Resi (Tocca qui)</span>
-                    <span id="discard-count" class="text-3xl font-bangers text-red-500">0/10</span>
+                <!-- Discard Box -->
+                <div class="w-full flex justify-end px-4 mt-4 order-4">
+                    <div id="discard-box"
+                        class="discard-zone w-24 h-24 border-4 border-black bg-gray-800 text-white flex flex-col items-center justify-center rounded-lg shadow-lg rotate-6 transition-transform">
+                        <span class="text-xs uppercase font-bold text-center">Resi (Tocca qui)</span>
+                        <span id="discard-count" class="text-3xl font-bangers text-red-500">0/10</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- CONTACT FOOTER -->
