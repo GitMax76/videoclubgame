@@ -5,6 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VideoClub: Save the Store!</title>
+
+    <!-- OPEN GRAPH / SOCIAL SHARE -->
+    <meta property="og:title" content="The Last VideoClub - Boardgame" />
+    <meta property="og:description"
+        content="Collaboriamo per non fallire...ma solo il migliore diventerà Store Manager! Un gioco di Massimiliano Sabato." />
+    <meta property="og:image" content="https://gitmax76.github.io/videoclubgame/sfondo.png" />
+    <meta property="og:url" content="https://gitmax76.github.io/videoclubgame/" />
+    <meta property="og:type" content="website" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Patrick+Hand&display=swap" rel="stylesheet">
     <link rel="preload" href="https://w.soundcloud.com/player/api.js" as="script">
@@ -324,6 +333,38 @@
             right: 40px;
         }
 
+        /* Mobile Adjustments for Splash */
+        @media (max-width: 640px) {
+            .logo-main {
+                font-size: 4rem;
+                /* Further reduced */
+                text-shadow: 3px 3px 0 var(--bb-blue), -2px -2px 0 var(--toon-purple);
+            }
+
+            .logo-top {
+                font-size: 1.5rem;
+                margin-left: -20px;
+                margin-bottom: -10px;
+            }
+
+            .logo-sub {
+                font-size: 0.8rem;
+                margin-right: -20px;
+                background: white;
+            }
+
+            /* Hide decorative VCR text on small screens to prevent overlap */
+            .vhs-ui {
+                display: none;
+            }
+
+            .click-start {
+                font-size: 1.5rem;
+                /* Much smaller to not distract */
+                margin-top: 1.5rem;
+            }
+        }
+
         .click-start {
             font-family: 'Bangers', cursive;
             color: var(--toon-green);
@@ -331,6 +372,8 @@
             text-shadow: 3px 3px 0 black;
             animation: blink 0.8s step-end infinite;
             margin-top: 3rem;
+            cursor: pointer;
+            /* Emphasize clickable */
         }
 
         /* TV Turn On Effect */
@@ -647,7 +690,8 @@
                 <button onclick="switchTab('intro')" id="btn-intro"
                     class="tab-btn active btn-font bg-blue-900 text-white px-3 py-2 rounded border-2 border-black hover:bg-yellow-400 hover:text-blue-900 transition-all text-sm">Intro</button>
                 <button onclick="switchTab('turn')" id="btn-turn"
-                    class="tab-btn btn-font bg-blue-900 text-white px-3 py-2 rounded border-2 border-black hover:bg-yellow-400 hover:text-blue-900 transition-all text-sm">Regole</button>
+                    class="tab-btn btn-font bg-blue-900 text-white px-3 py-2 rounded border-2 border-black hover:bg-yellow-400 hover:text-blue-900 transition-all text-sm">Come
+                    si Gioca</button>
 
                 <!-- FULL RULES LINK -->
                 <a href="rules.html"
@@ -997,6 +1041,13 @@
     <div id="sound-effect"
         class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl font-bangers text-yellow-500 shadow-black drop-shadow-lg pointer-events-none opacity-0 transition-opacity duration-200 z-50">
         CLUNK!</div>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});"
+        class="fixed bottom-4 right-4 bg-yellow-500 text-black border-2 border-black p-3 rounded-full shadow-[2px_2px_0_black] hover:translate-y-1 hover:shadow-none transition-all z-50 font-bold"
+        style="font-family: 'Bangers', cursive; font-size: 1.2rem;">
+        ⬆ TOP
+    </button>
 
     <script>
         // --- GAME DATA & STATE ---
@@ -1364,9 +1415,9 @@
 
                     // Attempt to auto-resume if it was playing
                     if (storedPlaying === 'true') {
+                        scWidget.play();
+                        isPlaying = true;
                         setTimeout(() => {
-                            scWidget.play();
-                            isPlaying = true;
                             // Update UI
                             const btn = document.getElementById('btn-music');
                             if (btn) {
