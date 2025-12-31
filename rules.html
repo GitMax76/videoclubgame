@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VIDEOCLUB - Regolamento Ufficiale</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preload" href="https://w.soundcloud.com/player/api.js" as="script">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
@@ -35,11 +37,12 @@
             position: relative;
             width: 100%;
             max-width: 1024px;
-            height: 95vh; /* Taller on mobile */
+            height: 95vh;
+            /* Taller on mobile */
             background: #111;
             border: 20px solid #333;
             border-radius: 20px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 100px rgba(0,0,0,0.9);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), inset 0 0 100px rgba(0, 0, 0, 0.9);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -48,7 +51,8 @@
         @media (max-width: 640px) {
             .crt-container {
                 height: 100vh;
-                border: 8px solid #333; /* Thinner border for mobile */
+                border: 8px solid #333;
+                /* Thinner border for mobile */
                 border-radius: 0;
                 width: 100%;
             }
@@ -60,14 +64,16 @@
             width: 100%;
             padding: 2rem;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling iOS */
+            -webkit-overflow-scrolling: touch;
+            /* Smooth scrolling iOS */
             background: radial-gradient(circle, #1a2a1a 0%, #0d120d 100%);
             z-index: 2;
         }
 
         @media (max-width: 640px) {
             .screen-content {
-                padding: 1rem; /* Less padding on mobile */
+                padding: 1rem;
+                /* Less padding on mobile */
             }
         }
 
@@ -88,20 +94,31 @@
         }
 
         @keyframes flicker {
-            0% { opacity: 0.97; }
-            50% { opacity: 1; }
-            100% { opacity: 0.98; }
+            0% {
+                opacity: 0.97;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.98;
+            }
         }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px; /* Thinner scrollbar */
+            width: 8px;
+            /* Thinner scrollbar */
         }
+
         ::-webkit-scrollbar-track {
-            background: #000; 
+            background: #000;
         }
+
         ::-webkit-scrollbar-thumb {
-            background: var(--crt-green); 
+            background: var(--crt-green);
             border: 1px solid #000;
             border-radius: 4px;
         }
@@ -112,14 +129,17 @@
             background: transparent;
             color: var(--crt-green);
             text-transform: uppercase;
-            padding: 8px 12px; /* Smaller padding */
+            padding: 8px 12px;
+            /* Smaller padding */
             font-size: 1.1rem;
             transition: all 0.2s;
             box-shadow: 3px 3px 0px var(--crt-green);
             margin-right: 8px;
             margin-bottom: 8px;
-            white-space: nowrap; /* Prevent text wrap inside buttons */
-            flex-grow: 1; /* Make buttons grow on mobile to fill width */
+            white-space: nowrap;
+            /* Prevent text wrap inside buttons */
+            flex-grow: 1;
+            /* Make buttons grow on mobile to fill width */
             text-align: center;
         }
 
@@ -130,11 +150,13 @@
                 box-shadow: 4px 4px 0px var(--crt-green);
                 margin-right: 10px;
                 margin-bottom: 10px;
-                flex-grow: 0; /* Normal behavior on desktop */
+                flex-grow: 0;
+                /* Normal behavior on desktop */
             }
         }
 
-        .btn-retro:hover, .btn-retro.active {
+        .btn-retro:hover,
+        .btn-retro.active {
             background: var(--crt-green);
             color: #000;
             transform: translate(2px, 2px);
@@ -152,7 +174,7 @@
             background: rgba(0, 20, 0, 0.6);
             margin-bottom: 1rem;
         }
-        
+
         @media (min-width: 640px) {
             .panel {
                 padding: 1.5rem;
@@ -168,26 +190,34 @@
             font-size: 1.5rem;
             text-transform: uppercase;
         }
-        
+
         @media (min-width: 640px) {
             .section-title {
                 font-size: 1.8rem;
             }
         }
 
-        .highlight { color: var(--neon-yellow); }
-        .danger { color: #fc8181; }
-        
+        .highlight {
+            color: var(--neon-yellow);
+        }
+
+        .danger {
+            color: #fc8181;
+        }
+
         .glitch-text {
             text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
         }
-        
-        .hidden { display: none !important; }
+
+        .hidden {
+            display: none !important;
+        }
 
         ul.retro-list {
             list-style-type: none;
             padding-left: 0.5rem;
         }
+
         ul.retro-list li::before {
             content: "> ";
             color: var(--crt-green);
@@ -202,6 +232,7 @@
             margin-right: 6px;
             border: 1px solid #333;
         }
+
         @media (min-width: 640px) {
             .flag-img {
                 height: 20px;
@@ -213,28 +244,39 @@
         .blink-slow {
             animation: blinker 2s linear infinite;
         }
+
         @keyframes blinker {
-            50% { opacity: 0; }
+            50% {
+                opacity: 0;
+            }
         }
     </style>
 </head>
+
 <body class="flicker">
+    <!-- SOUNDCLOUD WIDGET (HIDDEN) -->
+    <iframe id="sc-widget" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/synthwave80s/sets/dreams&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"
+        style="opacity:0; position:absolute; z-index:-1; pointer-events:none;">
+    </iframe>
 
     <div class="crt-container">
         <div class="scanlines"></div>
         <div class="screen-content flex flex-col">
-            
+
             <!-- Header -->
-            <header class="flex flex-col md:flex-row justify-between items-center md:items-start border-b-2 border-[#39ff14] pb-4 mb-4 md:mb-6">
+            <header
+                class="flex flex-col md:flex-row justify-between items-center md:items-start border-b-2 border-[#39ff14] pb-4 mb-4 md:mb-6">
                 <div class="text-center md:text-left mb-4 md:mb-0">
                     <h1 class="text-3xl md:text-4xl font-bold glitch-text leading-tight">VIDEOCLUB DB</h1>
                     <p class="text-lg md:text-xl opacity-80" data-lang="it">> ARCHIVIO REGOLE</p>
                     <p class="text-lg md:text-xl opacity-80 hidden" data-lang="en">> RULES ARCHIVE</p>
                     <p class="text-lg md:text-xl opacity-80 hidden" data-lang="fr">> ARCHIVE RÈGLES</p>
                 </div>
-                
-                <div class="text-center md:text-right flex flex-col items-center md:items-end w-full md:w-auto relative">
-                    
+
+                <div
+                    class="text-center md:text-right flex flex-col items-center md:items-end w-full md:w-auto relative">
+
                     <!-- Language Hint Popup -->
                     <div id="lang-hint" class="blink-slow text-yellow-300 text-xs mb-1 font-bold tracking-wider">
                         ↓ TOCCA PER CAMBIARE LINGUA
@@ -243,11 +285,28 @@
                     <!-- Language Selector Area -->
                     <div class="flex items-center gap-2 mb-2 bg-gray-900 border border-gray-700 p-1 rounded w-auto">
                         <span class="text-xs md:text-sm opacity-70 ml-2">LANG:</span>
-                        <button onclick="toggleLanguage()" class="btn-retro text-base md:text-lg py-1 px-3 bg-black hover:bg-gray-800 border-yellow-500 text-yellow-500 shadow-none hover:translate-x-0 hover:translate-y-0 flex items-center gap-2 m-0 flex-grow-0" id="lang-btn">
+                        <button onclick="toggleLanguage()"
+                            class="btn-retro text-base md:text-lg py-1 px-3 bg-black hover:bg-gray-800 border-yellow-500 text-yellow-500 shadow-none hover:translate-x-0 hover:translate-y-0 flex items-center gap-2 m-0 flex-grow-0"
+                            id="lang-btn">
                             <img src="https://flagcdn.com/w40/it.png" class="flag-img" alt="IT"> IT
                         </button>
                     </div>
-                    
+
+                    <div class="flex justify-between w-full md:w-auto gap-4 px-2 md:px-0 mt-2">
+                        <!-- AUDIO BUTTON -->
+                        <button onclick="toggleMusic()" id="btn-music"
+                            class="btn-retro text-sm py-1 px-2 border-green-500 text-green-500 shadow-none hover:translate-x-0 hover:translate-y-0 m-0">
+                            🎵 AUDIO: OFF
+                        </button>
+
+                        <!-- HOME BUTTON -->
+                        <button
+                            onclick="sessionStorage.setItem('skip_splash', 'true'); window.location.href='index.html'"
+                            class="btn-retro text-sm py-1 px-2 border-yellow-500 text-yellow-500 shadow-none hover:translate-x-0 hover:translate-y-0 m-0">
+                            🏠 HOME
+                        </button>
+                    </div>
+
                     <div class="flex justify-between w-full md:w-auto gap-4 px-2 md:px-0">
                         <p id="clock" class="text-lg md:text-xl mt-1">00:00:00</p>
                         <p class="text-sm text-yellow-400 blink self-center">● REC</p>
@@ -257,15 +316,16 @@
 
             <!-- Navigation -->
             <!-- RESTORED: flex-wrap to ensure tabs are visible on screen without scrolling -->
-            <nav class="flex flex-wrap gap-2 mb-4 md:mb-6 border-b border-gray-800 pb-4 justify-center md:justify-start">
-                <button onclick="showSection('intro')" class="btn-retro active" id="btn-intro" 
-                    data-it="INTRO" data-en="INTRO" data-fr="INTRO">INTRO</button>
-                <button onclick="showSection('setup')" class="btn-retro" id="btn-setup" 
-                    data-it="PREPARAZIONE" data-en="SETUP" data-fr="PRÉPARATION">PREPARAZIONE</button>
-                <button onclick="showSection('gameplay')" class="btn-retro" id="btn-gameplay" 
-                    data-it="SVOLGIMENTO" data-en="GAMEPLAY" data-fr="DÉROULEMENT">SVOLGIMENTO</button>
-                <button onclick="showSection('endgame')" class="btn-retro" id="btn-endgame" 
-                    data-it="FINE" data-en="END" data-fr="FIN">FINE</button>
+            <nav
+                class="flex flex-wrap gap-2 mb-4 md:mb-6 border-b border-gray-800 pb-4 justify-center md:justify-start">
+                <button onclick="showSection('intro')" class="btn-retro active" id="btn-intro" data-it="INTRO"
+                    data-en="INTRO" data-fr="INTRO">INTRO</button>
+                <button onclick="showSection('setup')" class="btn-retro" id="btn-setup" data-it="PREPARAZIONE"
+                    data-en="SETUP" data-fr="PRÉPARATION">PREPARAZIONE</button>
+                <button onclick="showSection('gameplay')" class="btn-retro" id="btn-gameplay" data-it="SVOLGIMENTO"
+                    data-en="GAMEPLAY" data-fr="DÉROULEMENT">SVOLGIMENTO</button>
+                <button onclick="showSection('endgame')" class="btn-retro" id="btn-endgame" data-it="FINE" data-en="END"
+                    data-fr="FIN">FINE</button>
             </nav>
 
             <!-- 1. INTRO & SCOPO -->
@@ -273,7 +333,8 @@
                 <!-- ITALIAN CONTENT -->
                 <div class="lang-it">
                     <div class="text-center mb-6">
-                        <h2 class="text-3xl md:text-5xl mb-2 text-yellow-300 leading-none">"Make it a VideoClub Night!"</h2>
+                        <h2 class="text-3xl md:text-5xl mb-2 text-yellow-300 leading-none">"Make it a VideoClub Night!"
+                        </h2>
                         <p class="text-lg md:text-2xl italic opacity-80">L'ultimo baluardo delle videoteche.</p>
                     </div>
 
@@ -281,19 +342,22 @@
                         <div class="panel">
                             <h3 class="section-title">L'Ambientazione</h3>
                             <p class="text-base md:text-lg leading-relaxed mb-4">
-                                È un venerdì sera di fine anni '90. I DVD avanzano, ma qui dentro si respira ancora profumo di plastica e popcorn.
-                                Siete lo staff dell'ultimo store aperto. La Direzione Centrale ha mandato un ultimatum: <span class="highlight">"Fatturate o Chiudete"</span>.
+                                È un venerdì sera di fine anni '90. I DVD avanzano, ma qui dentro si respira ancora
+                                profumo di plastica e popcorn.
+                                Siete lo staff dell'ultimo store aperto. La Direzione Centrale ha mandato un ultimatum:
+                                <span class="highlight">"Fatturate o Chiudete"</span>.
                             </p>
                         </div>
 
                         <div class="panel">
                             <h3 class="section-title">Scopo del Gioco</h3>
                             <p class="mb-4"><strong>Modalità:</strong> Semi-Cooperativo (2-5 Giocatori)</p>
-                            
+
                             <ul class="retro-list space-y-3 text-base md:text-lg">
                                 <li>
-                                    <strong class="text-blue-400">OBIETTIVO COOP:</strong><br> 
-                                    Sopravvivere completando gli <span class="highlight">Obiettivi Comuni</span>. Se ne fallite 3, il negozio chiude e TUTTI perdono.
+                                    <strong class="text-blue-400">OBIETTIVO COOP:</strong><br>
+                                    Sopravvivere completando gli <span class="highlight">Obiettivi Comuni</span>. Se ne
+                                    fallite 3, il negozio chiude e TUTTI perdono.
                                 </li>
                                 <li>
                                     <strong class="text-purple-400">OBIETTIVO PERSONALE:</strong><br>
@@ -307,7 +371,8 @@
                 <!-- ENGLISH CONTENT -->
                 <div class="lang-en hidden">
                     <div class="text-center mb-6">
-                        <h2 class="text-3xl md:text-5xl mb-2 text-yellow-300 leading-none">"Make it a VideoClub Night!"</h2>
+                        <h2 class="text-3xl md:text-5xl mb-2 text-yellow-300 leading-none">"Make it a VideoClub Night!"
+                        </h2>
                         <p class="text-lg md:text-2xl italic opacity-80">The last bastion of video rental stores.</p>
                     </div>
 
@@ -315,23 +380,27 @@
                         <div class="panel">
                             <h3 class="section-title">The Setting</h3>
                             <p class="text-base md:text-lg leading-relaxed mb-4">
-                                It's a Friday night in the late 90s. DVDs are rising, but in here, the smell of plastic and popcorn still reigns.
-                                You are the staff of the last open store. HQ has sent an ultimatum: <span class="highlight">"Profit or Close"</span>.
+                                It's a Friday night in the late 90s. DVDs are rising, but in here, the smell of plastic
+                                and popcorn still reigns.
+                                You are the staff of the last open store. HQ has sent an ultimatum: <span
+                                    class="highlight">"Profit or Close"</span>.
                             </p>
                         </div>
 
                         <div class="panel">
                             <h3 class="section-title">Goal of the Game</h3>
                             <p class="mb-4"><strong>Mode:</strong> Semi-Cooperative (2-5 Players)</p>
-                            
+
                             <ul class="retro-list space-y-3 text-base md:text-lg">
                                 <li>
-                                    <strong class="text-blue-400">COOP GOAL:</strong><br> 
-                                    Survive by completing <span class="highlight">Common Objectives</span>. If you fail 3, the store closes and EVERYONE loses.
+                                    <strong class="text-blue-400">COOP GOAL:</strong><br>
+                                    Survive by completing <span class="highlight">Common Objectives</span>. If you fail
+                                    3, the store closes and EVERYONE loses.
                                 </li>
                                 <li>
                                     <strong class="text-purple-400">PERSONAL GOAL:</strong><br>
-                                    If the store is saved, the winner is whoever has the most points (Personal Objectives + Snack Bonus).
+                                    If the store is saved, the winner is whoever has the most points (Personal
+                                    Objectives + Snack Bonus).
                                 </li>
                             </ul>
                         </div>
@@ -341,7 +410,8 @@
                 <!-- FRENCH CONTENT -->
                 <div class="lang-fr hidden">
                     <div class="text-center mb-6">
-                        <h2 class="text-3xl md:text-5xl mb-2 text-yellow-300 leading-none">"Make it a VideoClub Night!"</h2>
+                        <h2 class="text-3xl md:text-5xl mb-2 text-yellow-300 leading-none">"Make it a VideoClub Night!"
+                        </h2>
                         <p class="text-lg md:text-2xl italic opacity-80">Le dernier bastion des vidéoclubs.</p>
                     </div>
 
@@ -349,23 +419,27 @@
                         <div class="panel">
                             <h3 class="section-title">L'Ambiance</h3>
                             <p class="text-base md:text-lg leading-relaxed mb-4">
-                                C'est un vendredi soir à la fin des années 90. Les DVD progressent, mais ici, l'odeur du plastique et du pop-corn règne encore.
-                                Vous êtes le personnel du dernier magasin ouvert. Le siège a envoyé un ultimatum : <span class="highlight">"Faites du profit ou fermez"</span>.
+                                C'est un vendredi soir à la fin des années 90. Les DVD progressent, mais ici, l'odeur du
+                                plastique et du pop-corn règne encore.
+                                Vous êtes le personnel du dernier magasin ouvert. Le siège a envoyé un ultimatum : <span
+                                    class="highlight">"Faites du profit ou fermez"</span>.
                             </p>
                         </div>
 
                         <div class="panel">
                             <h3 class="section-title">But du Jeu</h3>
                             <p class="mb-4"><strong>Mode :</strong> Semi-Coopératif (2-5 Joueurs)</p>
-                            
+
                             <ul class="retro-list space-y-3 text-base md:text-lg">
                                 <li>
-                                    <strong class="text-blue-400">OBJECTIF COOP :</strong><br> 
-                                    Survivre en remplissant les <span class="highlight">Objectifs Communs</span>. Si vous en ratez 3, le magasin ferme et TOUT LE MONDE perd.
+                                    <strong class="text-blue-400">OBJECTIF COOP :</strong><br>
+                                    Survivre en remplissant les <span class="highlight">Objectifs Communs</span>. Si
+                                    vous en ratez 3, le magasin ferme et TOUT LE MONDE perd.
                                 </li>
                                 <li>
                                     <strong class="text-purple-400">OBJECTIF PERSO :</strong><br>
-                                    Si le magasin est sauvé, le gagnant est celui qui a le plus de points (Objectifs Personnels + Bonus Snack).
+                                    Si le magasin est sauvé, le gagnant est celui qui a le plus de points (Objectifs
+                                    Personnels + Bonus Snack).
                                 </li>
                             </ul>
                         </div>
@@ -378,7 +452,7 @@
                 <!-- ITALIAN -->
                 <div class="lang-it">
                     <h3 class="section-title">Setup del Bancone</h3>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <div class="panel">
                             <h4 class="text-lg md:text-xl font-bold mb-2 underline">IL DESK CENTRALE</h4>
@@ -413,7 +487,7 @@
                 <!-- ENGLISH -->
                 <div class="lang-en hidden">
                     <h3 class="section-title">Counter Setup</h3>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <div class="panel">
                             <h4 class="text-lg md:text-xl font-bold mb-2 underline">THE CENTRAL DESK</h4>
@@ -448,7 +522,7 @@
                 <!-- FRENCH -->
                 <div class="lang-fr hidden">
                     <h3 class="section-title">Mise en place</h3>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <div class="panel">
                             <h4 class="text-lg md:text-xl font-bold mb-2 underline">LE BUREAU CENTRAL</h4>
@@ -491,7 +565,8 @@
                         <ul class="list-disc pl-6">
                             <li><strong>RIEMPIRE:</strong> Pile vuote → 4 VHS + 1 Snack.</li>
                             <li><strong>DIRETTIVA:</strong> Pesca 1 Obiettivo Comune.</li>
-                            <li class="danger"><strong>FALLIMENTO AUTO:</strong> Se già 2 obiettivi attivi, il vecchio FALLISCE (+1 Fallimento).</li>
+                            <li class="danger"><strong>FALLIMENTO AUTO:</strong> Se già 2 obiettivi attivi, il vecchio
+                                FALLISCE (+1 Fallimento).</li>
                         </ul>
                     </div>
 
@@ -527,7 +602,8 @@
                         <ul class="list-disc pl-6">
                             <li><strong>REFILL:</strong> Empty stacks → 4 VHS + 1 Snack.</li>
                             <li><strong>DIRECTIVE:</strong> Draw 1 Common Objective.</li>
-                            <li class="danger"><strong>AUTO FAIL:</strong> If 2 objectives active, oldest FAILS (+1 Failure).</li>
+                            <li class="danger"><strong>AUTO FAIL:</strong> If 2 objectives active, oldest FAILS (+1
+                                Failure).</li>
                         </ul>
                     </div>
 
@@ -563,7 +639,8 @@
                         <ul class="list-disc pl-6">
                             <li><strong>RÉASSORT :</strong> Piles vides → 4 VHS + 1 Snack.</li>
                             <li><strong>DIRECTIVE :</strong> Pioche 1 Objectif Commun.</li>
-                            <li class="danger"><strong>ÉCHEC AUTO :</strong> Si 2 objectifs actifs, le vieux ÉCHOUE (+1 Échec).</li>
+                            <li class="danger"><strong>ÉCHEC AUTO :</strong> Si 2 objectifs actifs, le vieux ÉCHOUE (+1
+                                Échec).</li>
                         </ul>
                     </div>
 
@@ -686,7 +763,7 @@
         function showSection(id) {
             // Hide all sections
             document.querySelectorAll('section').forEach(el => el.classList.add('hidden'));
-            
+
             // Show target section
             document.getElementById(id).classList.remove('hidden');
 
@@ -694,16 +771,16 @@
             document.querySelectorAll('.btn-retro').forEach(btn => btn.classList.remove('active'));
             // Avoid adding active to lang button if it matches
             const navBtn = document.getElementById('btn-' + id);
-            if(navBtn) navBtn.classList.add('active');
+            if (navBtn) navBtn.classList.add('active');
         }
 
         // Language Logic
         const langs = ['it', 'en', 'fr'];
-        
+
         // Use external images to guarantee visibility regardless of font or OS
         const flags = {
-            'it': '<img src="https://flagcdn.com/w40/it.png" class="flag-img" alt="IT"> IT', 
-            'en': '<img src="https://flagcdn.com/w40/gb.png" class="flag-img" alt="EN"> EN', 
+            'it': '<img src="https://flagcdn.com/w40/it.png" class="flag-img" alt="IT"> IT',
+            'en': '<img src="https://flagcdn.com/w40/gb.png" class="flag-img" alt="EN"> EN',
             'fr': '<img src="https://flagcdn.com/w40/fr.png" class="flag-img" alt="FR"> FR'
         };
 
@@ -719,7 +796,7 @@
             // Cycle language
             currentLangIndex = (currentLangIndex + 1) % langs.length;
             const currentLang = langs[currentLangIndex];
-            
+
             // Toggle Content Visibility
             // 1. Hide all
             langs.forEach(lang => {
@@ -734,7 +811,7 @@
             // Update Nav Buttons Text
             document.querySelectorAll('nav .btn-retro').forEach(btn => {
                 const text = btn.getAttribute(`data-${currentLang}`);
-                if(text) btn.innerText = text;
+                if (text) btn.innerText = text;
             });
 
             // Update Toggle Button Content
@@ -743,6 +820,84 @@
             // Update Hint Text
             document.getElementById('lang-hint').innerText = hints[currentLang];
         }
+        // --- SOUNDCLOUD AUDIO ENGINE ---
+        let scWidget = null;
+        let isPlaying = false;
+        let currentPos = 0;
+
+        function initAudio() {
+            const script = document.createElement('script');
+            script.src = "https://w.soundcloud.com/player/api.js";
+            script.onload = () => {
+                const iframe = document.getElementById('sc-widget');
+                scWidget = SC.Widget(iframe);
+                scWidget.bind(SC.Widget.Events.READY, () => {
+                    console.log('Audio Ready');
+
+                    // --- RESTORE STATE ---
+                    const storedPos = sessionStorage.getItem('audio_pos');
+                    const storedPlaying = sessionStorage.getItem('audio_playing');
+
+                    if (storedPos) {
+                        currentPos = parseFloat(storedPos);
+                        scWidget.seekTo(currentPos);
+                    }
+
+                    // Attempt to auto-resume
+                    if (storedPlaying === 'true') {
+                        setTimeout(() => {
+                            scWidget.play();
+                            isPlaying = true;
+                            const btn = document.getElementById('btn-music');
+                            if (btn) {
+                                btn.innerText = "🎵 AUDIO: ON";
+                                btn.classList.add('bg-green-900'); // Adapting style
+                                btn.classList.add('text-white');
+                            }
+                        }, 100);
+                    }
+                });
+
+                // Track progress
+                scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
+                    currentPos = data.currentPosition;
+                });
+            };
+            document.head.appendChild(script);
+
+            // --- SAVE STATE ON UNLOAD ---
+            window.addEventListener('beforeunload', () => {
+                sessionStorage.setItem('audio_pos', currentPos);
+                sessionStorage.setItem('audio_playing', isPlaying);
+            });
+        }
+
+        function toggleMusic() {
+            const btn = document.getElementById('btn-music');
+            if (!scWidget) return;
+
+            scWidget.isPaused((paused) => {
+                if (paused) {
+                    scWidget.play();
+                    isPlaying = true;
+                    btn.innerText = "🎵 AUDIO: ON";
+                    btn.classList.add('bg-green-900');
+                    btn.classList.add('text-white');
+                } else {
+                    scWidget.pause();
+                    isPlaying = false;
+                    btn.innerText = "🎵 AUDIO: OFF";
+                    btn.classList.remove('bg-green-900');
+                    btn.classList.remove('text-white');
+                }
+            });
+        }
+
+        // Init
+        window.onload = () => {
+            initAudio();
+        };
     </script>
 </body>
+
 </html>
