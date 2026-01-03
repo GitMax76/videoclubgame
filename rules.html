@@ -102,6 +102,8 @@
             font-size: 12px;
             text-align: right;
             margin-bottom: 5px;
+            margin-top: 5px;
+            /* Added spacing */
         }
 
         .flag-img {
@@ -147,42 +149,10 @@
 
         .start-icon {
             margin-right: 6px;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             background: url('https://win98icons.alexmeub.com/icons/png/windows-0.png') no-repeat center center;
             background-size: contain;
-        }
-
-        .clock-tray {
-            margin-left: auto;
-            border: 2px solid #808080;
-            border-right-color: #fff;
-            border-bottom-color: #fff;
-            padding: 2px 10px;
-            font-size: 14px;
-            background: #c0c0c0;
-            /* Tray matches bg */
-            display: flex;
-            align-items: center;
-            height: 26px;
-        }
-
-        /* Tabs styling adjustment */
-        menu[role="tablist"] {
-            margin: 0;
-            padding-left: 0;
-            display: flex;
-        }
-
-        menu[role="tablist"] li {
-            font-size: 18px;
-            /* Larger tabs */
-            padding: 8px 16px;
-            cursor: pointer;
-        }
-
-        .hidden {
-            display: none !important;
         }
 
         /* Custom scrollbar for webkit */
@@ -210,37 +180,75 @@
             border-bottom-color: #404040;
         }
 
-        button {
-            font-size: 16px !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            background: #c0c0c0 !important;
-            /* Force Win98 Silver */
-            color: #000 !important;
-            /* Force Black Text */
-            border: 2px solid #fff;
-            border-right-color: #404040;
-            border-bottom-color: #404040;
-            box-shadow: 1px 1px 0 #000;
-        }
-
-        button:active {
-            border: 2px solid #404040;
+        .clock-tray {
+            margin-left: auto;
+            border: 2px solid #808080;
             border-right-color: #fff;
             border-bottom-color: #fff;
-            transform: translate(1px, 1px);
+            padding: 2px 10px;
+            font-size: 14px;
+            background: #c0c0c0;
+            /* Tray matches bg */
+            display: flex;
+            align-items: center;
+            height: 26px;
         }
 
-        /* Fix for icons if they are transparent PNGs being affected by dark backgrounds */
-        .win-icon {
-            height: 20px;
-            width: 20px;
-            vertical-align: bottom;
+        /* Tabs styling adjustment */
+        menu[role="tablist"] {
+            margin: 0;
+            padding-left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            /* Fix for mobile overflow */
+        }
+
+        menu[role="tablist"] li {
+            font-size: 16px;
+            /* Slightly smaller as requested */
+            padding: 8px 16px;
+            cursor: pointer;
+            white-space: nowrap;
+            /* Prevent breaking mid-word on small screens if possible */
+            flex-grow: 1;
+            /* Distribute space */
+            text-align: center;
+        }
+
+        /* Language Hint */
+        #lang-hint {
+            font-size: 12px;
+            text-align: right;
+            margin-bottom: 5px;
+            margin-top: 4px;
+            /* More spacing from button */
+            padding-right: 2px;
+        }
+
+        /* Start Icon Larger */
+        .start-icon {
             margin-right: 6px;
-            image-rendering: pixelated;
-            /* Crisp icons */
+            width: 24px;
+            /* Larger */
+            height: 24px;
+            /* Larger */
+            background: url('https://win98icons.alexmeub.com/icons/png/windows-0.png') no-repeat center center;
+            background-size: contain;
+        }
+
+        /* Intro Text Hierarchy */
+        .intro-text-large {
+            font-size: 22px;
+            /* Bigger body text for intro */
+            line-height: 1.4;
+        }
+
+        .intro-fieldset-large {
+            font-size: 18px;
+        }
+
+        .hidden {
+            display: none !important;
         }
 
         /* Tab Switching Animation */
@@ -305,8 +313,10 @@
                     </button>
                     <a href="Regolamento VideoClub.pdf" target="_blank" style="text-decoration:none;">
                         <button onclick="playClick()">
-                            <img src="https://win98icons.alexmeub.com/icons/png/clip_file-0.png" class="win-icon"
-                                alt="">
+                            <!-- Using a different icon for PDF -->
+                            <img src="https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs_small-0.png"
+                                class="win-icon" alt="PDF"
+                                onerror="this.src='https://win98icons.alexmeub.com/icons/png/file_lines-0.png'">
                             PDF
                         </button>
                     </a>
@@ -336,19 +346,20 @@
                             <h2 style="font-style: italic; font-size: 24px; color: #000080; margin-top: 15px;">"Make it
                                 a VideoClub Night!"</h2>
                         </div>
-                        <fieldset>
+                        <fieldset class="intro-fieldset-large">
                             <legend>L'Ambientazione</legend>
-                            <p>È un venerdì sera di fine anni '90. I DVD avanzano, ma qui dentro si respira ancora
+                            <p class="intro-text-large">È un venerdì sera di fine anni '90. I DVD avanzano, ma qui
+                                dentro si respira ancora
                                 profumo di plastica e popcorn.
                                 Siete lo staff dell'ultimo store aperto. La Direzione Centrale ha mandato un ultimatum:
                                 <span class="highlight">"Fatturate o Chiudete"</span>.
                             </p>
                         </fieldset>
                         <br>
-                        <fieldset>
+                        <fieldset class="intro-fieldset-large">
                             <legend>Scopo del Gioco</legend>
-                            <p><strong>Modalità:</strong> Semi-Cooperativo (2-5 Giocatori)</p>
-                            <ul>
+                            <p class="intro-text-large"><strong>Modalità:</strong> Semi-Cooperativo (2-5 Giocatori)</p>
+                            <ul class="intro-text-large">
                                 <li><strong style="color:blue">OBIETTIVO COOP:</strong> Sopravvivere completando gli
                                     <span class="highlight">Obiettivi Comuni</span>. Se ne fallite 3, il negozio chiude
                                     e TUTTI perdono.
@@ -368,19 +379,20 @@
                             <h2 style="font-style: italic; font-size: 24px; color: #000080; margin-top: 15px;">"Make it
                                 a VideoClub Night!"</h2>
                         </div>
-                        <fieldset>
+                        <fieldset class="intro-fieldset-large">
                             <legend>The Setting</legend>
-                            <p>It's a Friday night in the late 90s. DVDs are rising, but in here, the smell of plastic
+                            <p class="intro-text-large">It's a Friday night in the late 90s. DVDs are rising, but in
+                                here, the smell of plastic
                                 and popcorn still reigns.
                                 You are the staff of the last open store. HQ has sent an ultimatum: <span
                                     class="highlight">"Profit or Close"</span>.
                             </p>
                         </fieldset>
                         <br>
-                        <fieldset>
+                        <fieldset class="intro-fieldset-large">
                             <legend>Goal of the Game</legend>
-                            <p><strong>Mode:</strong> Semi-Cooperative (2-5 Players)</p>
-                            <ul>
+                            <p class="intro-text-large"><strong>Mode:</strong> Semi-Cooperative (2-5 Players)</p>
+                            <ul class="intro-text-large">
                                 <li><strong style="color:blue">COOP GOAL:</strong> Survive by completing <span
                                         class="highlight">Common Objectives</span>. If you fail 3, the store closes and
                                     EVERYONE loses.</li>
@@ -399,19 +411,20 @@
                             <h2 style="font-style: italic; font-size: 24px; color: #000080; margin-top: 15px;">"Make it
                                 a VideoClub Night!"</h2>
                         </div>
-                        <fieldset>
+                        <fieldset class="intro-fieldset-large">
                             <legend>L'Ambiance</legend>
-                            <p>C'est un vendredi soir à la fin des années 90. Les DVD progressent, mais ici, l'odeur du
+                            <p class="intro-text-large">C'est un vendredi soir à la fin des années 90. Les DVD
+                                progressent, mais ici, l'odeur du
                                 plastique et du pop-corn règne encore.
                                 Vous êtes le personnel du dernier magasin ouvert. Le siège a envoyé un ultimatum : <span
                                     class="highlight">"Faites du profit ou fermez"</span>.
                             </p>
                         </fieldset>
                         <br>
-                        <fieldset>
+                        <fieldset class="intro-fieldset-large">
                             <legend>But du Jeu</legend>
-                            <p><strong>Mode :</strong> Semi-Coopératif (2-5 Joueurs)</p>
-                            <ul>
+                            <p class="intro-text-large"><strong>Mode :</strong> Semi-Coopératif (2-5 Joueurs)</p>
+                            <ul class="intro-text-large">
                                 <li><strong style="color:blue">OBJECTIF COOP :</strong> Survivre en remplissant les
                                     <span class="highlight">Objectifs Communs</span>. Si vous en ratez 3, le magasin
                                     ferme et TOUT LE MONDE perd.
@@ -738,6 +751,44 @@
         // --- SOUNDS ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = new AudioContext();
+
+        // WIN98 Startup Sound Simulation (Simple synthesized version as I cannot link external big files reliably without CORS)
+        // Actually, let's try to play a small base64 encoded buffer or a chime.
+        // For now, I will create a synthesized "Ta-da" chime on load.
+        window.addEventListener('click', () => {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume().then(() => {
+                    playStartupChime();
+                });
+            } else {
+                playStartupChime();
+            }
+        }, { once: true });
+
+        function playStartupChime() {
+            if (audioCtx.state === 'suspended') return; // Can't play if not interacted
+            const t = audioCtx.currentTime;
+
+            // Simple Major Chord Arpeggio
+            const notes = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.frequency.value = freq;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0, t + i * 0.1);
+                gain.gain.linearRampToValueAtTime(0.1, t + i * 0.1 + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 1.5);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(t + i * 0.1);
+                osc.stop(t + i * 0.1 + 1.5);
+            });
+        }
+
+        // Try to play on first interaction if blocked, or immediately if possible (rare in modern browsers)
+        // setTimeout(playStartupChime, 500);
 
         // Authentic simple "Click" synthesized
         function playClick() {
