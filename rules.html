@@ -205,14 +205,29 @@
 
         menu[role="tablist"] li {
             font-size: 16px;
-            /* Slightly smaller as requested */
             padding: 8px 16px;
             cursor: pointer;
             white-space: nowrap;
-            /* Prevent breaking mid-word on small screens if possible */
             flex-grow: 1;
-            /* Distribute space */
             text-align: center;
+            /* WIN98 Tab/Button Style */
+            background: #c0c0c0;
+            border-top: 2px solid #fff;
+            border-left: 2px solid #fff;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            margin-right: 2px;
+            margin-bottom: 4px;
+        }
+
+        menu[role="tablist"] li[aria-selected="true"] {
+            font-weight: bold;
+            background: #dfdfdf;
+            border-bottom: 2px solid #dfdfdf;
+            /* Meld with content */
+            position: relative;
+            top: 2px;
+            z-index: 10;
         }
 
         /* Language Hint */
@@ -220,26 +235,28 @@
             font-size: 12px;
             text-align: right;
             margin-bottom: 5px;
-            margin-top: 4px;
-            /* More spacing from button */
+            margin-top: 5px;
             padding-right: 2px;
         }
 
         /* Start Icon Larger */
         .start-icon {
-            margin-right: 6px;
-            width: 24px;
-            /* Larger */
-            height: 24px;
-            /* Larger */
+            margin-right: 8px;
+            width: 32px;
+            /* Much Larger as requested */
+            height: 32px;
             background: url('https://win98icons.alexmeub.com/icons/png/windows-0.png') no-repeat center center;
             background-size: contain;
+        }
+
+        .start-button {
+            height: 36px !important;
+            /* Adjust button height for icon */
         }
 
         /* Intro Text Hierarchy */
         .intro-text-large {
             font-size: 22px;
-            /* Bigger body text for intro */
             line-height: 1.4;
         }
 
@@ -265,6 +282,56 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        /* Intro Text Animations */
+        .anim-title {
+            animation: slideInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .anim-subtitle {
+            animation: fadeInSlow 1.5s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+
+        .anim-slogan {
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInSlow {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
             }
         }
     </style>
@@ -339,11 +406,14 @@
                 <section id="intro" class="tab-anim">
                     <div class="lang-it">
                         <div style="text-align:center; margin-bottom: 20px;">
-                            <h1 style="font-size: 42px; margin: 10px 0; text-shadow: 2px 2px #c0c0c0;">The Last Video
+                            <h1 class="anim-title"
+                                style="font-size: 42px; margin: 10px 0; text-shadow: 2px 2px #c0c0c0;">The Last Video
                                 Club</h1>
-                            <h3 style="font-size: 18px; margin: 0; font-weight: normal;">L'ultimo baluardo delle
+                            <h3 class="anim-subtitle" style="font-size: 18px; margin: 0; font-weight: normal;">L'ultimo
+                                baluardo delle
                                 videoteche.</h3>
-                            <h2 style="font-style: italic; font-size: 24px; color: #000080; margin-top: 15px;">"Make it
+                            <h2 class="anim-slogan"
+                                style="font-style: italic; font-size: 24px; color: #000080; margin-top: 15px;">"Make it
                                 a VideoClub Night!"</h2>
                         </div>
                         <fieldset class="intro-fieldset-large">
@@ -372,11 +442,14 @@
 
                     <div class="lang-en hidden">
                         <div style="text-align:center; margin-bottom: 20px;">
-                            <h1 style="font-size: 42px; margin: 10px 0; text-shadow: 2px 2px #c0c0c0;">The Last Video
+                            <h1 class="anim-title"
+                                style="font-size: 42px; margin: 10px 0; text-shadow: 2px 2px #c0c0c0;">The Last Video
                                 Club</h1>
-                            <h3 style="font-size: 18px; margin: 0; font-weight: normal;">The last bastion of video
+                            <h3 class="anim-subtitle" style="font-size: 18px; margin: 0; font-weight: normal;">The last
+                                bastion of video
                                 rental stores.</h3>
-                            <h2 style="font-style: italic; font-size: 24px; color: #000080; margin-top: 15px;">"Make it
+                            <h2 class="anim-slogan"
+                                style="font-style: italic; font-size: 24px; color: #000080; margin-top: 15px;">"Make it
                                 a VideoClub Night!"</h2>
                         </div>
                         <fieldset class="intro-fieldset-large">
@@ -404,11 +477,14 @@
 
                     <div class="lang-fr hidden">
                         <div style="text-align:center; margin-bottom: 20px;">
-                            <h1 style="font-size: 42px; margin: 10px 0; text-shadow: 2px 2px #c0c0c0;">The Last Video
+                            <h1 class="anim-title"
+                                style="font-size: 42px; margin: 10px 0; text-shadow: 2px 2px #c0c0c0;">The Last Video
                                 Club</h1>
-                            <h3 style="font-size: 18px; margin: 0; font-weight: normal;">Le dernier bastion des
+                            <h3 class="anim-subtitle" style="font-size: 18px; margin: 0; font-weight: normal;">Le
+                                dernier bastion des
                                 vidéoclubs.</h3>
-                            <h2 style="font-style: italic; font-size: 24px; color: #000080; margin-top: 15px;">"Make it
+                            <h2 class="anim-slogan"
+                                style="font-style: italic; font-size: 24px; color: #000080; margin-top: 15px;">"Make it
                                 a VideoClub Night!"</h2>
                         </div>
                         <fieldset class="intro-fieldset-large">
