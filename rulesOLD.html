@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VIDEOCLUB - Regolamento Ufficiale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preload" href="https://w.soundcloud.com/player/api.js" as="script">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-yellow: #ffee00;
+            --retro-bg: #1a1a2e;
+            --crt-green: #39ff14;
+            --crt-amber: #ffb000;
+        }
+
+        body {
+            background-color: #050505;
+            color: var(--crt-green);
+            font-family: 'VT323', monospace;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Prevent bounce on mobile */
+            overscroll-behavior: none;
+        }
+
+        /* CRT Screen Effect */
+        .crt-container {
+            position: relative;
+            width: 100%;
+            max-width: 1024px;
+            height: 95vh;
+            /* Taller on mobile */
+            background: #111;
+            border: 20px solid #333;
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), inset 0 0 100px rgba(0, 0, 0, 0.9);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 640px) {
+            .crt-container {
+                height: 100vh;
+                border: 8px solid #333;
+                /* Thinner border for mobile */
+                border-radius: 0;
+                width: 100%;
+            }
+        }
+
+        .screen-content {
+            position: relative;
+            flex-grow: 1;
+            width: 100%;
+            padding: 2rem;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            /* Smooth scrolling iOS */
+            background: radial-gradient(circle, #1a2a1a 0%, #0d120d 100%);
+            z-index: 2;
+        }
+
+        @media (max-width: 640px) {
+            .screen-content {
+                padding: 1rem;
+                /* Less padding on mobile */
+            }
+        }
+
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .flicker {
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% {
+                opacity: 0.97;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.98;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            /* Thinner scrollbar */
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--crt-green);
+            border: 1px solid #000;
+            border-radius: 4px;
+        }
+
+        /* UI Elements */
+        .btn-retro {
+            border: 2px solid var(--crt-green);
+            background: transparent;
+            color: var(--crt-green);
+            text-transform: uppercase;
+            padding: 8px 12px;
+            /* Smaller padding */
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            box-shadow: 3px 3px 0px var(--crt-green);
+            margin-right: 8px;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            /* Prevent text wrap inside buttons */
+            flex-grow: 1;
+            /* Make buttons grow on mobile to fill width */
+            text-align: center;
+        }
+
+        @media (min-width: 640px) {
+            .btn-retro {
+                padding: 8px 16px;
+                font-size: 1.25rem;
+                box-shadow: 4px 4px 0px var(--crt-green);
+                margin-right: 10px;
+                margin-bottom: 10px;
+                flex-grow: 0;
+                /* Normal behavior on desktop */
+            }
+        }
+
+        .btn-retro:hover,
+        .btn-retro.active {
+            background: var(--crt-green);
+            color: #000;
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px var(--crt-green);
+        }
+
+        /* Nav specific styling to fix mobile visibility */
+        nav {
+            justify-content: center;
+        }
+
+        .panel {
+            border: 1px solid var(--crt-green);
+            padding: 1rem;
+            background: rgba(0, 20, 0, 0.6);
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .panel {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        .section-title {
+            color: var(--crt-amber);
+            border-bottom: 2px solid var(--crt-amber);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        @media (min-width: 640px) {
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        .highlight {
+            color: var(--neon-yellow);
+        }
+
+        .danger {
+            color: #fc8181;
+        }
+
+        .glitch-text {
+            text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        ul.retro-list {
+            list-style-type: none;
+            padding-left: 0.5rem;
+        }
+
+        ul.retro-list li::before {
+            content: "> ";
+            color: var(--crt-green);
+        }
+
+        /* Flag Icon Style */
+        .flag-img {
+            height: 16px;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 6px;
+            border: 1px solid #333;
+        }
+
+        @media (min-width: 640px) {
+            .flag-img {
+                height: 20px;
+                margin-right: 8px;
+            }
+        }
+
+        /* Blink Animation for Hint */
+        .blink-slow {
+            animation: blinker 2s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="flicker">
+    <!-- SOUNDCLOUD WIDGET (HIDDEN) -->
+    <iframe id="sc-widget" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/synthwave80s/sets/dreams&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"
+        style="opacity:0; position:absolute; z-index:-1; pointer-events:none;">
+    </iframe>
+
+    <div class="crt-container">
+        <div class="scanlines"></div>
+        <div class="screen-content flex flex-col">
+
+            <!-- Header -->
+            <header
+                class="flex flex-col md:flex-row justify-between items-center md:items-start border-b-2 border-[#39ff14] pb-4 mb-4 md:mb-6">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <h1 class="text-3xl md:text-4xl font-bold glitch-text leading-tight">VIDEOCLUB DB</h1>
+                    <p class="text-sm md:text-base text-green-400 font-mono mb-1">> Un gioco di Massimiliano Sabato</p>
+                    <p class="text-lg md:text-xl opacity-80" data-lang="it">> ARCHIVIO REGOLE</p>
+                    <p class="text-lg md:text-xl opacity-80 hidden" data-lang="en">> RULES ARCHIVE</p>
+                    <p class="text-lg md:text-xl opacity-80 hidden" data-lang="fr">> ARCHIVE RÈGLES</p>
+                </div>
+
+                <div
+                    class="text-center md:text-right flex flex-col items-center md:items-end w-full md:w-auto relative">
+
+                    <!-- Language Hint Popup -->
+                    <div id="lang-hint" class="blink-slow text-yellow-300 text-xs mb-1 font-bold tracking-wider">
+                        ↓ TOCCA PER CAMBIARE LINGUA
+                    </div>
+
+                    <div class="flex flex-col items-end gap-2">
+                        <!-- PDF DOWNLOAD MINI -->
+                        <!-- PDF DOWNLOAD -->
+                        <a href="Regolamento VideoClub.pdf" target="_blank"
+                            class="btn-retro text-sm py-1 px-3 border-red-500 text-red-500 hover:bg-red-600 hover:text-white mb-1 no-underline flex items-center gap-2">
+                            📄 SCARICA PDF
+                        </a>
+
+                        <!-- Language Selector Area -->
+                        <div class="flex items-center gap-2 mb-2 bg-gray-900 border border-gray-700 p-1 rounded w-auto">
+                            <span class="text-xs md:text-sm opacity-70 ml-2">LANG:</span>
+                            <button onclick="toggleLanguage()"
+                                class="btn-retro text-base md:text-lg py-1 px-3 bg-black hover:bg-gray-800 border-yellow-500 text-yellow-500 shadow-none hover:translate-x-0 hover:translate-y-0 flex items-center gap-2 m-0 flex-grow-0"
+                                id="lang-btn">
+                                <img src="https://flagcdn.com/w40/it.png" class="flag-img" alt="IT"> IT
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between w-full md:w-auto gap-4 px-2 md:px-0 mt-2">
+                        <!-- AUDIO BUTTON -->
+                        <button onclick="toggleMusic()" id="btn-music"
+                            class="btn-retro text-sm py-1 px-2 border-green-500 text-green-500 shadow-none hover:translate-x-0 hover:translate-y-0 m-0">
+                            🎵 AUDIO: OFF
+                        </button>
+
+                        <!-- HOME BUTTON -->
+                        <button
+                            onclick="sessionStorage.setItem('skip_splash', 'true'); window.location.href='index.html'"
+                            class="btn-retro text-sm py-1 px-2 border-yellow-500 text-yellow-500 shadow-none hover:translate-x-0 hover:translate-y-0 m-0">
+                            🏠 HOME
+                        </button>
+                    </div>
+
+                    <div class="flex justify-between w-full md:w-auto gap-4 px-2 md:px-0">
+                        <p id="clock" class="text-lg md:text-xl mt-1">00:00:00</p>
+                        <p class="text-sm text-yellow-400 blink self-center">● REC</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Navigation -->
+            <!-- RESTORED: flex-wrap to ensure tabs are visible on screen without scrolling -->
+            <nav
+                class="flex flex-wrap gap-2 mb-4 md:mb-6 border-b border-gray-800 pb-4 justify-center md:justify-start">
+                <button onclick="showSection('intro')" class="btn-retro active" id="btn-intro" data-it="INTRO"
+                    data-en="INTRO" data-fr="INTRO">INTRO</button>
+                <button onclick="showSection('setup')" class="btn-retro" id="btn-setup" data-it="PREPARAZIONE"
+                    data-en="SETUP" data-fr="PRÉPARATION">PREPARAZIONE</button>
+                <button onclick="showSection('gameplay')" class="btn-retro" id="btn-gameplay" data-it="SVOLGIMENTO"
+                    data-en="GAMEPLAY" data-fr="DÉROULEMENT">SVOLGIMENTO</button>
+                <button onclick="showSection('endgame')" class="btn-retro" id="btn-endgame" data-it="FINE" data-en="END"
+                    data-fr="FIN">FINE</button>
+            </nav>
+
+            <!-- 1. INTRO & SCOPO -->
+            <section id="intro">
+                <!-- ITALIAN CONTENT -->
+                <div class="lang-it">
+                    <div class="text-center mb-6">
+                        <h2 class="text-3xl md:text-5xl mb-2 text-yellow-300 leading-none">"Make it a VideoClub Night!"
+                        </h2>
+                        <p class="text-lg md:text-2xl italic opacity-80">L'ultimo baluardo delle videoteche.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div class="panel">
+                            <h3 class="section-title">L'Ambientazione</h3>
+                            <p class="text-base md:text-lg leading-relaxed mb-4">
+                                È un venerdì sera di fine anni '90. I DVD avanzano, ma qui dentro si respira ancora
+                                profumo di plastica e popcorn.
+                                Siete lo staff dell'ultimo store aperto. La Direzione Centrale ha mandato un ultimatum:
+                                <span class="highlight">"Fatturate o Chiudete"</span>.
+                            </p>
+                        </div>
+
+                        <div class="panel">
+                            <h3 class="section-title">Scopo del Gioco</h3>
+                            <p class="mb-4"><strong>Modalità:</strong> Semi-Cooperativo (2-5 Giocatori)</p>
+
+                            <ul class="retro-list space-y-3 text-base md:text-lg">
+                                <li>
+                                    <strong class="text-blue-400">OBIETTIVO COOP:</strong><br>
+                                    Sopravvivere completando gli <span class="highlight">Obiettivi Comuni</span>. Se ne
+                                    fallite 3, il negozio chiude e TUTTI perdono.
+                                </li>
+                                <li>
+                                    <strong class="text-purple-400">OBIETTIVO PERSONALE:</strong><br>
+                                    Se il negozio si salva, vince chi ha più punti (Obiettivi Personali + Bonus Snack).
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENGLISH CONTENT -->
+                <div class="lang-en hidden">
+                    <div class="text-center mb-6">
+                        <h2 class="text-3xl md:text-5xl mb-2 text-yellow-300 leading-none">"Make it a VideoClub Night!"
+                        </h2>
+                        <p class="text-lg md:text-2xl italic opacity-80">The last bastion of video rental stores.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div class="panel">
+                            <h3 class="section-title">The Setting</h3>
+                            <p class="text-base md:text-lg leading-relaxed mb-4">
+                                It's a Friday night in the late 90s. DVDs are rising, but in here, the smell of plastic
+                                and popcorn still reigns.
+                                You are the staff of the last open store. HQ has sent an ultimatum: <span
+                                    class="highlight">"Profit or Close"</span>.
+                            </p>
+                        </div>
+
+                        <div class="panel">
+                            <h3 class="section-title">Goal of the Game</h3>
+                            <p class="mb-4"><strong>Mode:</strong> Semi-Cooperative (2-5 Players)</p>
+
+                            <ul class="retro-list space-y-3 text-base md:text-lg">
+                                <li>
+                                    <strong class="text-blue-400">COOP GOAL:</strong><br>
+                                    Survive by completing <span class="highlight">Common Objectives</span>. If you fail
+                                    3, the store closes and EVERYONE loses.
+                                </li>
+                                <li>
+                                    <strong class="text-purple-400">PERSONAL GOAL:</strong><br>
+                                    If the store is saved, the winner is whoever has the most points (Personal
+                                    Objectives + Snack Bonus).
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FRENCH CONTENT -->
+                <div class="lang-fr hidden">
+                    <div class="text-center mb-6">
+                        <h2 class="text-3xl md:text-5xl mb-2 text-yellow-300 leading-none">"Make it a VideoClub Night!"
+                        </h2>
+                        <p class="text-lg md:text-2xl italic opacity-80">Le dernier bastion des vidéoclubs.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div class="panel">
+                            <h3 class="section-title">L'Ambiance</h3>
+                            <p class="text-base md:text-lg leading-relaxed mb-4">
+                                C'est un vendredi soir à la fin des années 90. Les DVD progressent, mais ici, l'odeur du
+                                plastique et du pop-corn règne encore.
+                                Vous êtes le personnel du dernier magasin ouvert. Le siège a envoyé un ultimatum : <span
+                                    class="highlight">"Faites du profit ou fermez"</span>.
+                            </p>
+                        </div>
+
+                        <div class="panel">
+                            <h3 class="section-title">But du Jeu</h3>
+                            <p class="mb-4"><strong>Mode :</strong> Semi-Coopératif (2-5 Joueurs)</p>
+
+                            <ul class="retro-list space-y-3 text-base md:text-lg">
+                                <li>
+                                    <strong class="text-blue-400">OBJECTIF COOP :</strong><br>
+                                    Survivre en remplissant les <span class="highlight">Objectifs Communs</span>. Si
+                                    vous en ratez 3, le magasin ferme et TOUT LE MONDE perd.
+                                </li>
+                                <li>
+                                    <strong class="text-purple-400">OBJECTIF PERSO :</strong><br>
+                                    Si le magasin est sauvé, le gagnant est celui qui a le plus de points (Objectifs
+                                    Personnels + Bonus Snack).
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. PREPARAZIONE -->
+            <section id="setup" class="hidden">
+                <!-- ITALIAN -->
+                <div class="lang-it">
+                    <h3 class="section-title">Setup del Bancone</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div class="panel">
+                            <h4 class="text-lg md:text-xl font-bold mb-2 underline">IL DESK CENTRALE</h4>
+                            <ol class="list-decimal pl-6 space-y-2">
+                                <li>Piazza il <strong>DESK ottagonale</strong> al centro.</li>
+                                <li>Crea <strong>8 Pile</strong> attorno: 4 Cassette + 1 Snack.</li>
+                                <li>Piazza lo <strong>Store Manager</strong> <u>di fianco</u> alla Pila 1.</li>
+                                <li>Pesca <strong>1 Obiettivo Comune</strong> visibile.</li>
+                                <li>Prepara il <strong>Box Riconsegna</strong> (vuoto).</li>
+                            </ol>
+                        </div>
+
+                        <div class="panel">
+                            <h4 class="text-lg md:text-xl font-bold mb-2 underline">I GIOCATORI</h4>
+                            <ol class="list-decimal pl-6 space-y-2">
+                                <li>Ogni giocatore riceve 1 <strong>Scaffale Personale</strong>.</li>
+                                <li>Piazzate 1 <strong>Scaffale Condiviso</strong> tra coppie.</li>
+                                <li>Pesca <strong>3 Obiettivi</strong>: tieni 2, scarta 1.</li>
+                            </ol>
+                            <div class="mt-4 border-t border-gray-600 pt-2">
+                                <p class="text-sm highlight">REGOLA SCAFFALI CONDIVISI:</p>
+                                <p class="text-sm">Sinistra: Gestisci col. B | Destra: Gestisci col. A</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel text-center mt-4">
+                        <p class="text-lg">PRIMO GIOCATORE: Chi ha visto un film in VHS più di recente.</p>
+                    </div>
+                </div>
+
+                <!-- ENGLISH -->
+                <div class="lang-en hidden">
+                    <h3 class="section-title">Counter Setup</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div class="panel">
+                            <h4 class="text-lg md:text-xl font-bold mb-2 underline">THE CENTRAL DESK</h4>
+                            <ol class="list-decimal pl-6 space-y-2">
+                                <li>Place the <strong>octagonal DESK</strong> in center.</li>
+                                <li>Create <strong>8 Stacks</strong>: 4 Tapes + 1 Snack.</li>
+                                <li>Place <strong>Store Manager</strong> <u>next to</u> Stack 1.</li>
+                                <li>Draw <strong>1 Common Objective</strong> face up.</li>
+                                <li>Prepare the <strong>Return Box</strong> (empty).</li>
+                            </ol>
+                        </div>
+
+                        <div class="panel">
+                            <h4 class="text-lg md:text-xl font-bold mb-2 underline">THE PLAYERS</h4>
+                            <ol class="list-decimal pl-6 space-y-2">
+                                <li>Receive 1 <strong>Personal Shelf</strong>.</li>
+                                <li>Place 1 <strong>Shared Shelf</strong> between pairs.</li>
+                                <li>Draw <strong>3 Objectives</strong>: keep 2, discard 1.</li>
+                            </ol>
+                            <div class="mt-4 border-t border-gray-600 pt-2">
+                                <p class="text-sm highlight">SHARED SHELF RULE:</p>
+                                <p class="text-sm">Left: Manage col. B | Right: Manage col. A</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel text-center mt-4">
+                        <p class="text-lg">FIRST PLAYER: Whoever watched a VHS most recently.</p>
+                    </div>
+                </div>
+
+                <!-- FRENCH -->
+                <div class="lang-fr hidden">
+                    <h3 class="section-title">Mise en place</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div class="panel">
+                            <h4 class="text-lg md:text-xl font-bold mb-2 underline">LE BUREAU CENTRAL</h4>
+                            <ol class="list-decimal pl-6 space-y-2">
+                                <li>Placez le <strong>BUREAU octogonal</strong> au centre.</li>
+                                <li>Créez <strong>8 Piles</strong> : 4 Cassettes + 1 Snack.</li>
+                                <li>Placez le <strong>Manager</strong> <u>à côté</u> de la Pile 1.</li>
+                                <li>Piochez <strong>1 Objectif Commun</strong> visible.</li>
+                                <li>Préparez la <strong>Boîte de Retour</strong> (vide).</li>
+                            </ol>
+                        </div>
+
+                        <div class="panel">
+                            <h4 class="text-lg md:text-xl font-bold mb-2 underline">LES JOUEURS</h4>
+                            <ol class="list-decimal pl-6 space-y-2">
+                                <li>Reçoit 1 <strong>Étagère Personnelle</strong>.</li>
+                                <li>Placez 1 <strong>Étagère Partagée</strong> entre paires.</li>
+                                <li>Piochez <strong>3 Objectifs</strong> : gardez 2, jetez 1.</li>
+                            </ol>
+                            <div class="mt-4 border-t border-gray-600 pt-2">
+                                <p class="text-sm highlight">RÈGLE ÉTAGÈRE PARTAGÉE :</p>
+                                <p class="text-sm">Gauche : Gérer col. B | Droite : Gérer col. A</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel text-center mt-4">
+                        <p class="text-lg">PREMIER JOUEUR : Le dernier à avoir vu une VHS.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. SVOLGIMENTO -->
+            <section id="gameplay" class="hidden">
+                <!-- ITALIAN -->
+                <div class="lang-it">
+                    <div class="panel bg-gray-900 border-yellow-500">
+                        <h3 class="text-xl md:text-2xl text-yellow-500 mb-2">⚠ INIZIO ROUND (REFILL)</h3>
+                        <p>Quando il Manager torna alla Pila 1:</p>
+                        <ul class="list-disc pl-6">
+                            <li><strong>RIEMPIRE:</strong> Pile vuote → 4 VHS + 1 Snack.</li>
+                            <li><strong>DIRETTIVA:</strong> Pesca 1 Obiettivo Comune.</li>
+                            <li class="danger"><strong>FALLIMENTO AUTO:</strong> Se già 2 obiettivi attivi, il vecchio
+                                FALLISCE (+1 Fallimento).</li>
+                        </ul>
+                    </div>
+
+                    <h3 class="section-title mt-6">Il Turno del Giocatore</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">1. MUOVI</h4>
+                            <p>Sposta <strong>Manager</strong> di 1 o 2 pile orario.</p>
+                        </div>
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">2. PRELEVA</h4>
+                            <p>Prendi <strong>TUTTO</strong> dalla pila (Cassette + Snack).</p>
+                        </div>
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">3. PIAZZA</h4>
+                            <p>Sistema su scaffali (Pers. o Cond.).</p>
+                            <p class="text-sm highlight mt-2">OBBLIGO: Piazza almeno 2 cassette!</p>
+                        </div>
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">4. SCARTA</h4>
+                            <p>Eccessi nel <strong>Box</strong>.</p>
+                            <p class="danger text-sm mt-2 font-bold">BOX A 12?</p>
+                            <p class="text-xs">+1 Fallimento e svuota.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENGLISH -->
+                <div class="lang-en hidden">
+                    <div class="panel bg-gray-900 border-yellow-500">
+                        <h3 class="text-xl md:text-2xl text-yellow-500 mb-2">⚠ ROUND START (REFILL)</h3>
+                        <p>When Manager returns to Stack 1:</p>
+                        <ul class="list-disc pl-6">
+                            <li><strong>REFILL:</strong> Empty stacks → 4 VHS + 1 Snack.</li>
+                            <li><strong>DIRECTIVE:</strong> Draw 1 Common Objective.</li>
+                            <li class="danger"><strong>AUTO FAIL:</strong> If 2 objectives active, oldest FAILS (+1
+                                Failure).</li>
+                        </ul>
+                    </div>
+
+                    <h3 class="section-title mt-6">Player Turn</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">1. MOVE</h4>
+                            <p>Move <strong>Manager</strong> 1 or 2 stacks CW.</p>
+                        </div>
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">2. TAKE</h4>
+                            <p>Take <strong>EVERYTHING</strong> (Tapes + Snack).</p>
+                        </div>
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">3. PLACE</h4>
+                            <p>Put on shelves (Pers. or Shared).</p>
+                            <p class="text-sm highlight mt-2">MANDATORY: Place at least 2 tapes!</p>
+                        </div>
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">4. DISCARD</h4>
+                            <p>Excess to <strong>Box</strong>.</p>
+                            <p class="danger text-sm mt-2 font-bold">BOX AT 12?</p>
+                            <p class="text-xs">+1 Failure and empty.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FRENCH -->
+                <div class="lang-fr hidden">
+                    <div class="panel bg-gray-900 border-yellow-500">
+                        <h3 class="text-xl md:text-2xl text-yellow-500 mb-2">⚠ DÉBUT ROUND (RÉASSORT)</h3>
+                        <p>Quand le Manager revient Pile 1 :</p>
+                        <ul class="list-disc pl-6">
+                            <li><strong>RÉASSORT :</strong> Piles vides → 4 VHS + 1 Snack.</li>
+                            <li><strong>DIRECTIVE :</strong> Pioche 1 Objectif Commun.</li>
+                            <li class="danger"><strong>ÉCHEC AUTO :</strong> Si 2 objectifs actifs, le vieux ÉCHOUE (+1
+                                Échec).</li>
+                        </ul>
+                    </div>
+
+                    <h3 class="section-title mt-6">Tour du Joueur</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">1. DÉPLACER</h4>
+                            <p>Bouger <strong>Manager</strong> 1 ou 2 piles horaire.</p>
+                        </div>
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">2. PRENDRE</h4>
+                            <p>Prendre <strong>TOUT</strong> (Cassettes + Snack).</p>
+                        </div>
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">3. PLACER</h4>
+                            <p>Ranger sur étagères (Pers. ou Part.).</p>
+                            <p class="text-sm highlight mt-2">OBLIGATOIRE : Placer au moins 2 VHS !</p>
+                        </div>
+                        <div class="border border-green-500 p-3 md:p-4">
+                            <h4 class="text-lg md:text-xl font-bold mb-2">4. DÉFAUSSER</h4>
+                            <p>Excès dans la <strong>Boîte</strong>.</p>
+                            <p class="danger text-sm mt-2 font-bold">BOÎTE À 12 ?</p>
+                            <p class="text-xs">+1 Échec et vider.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. FINE PARTITA -->
+            <section id="endgame" class="hidden">
+                <!-- ITALIAN -->
+                <div class="lang-it">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                        <div class="panel border-red-500">
+                            <h3 class="text-2xl md:text-3xl text-red-500 mb-4">SCONFITTA</h3>
+                            <p class="text-lg md:text-xl mb-4">Se accumulate <strong>3 Fallimenti</strong>.</p>
+                            <p class="italic">"Siete licenziati."</p>
+                            <div class="mt-4 md:mt-8 text-4xl md:text-6xl text-center">💀</div>
+                        </div>
+
+                        <div class="panel border-yellow-500">
+                            <h3 class="text-2xl md:text-3xl text-yellow-500 mb-4">VITTORIA</h3>
+                            <p class="text-lg md:text-xl mb-4">Sopravvivete fino alla fine.</p>
+                            <hr class="border-gray-600 my-4">
+                            <h4 class="text-lg font-bold mb-2">PUNTEGGIO:</h4>
+                            <ul class="retro-list space-y-2">
+                                <li>Punti Obiettivi Personali.</li>
+                                <li><strong>+1 Pt</strong> per Coppia Snack uguali.</li>
+                                <li><strong>+5 Pt</strong> per Tris Diverso.</li>
+                            </ul>
+                            <p class="mt-4 text-center highlight text-xl">Vince lo STORE MANAGER!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENGLISH -->
+                <div class="lang-en hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                        <div class="panel border-red-500">
+                            <h3 class="text-2xl md:text-3xl text-red-500 mb-4">DEFEAT</h3>
+                            <p class="text-lg md:text-xl mb-4">If <strong>3 Failures</strong> total.</p>
+                            <p class="italic">"You are fired."</p>
+                            <div class="mt-4 md:mt-8 text-4xl md:text-6xl text-center">💀</div>
+                        </div>
+
+                        <div class="panel border-yellow-500">
+                            <h3 class="text-2xl md:text-3xl text-yellow-500 mb-4">VICTORY</h3>
+                            <p class="text-lg md:text-xl mb-4">Survive until the end.</p>
+                            <hr class="border-gray-600 my-4">
+                            <h4 class="text-lg font-bold mb-2">SCORING:</h4>
+                            <ul class="retro-list space-y-2">
+                                <li>Personal Objective Points.</li>
+                                <li><strong>+1 Pt</strong> per Identical Pair.</li>
+                                <li><strong>+5 Pt</strong> per Different Trio.</li>
+                            </ul>
+                            <p class="mt-4 text-center highlight text-xl">Winner is STORE MANAGER!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FRENCH -->
+                <div class="lang-fr hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                        <div class="panel border-red-500">
+                            <h3 class="text-2xl md:text-3xl text-red-500 mb-4">DÉFAITE</h3>
+                            <p class="text-lg md:text-xl mb-4">Si <strong>3 Échecs</strong> au total.</p>
+                            <p class="italic">"Vous êtes virés."</p>
+                            <div class="mt-4 md:mt-8 text-4xl md:text-6xl text-center">💀</div>
+                        </div>
+
+                        <div class="panel border-yellow-500">
+                            <h3 class="text-2xl md:text-3xl text-yellow-500 mb-4">VICTOIRE</h3>
+                            <p class="text-lg md:text-xl mb-4">Survivez jusqu'à la fin.</p>
+                            <hr class="border-gray-600 my-4">
+                            <h4 class="text-lg font-bold mb-2">POINTS :</h4>
+                            <ul class="retro-list space-y-2">
+                                <li>Points Objectifs Personnels.</li>
+                                <li><strong>+1 Pt</strong> par Paire Identique.</li>
+                                <li><strong>+5 Pt</strong> par Trio Différent.</li>
+                            </ul>
+                            <p class="mt-4 text-center highlight text-xl">Le Gagnant est STORE MANAGER !</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACTS FOOTER -->
+            <footer id="contacts-footer" class="mt-8 pt-4 border-t-2 border-[#39ff14] text-center">
+                <h3 class="text-xl text-yellow-400 mb-4 section-title" style="border:none;">👋 PARLIAMO?</h3>
+                <div class="flex flex-wrap justify-center gap-4 text-lg">
+                    <a href="mailto:massi.sabato@gmail.com"
+                        class="btn-retro text-sm py-2 px-3 border-gray-500 text-gray-300 hover:text-white"
+                        style="text-decoration:none;">
+                        📧 EMAIL
+                    </a>
+                    <a href="https://wa.me/393295644852" target="_blank"
+                        class="btn-retro text-sm py-2 px-3 border-green-500 text-green-400 hover:text-white"
+                        style="text-decoration:none;">
+                        💬 WHATSAPP
+                    </a>
+                    <a href="https://linktr.ee/JustMax76" target="_blank"
+                        class="btn-retro text-sm py-2 px-3 border-purple-500 text-purple-400 hover:text-white"
+                        style="text-decoration:none;">
+                        🌲 LINKTREE
+                    </a>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button onclick="document.querySelector('.screen-content').scrollTo({top: 0, behavior: 'smooth'});"
+        class="fixed bottom-4 right-4 bg-green-500 text-black border-2 border-black p-2 rounded shadow-[2px_2px_0_black] hover:translate-y-1 hover:shadow-none transition-all z-50 font-bold"
+        style="font-family: 'VT323', monospace; font-size: 1.2rem;">
+        ⬆ TOP
+    </button>
+
+    <script>
+        // Clock Logic
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('it-IT');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Navigation Logic
+        function showSection(id) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(el => el.classList.add('hidden'));
+
+            // Show target section
+            document.getElementById(id).classList.remove('hidden');
+
+            // Update buttons state
+            document.querySelectorAll('.btn-retro').forEach(btn => btn.classList.remove('active'));
+            // Avoid adding active to lang button if it matches
+            const navBtn = document.getElementById('btn-' + id);
+            if (navBtn) navBtn.classList.add('active');
+        }
+
+        // Language Logic
+        const langs = ['it', 'en', 'fr'];
+
+        // Use external images to guarantee visibility regardless of font or OS
+        const flags = {
+            'it': '<img src="https://flagcdn.com/w40/it.png" class="flag-img" alt="IT"> IT',
+            'en': '<img src="https://flagcdn.com/w40/gb.png" class="flag-img" alt="EN"> EN',
+            'fr': '<img src="https://flagcdn.com/w40/fr.png" class="flag-img" alt="FR"> FR'
+        };
+
+        const hints = {
+            'it': '↓ TOCCA PER CAMBIARE LINGUA',
+            'en': '↓ TAP TO CHANGE LANGUAGE',
+            'fr': '↓ TAP POUR CHANGER LANGUE'
+        };
+
+        let currentLangIndex = 0;
+
+        function toggleLanguage() {
+            // Cycle language
+            currentLangIndex = (currentLangIndex + 1) % langs.length;
+            const currentLang = langs[currentLangIndex];
+
+            // Toggle Content Visibility
+            // 1. Hide all
+            langs.forEach(lang => {
+                document.querySelectorAll('.lang-' + lang).forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('[data-lang="' + lang + '"]').forEach(el => el.classList.add('hidden'));
+            });
+
+            // 2. Show current
+            document.querySelectorAll('.lang-' + currentLang).forEach(el => el.classList.remove('hidden'));
+            document.querySelectorAll('[data-lang="' + currentLang + '"]').forEach(el => el.classList.remove('hidden'));
+
+            // Update Nav Buttons Text
+            document.querySelectorAll('nav .btn-retro').forEach(btn => {
+                const text = btn.getAttribute(`data-${currentLang}`);
+                if (text) btn.innerText = text;
+            });
+
+            // Update Toggle Button Content
+            document.getElementById('lang-btn').innerHTML = flags[currentLang];
+
+            // Update Hint Text
+            document.getElementById('lang-hint').innerText = hints[currentLang];
+        }
+        // --- SOUNDCLOUD AUDIO ENGINE ---
+        let scWidget = null;
+        let isPlaying = false;
+        let currentPos = 0;
+
+        function initAudio() {
+            const script = document.createElement('script');
+            script.src = "https://w.soundcloud.com/player/api.js";
+            script.onload = () => {
+                const iframe = document.getElementById('sc-widget');
+                scWidget = SC.Widget(iframe);
+                scWidget.bind(SC.Widget.Events.READY, () => {
+                    console.log('Audio Ready');
+
+                    // --- RESTORE STATE ---
+                    const storedPos = sessionStorage.getItem('audio_pos');
+                    const storedPlaying = sessionStorage.getItem('audio_playing');
+
+                    if (storedPos) {
+                        currentPos = parseFloat(storedPos);
+                        scWidget.seekTo(currentPos);
+                    }
+
+                    // Attempt to auto-resume
+                    if (storedPlaying === 'true') {
+                        setTimeout(() => {
+                            scWidget.play();
+                            isPlaying = true;
+                            const btn = document.getElementById('btn-music');
+                            if (btn) {
+                                btn.innerText = "🎵 AUDIO: ON";
+                                btn.classList.add('bg-green-900'); // Adapting style
+                                btn.classList.add('text-white');
+                            }
+                        }, 100);
+                    }
+                });
+
+                // Track progress
+                scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
+                    currentPos = data.currentPosition;
+                });
+            };
+            document.head.appendChild(script);
+
+            // --- SAVE STATE ON UNLOAD ---
+            window.addEventListener('beforeunload', () => {
+                sessionStorage.setItem('audio_pos', currentPos);
+                sessionStorage.setItem('audio_playing', isPlaying);
+            });
+        }
+
+        function toggleMusic() {
+            const btn = document.getElementById('btn-music');
+            if (!scWidget) return;
+
+            scWidget.isPaused((paused) => {
+                if (paused) {
+                    scWidget.play();
+                    isPlaying = true;
+                    btn.innerText = "🎵 AUDIO: ON";
+                    btn.classList.add('bg-green-900');
+                    btn.classList.add('text-white');
+                } else {
+                    scWidget.pause();
+                    isPlaying = false;
+                    btn.innerText = "🎵 AUDIO: OFF";
+                    btn.classList.remove('bg-green-900');
+                    btn.classList.remove('text-white');
+                }
+            });
+        }
+
+        // Init
+        window.onload = () => {
+            initAudio();
+        };
+    </script>
+</body>
+
+</html>
