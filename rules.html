@@ -20,12 +20,15 @@
             min-height: 100vh;
             margin: 0;
             padding: 10px;
+            font-size: 16px;
+            /* Increased base font size */
         }
 
         .window {
             width: 100%;
-            max-width: 800px;
-            height: 90vh;
+            max-width: 900px;
+            /* Slightly wider */
+            height: 95vh;
             display: flex;
             flex-direction: column;
             box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
@@ -35,13 +38,13 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            padding: 10px;
+            padding: 12px;
             overflow: hidden;
         }
 
         .tab-content {
             background: #c0c0c0;
-            padding: 15px;
+            padding: 20px;
             border: 2px solid #dfdfdf;
             border-right-color: #808080;
             border-bottom-color: #808080;
@@ -76,8 +79,9 @@
             margin-top: 0;
             background: #000080;
             color: #fff;
-            padding: 2px 5px;
-            font-size: 14px;
+            padding: 4px 8px;
+            font-size: 18px;
+            /* Larger section titles */
         }
 
         /* Language Hint */
@@ -140,11 +144,17 @@
             height: 22px;
         }
 
-        /* Tabs styling adjustment for 98.css compatibility if needed, 
-           but 98.css usually provides <menu role="tablist"> */
+        /* Tabs styling adjustment */
         menu[role="tablist"] {
             margin: 0;
             padding-left: 0;
+            display: flex;
+        }
+
+        menu[role="tablist"] li {
+            font-size: 16px;
+            /* Larger tabs */
+            padding: 6px 12px;
         }
 
         .hidden {
@@ -243,7 +253,8 @@
                             <p>È un venerdì sera di fine anni '90. I DVD avanzano, ma qui dentro si respira ancora
                                 profumo di plastica e popcorn.
                                 Siete lo staff dell'ultimo store aperto. La Direzione Centrale ha mandato un ultimatum:
-                                <span class="highlight">"Fatturate o Chiudete"</span>.</p>
+                                <span class="highlight">"Fatturate o Chiudete"</span>.
+                            </p>
                         </fieldset>
                         <br>
                         <fieldset>
@@ -252,7 +263,8 @@
                             <ul>
                                 <li><strong style="color:blue">OBIETTIVO COOP:</strong> Sopravvivere completando gli
                                     <span class="highlight">Obiettivi Comuni</span>. Se ne fallite 3, il negozio chiude
-                                    e TUTTI perdono.</li>
+                                    e TUTTI perdono.
+                                </li>
                                 <li><strong style="color:purple">OBIETTIVO PERSONALE:</strong> Se il negozio si salva,
                                     vince chi ha più punti (Obiettivi Personali + Bonus Snack).</li>
                             </ul>
@@ -306,7 +318,8 @@
                             <ul>
                                 <li><strong style="color:blue">OBJECTIF COOP :</strong> Survivre en remplissant les
                                     <span class="highlight">Objectifs Communs</span>. Si vous en ratez 3, le magasin
-                                    ferme et TOUT LE MONDE perd.</li>
+                                    ferme et TOUT LE MONDE perd.
+                                </li>
                                 <li><strong style="color:purple">OBJECTIF PERSO :</strong> Si le magasin est sauvé, le
                                     gagnant est celui qui a le plus de points (Objectifs Personnels + Bonus Snack).</li>
                             </ul>
