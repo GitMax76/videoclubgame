@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8">
   <title>Quest Card Editor - VHS Style</title>
   <!-- Importiamo un font stile "scritto a mano" e uno stile "marker" -->
-  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Permanent+Marker&display=swap"
+    rel="stylesheet">
+
   <style>
     :root {
       --card-size: 70mm;
-      --bg-color: #fdfd96; /* Giallo Post-it classico */
+      --bg-color: #fdfd96;
+      /* Giallo Post-it classico */
       --ink-color: #2c2c2c;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -27,7 +32,11 @@
       color: white;
     }
 
-    h1 { margin-top: 20px; font-weight: 300; color: #ffd400; }
+    h1 {
+      margin-top: 20px;
+      font-weight: 300;
+      color: #ffd400;
+    }
 
     /* --- LAYOUT EDITOR --- */
     .workspace {
@@ -53,16 +62,28 @@
       padding: 20px;
       border-radius: 8px;
       width: 350px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
       max-height: 90vh;
       overflow-y: auto;
     }
 
-    .control-group { margin-bottom: 15px; border-bottom: 1px solid #555; padding-bottom: 15px; }
-    .control-group:last-child { border-bottom: none; }
-    
-    label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #aaa; }
-    
+    .control-group {
+      margin-bottom: 15px;
+      border-bottom: 1px solid #555;
+      padding-bottom: 15px;
+    }
+
+    .control-group:last-child {
+      border-bottom: none;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
     button {
       width: 100%;
       padding: 8px;
@@ -75,29 +96,79 @@
       transition: background 0.2s, transform 0.1s;
     }
 
-    button:active { transform: scale(0.98); }
+    button:active {
+      transform: scale(0.98);
+    }
 
-    .btn-print { background: #ffd400; color: #000; }
-    .btn-print:hover { background: #ffea00; }
-    
-    .btn-save { background: #4CAF50; color: white; }
-    .btn-save:hover { background: #45a049; }
+    .btn-print {
+      background: #ffd400;
+      color: #000;
+    }
 
-    .btn-danger { background: #f44336; color: white; margin-top: 10px;}
-    
+    .btn-print:hover {
+      background: #ffea00;
+    }
+
+    .btn-save {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-save:hover {
+      background: #45a049;
+    }
+
+    .btn-danger {
+      background: #f44336;
+      color: white;
+      margin-top: 10px;
+    }
+
     /* Bottoni Navigazione */
-    .btn-nav { background: #6c757d; color: white; }
-    .btn-nav:hover { background: #5a6268; }
+    .btn-nav {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-nav:hover {
+      background: #5a6268;
+    }
 
     /* Bottone Layout */
-    .btn-layout { background: #17a2b8; color: white; }
-    .btn-layout:hover { background: #138496; }
+    .btn-layout {
+      background: #17a2b8;
+      color: white;
+    }
 
-    .btn-audio { background: #334155; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-audio.playing { background: #28a745; }
-    
-    .btn-color { display: inline-block; width: 30px; height: 30px; margin-right: 5px; border-radius: 50%; border: 2px solid #555; }
-    .btn-color:hover { transform: scale(1.1); }
+    .btn-layout:hover {
+      background: #138496;
+    }
+
+    .btn-audio {
+      background: #334155;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-audio.playing {
+      background: #28a745;
+    }
+
+    .btn-color {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      margin-right: 5px;
+      border-radius: 50%;
+      border: 2px solid #555;
+    }
+
+    .btn-color:hover {
+      transform: scale(1.1);
+    }
 
     input[type="text"] {
       width: 100%;
@@ -126,18 +197,40 @@
       border-bottom: 1px solid #333;
       font-size: 0.9rem;
     }
-    
-    .lib-item:hover { background: #333; }
 
-    .lib-item input[type="checkbox"] { margin-right: 10px; transform: scale(1.2); cursor: pointer; }
-    .lib-name { flex-grow: 1; cursor: pointer; }
-    .lib-del { background: none; border: none; color: #f44336; cursor: pointer; width: auto; padding: 0 5px; margin: 0; }
-    .lib-del:hover { color: #d32f2f; }
+    .lib-item:hover {
+      background: #333;
+    }
+
+    .lib-item input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+
+    .lib-name {
+      flex-grow: 1;
+      cursor: pointer;
+    }
+
+    .lib-del {
+      background: none;
+      border: none;
+      color: #f44336;
+      cursor: pointer;
+      width: auto;
+      padding: 0 5px;
+      margin: 0;
+    }
+
+    .lib-del:hover {
+      color: #d32f2f;
+    }
 
 
     /* --- LA CARTA (POST-IT) --- */
     .card-wrapper {
-      box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
       transform-origin: top center;
     }
 
@@ -159,8 +252,11 @@
     .card::before {
       content: "";
       position: absolute;
-      top: 0; left: 0; width: 100%; height: 15%;
-      background: rgba(0,0,0,0.05);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 15%;
+      background: rgba(0, 0, 0, 0.05);
       pointer-events: none;
     }
 
@@ -168,7 +264,7 @@
       font-family: 'Permanent Marker', cursive;
       font-size: 16pt;
       line-height: 1.1;
-      border-bottom: 2px dashed rgba(0,0,0,0.2);
+      border-bottom: 2px dashed rgba(0, 0, 0, 0.2);
       padding-bottom: 2mm;
       margin-bottom: 3mm;
       outline: none;
@@ -185,13 +281,13 @@
     /* --- LO SKETCH DELLO SCAFFALE --- */
     .sketch-area {
       margin-top: auto;
-      border: 2px solid rgba(0,0,0,0.3);
+      border: 2px solid rgba(0, 0, 0, 0.3);
       border-radius: 4px;
       padding: 2px;
       position: relative;
-      background: rgba(255,255,255,0.3);
+      background: rgba(255, 255, 255, 0.3);
     }
-    
+
     .sketch-label {
       font-size: 8pt;
       text-transform: uppercase;
@@ -212,8 +308,8 @@
     }
 
     .shelf-slot {
-      border: 1px solid rgba(0,0,0,0.2);
-      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.2);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -224,8 +320,8 @@
     }
 
     .shelf-slot:hover {
-      border-color: rgba(0,0,0,0.5);
-      background: rgba(255,255,255,0.4);
+      border-color: rgba(0, 0, 0, 0.5);
+      background: rgba(255, 255, 255, 0.4);
     }
 
     .vhs-icon {
@@ -235,14 +331,17 @@
       object-fit: contain;
       display: none;
       pointer-events: none;
-      filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3));
+      filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
     }
-    
-    .shelf-slot.has-item .vhs-icon { display: block; }
+
+    .shelf-slot.has-item .vhs-icon {
+      display: block;
+    }
 
     .shelf-slot.is-empty::after {
       content: "";
-      width: 80%; height: 60%;
+      width: 80%;
+      height: 60%;
       border: 1px dashed #999;
       border-radius: 2px;
       opacity: 0.3;
@@ -278,21 +377,45 @@
       border-radius: 5px;
       transition: all 0.2s;
     }
-    .footer-link:hover { background: #333; color: white; }
+
+    .footer-link:hover {
+      background: #333;
+      color: white;
+    }
 
     /* Area Stampa Multipla (nascosta a schermo) */
-    #print-grid-area { display: none; }
+    #print-grid-area {
+      display: none;
+    }
 
     /* --- STAMPA --- */
     @media print {
-      body { background: white; margin: 0; padding: 0; display: block; }
-      .controls, h1, footer { display: none !important; }
-      body.printing-grid .workspace { display: none !important; }
-      body.printing-grid #print-grid-area { display: block !important; }
+      body {
+        background: white;
+        margin: 0;
+        padding: 0;
+        display: block;
+      }
+
+      .controls,
+      h1,
+      footer {
+        display: none !important;
+      }
+
+      body.printing-grid .workspace {
+        display: none !important;
+      }
+
+      body.printing-grid #print-grid-area {
+        display: block !important;
+      }
 
       .print-page {
-        width: 210mm; height: 297mm;
-        page-break-after: always; break-after: page;
+        width: 210mm;
+        height: 297mm;
+        page-break-after: always;
+        break-after: page;
         display: grid;
         grid-template-columns: 70mm 70mm;
         grid-template-rows: 70mm 70mm 70mm;
@@ -310,11 +433,20 @@
         print-color-adjust: exact;
       }
 
-      body:not(.printing-grid) .workspace { padding: 0; margin: 0; display: block; }
-      body:not(.printing-grid) .card-wrapper { box-shadow: none; transform: none !important; }
+      body:not(.printing-grid) .workspace {
+        padding: 0;
+        margin: 0;
+        display: block;
+      }
+
+      body:not(.printing-grid) .card-wrapper {
+        box-shadow: none;
+        transform: none !important;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <h1>VHS Quest Editor <small style="font-size:0.5em; opacity:0.7">v2.2</small></h1>
@@ -326,7 +458,7 @@
   </iframe>
 
   <div class="workspace">
-    
+
     <!-- CARD PREVIEW -->
     <div class="card-wrapper">
       <div class="card" id="questCard">
@@ -335,7 +467,7 @@
           Obiettivo:<br>
           Posiziona cassette <b>Horror</b> su tutte le file più alte degli scaffali comuni.
         </div>
-        
+
         <div class="sketch-area">
           <div class="sketch-label">Sketch Configurazione</div>
           <div class="shelf-grid" id="mainShelfGrid">
@@ -352,15 +484,16 @@
 
     <!-- CONTROLS -->
     <div class="controls">
-      
+
       <!-- NAVIGAZIONE & AUDIO -->
       <div class="control-group">
         <label>Navigazione</label>
         <div style="display:flex; gap:5px; margin-bottom: 5px;">
-            <button class="btn-nav" onclick="goHome()">🏠 Home</button>
-            <button class="btn-nav" onclick="scrollToContacts()">📞 Contatti</button>
+          <button class="btn-nav" onclick="goHome()">🏠 Home</button>
+          <button class="btn-nav" onclick="scrollToContacts()">📞 Contatti</button>
         </div>
-        <button id="layoutBtn" class="btn-layout" style="margin-bottom: 5px;" onclick="toggleLayout()">Layout: ↔ Orizzontale</button>
+        <button id="layoutBtn" class="btn-layout" style="margin-bottom: 5px;" onclick="toggleLayout()">Layout: ↔
+          Orizzontale</button>
         <button id="btn-music" class="btn-audio" onclick="toggleMusic()">
           <span>🎵 AUDIO: OFF</span>
           <span style="font-size:0.7em; opacity:0.7">(Synthwave80s)</span>
@@ -389,24 +522,28 @@
         <label>Libreria & Salvataggio</label>
         <input type="text" id="configName" placeholder="Nome Configurazione..." />
         <button class="btn-save" onclick="saveToLibrary()">💾 Salva in Libreria</button>
-        
+
         <div class="library-list" id="libraryList">
           <!-- Qui appariranno gli item salvati -->
         </div>
 
-        <button class="btn-print" style="margin-top:15px;" onclick="printSelected()">🖨️ Stampa SELEZIONATI (A4)</button>
+        <button class="btn-print" style="margin-top:15px;" onclick="printSelected()">🖨️ Stampa SELEZIONATI
+          (A4)</button>
         <button class="btn-danger" onclick="clearLibrary()">🗑️ Svuota Tutto</button>
       </div>
-      
+
     </div>
   </div>
 
   <footer id="contacts-footer">
-    <h3 style="margin-bottom: 1rem; font-size: 1.5rem; color: #ffd400;">👋 PARLIAMO?</h3>
+    <h3 style="margin-bottom: 1rem; font-size: 1.5rem; color: #ffd400;">👋 Info? Suggerimenti? Collaborazioni? Demo?
+      Parliamo!</h3>
     <div class="footer-links">
       <a href="mailto:massi.sabato@gmail.com" class="footer-link">📧 massi.sabato@gmail.com</a>
-      <a href="https://wa.me/393295644852" target="_blank" class="footer-link" style="color:#4caf50; border-color:#4caf50;">💬 WhatsApp</a>
-      <a href="https://linktr.ee/JustMax76" target="_blank" class="footer-link" style="color:#e040fb; border-color:#e040fb;">🌲 Linktree</a>
+      <a href="https://wa.me/393295644852" target="_blank" class="footer-link"
+        style="color:#4caf50; border-color:#4caf50;">💬 WhatsApp</a>
+      <a href="https://linktr.ee/JustMax76" target="_blank" class="footer-link"
+        style="color:#e040fb; border-color:#e040fb;">🌲 Linktree</a>
     </div>
   </footer>
 
@@ -419,18 +556,18 @@
     const createXSvg = () => `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><text x='50' y='45' font-size='50' fill='%23d32f2f' font-family='sans-serif' font-weight='bold' text-anchor='middle'>✕</text></svg>`;
 
     const items = [
-      { id: 'empty',  src: '' },
-      { id: 'black',  src: createVhsSvg('#222222') },
-      { id: 'blue',   src: createVhsSvg('#0047AB') },
-      { id: 'red',    src: createVhsSvg('#D32F2F') },
+      { id: 'empty', src: '' },
+      { id: 'black', src: createVhsSvg('#222222') },
+      { id: 'blue', src: createVhsSvg('#0047AB') },
+      { id: 'red', src: createVhsSvg('#D32F2F') },
       { id: 'yellow', src: createVhsSvg('#FBC02D') },
-      { id: 'green',  src: createVhsSvg('#388E3C') },
-      { id: 'x',      src: createXSvg() }
+      { id: 'green', src: createVhsSvg('#388E3C') },
+      { id: 'x', src: createXSvg() }
     ];
 
     /* --- LOGICA EDITOR --- */
     function cycleSlot(element) {
-      if(element.getAttribute('onclick') === null) return;
+      if (element.getAttribute('onclick') === null) return;
 
       const img = element.querySelector('.vhs-icon');
       let currentIndex = 0;
@@ -470,11 +607,11 @@
     /* --- NAVIGAZIONE & UTILITY --- */
     function goHome() {
       sessionStorage.setItem('skip_splash', 'true');
-      window.location.href='index.html';
+      window.location.href = 'index.html';
     }
 
     function scrollToContacts() {
-      document.getElementById('contacts-footer').scrollIntoView({behavior: 'smooth'});
+      document.getElementById('contacts-footer').scrollIntoView({ behavior: 'smooth' });
     }
 
     function toggleLayout() {
@@ -512,7 +649,7 @@
             }, 500);
           }
         });
-        
+
         scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
           currentPos = data.currentPosition;
         });
@@ -565,7 +702,7 @@
       const cardTitle = document.getElementById('cardTitle').innerHTML;
       const cardDesc = document.getElementById('cardDesc').innerHTML;
       const bgColor = document.getElementById('questCard').style.backgroundColor || '#fdfd96';
-      
+
       const slotStates = [];
       document.querySelectorAll('#mainShelfGrid .shelf-slot').forEach(slot => {
         const img = slot.querySelector('img');
@@ -613,7 +750,7 @@
     }
 
     function deleteItem(index) {
-      if(confirm("Eliminare questa carta?")) {
+      if (confirm("Eliminare questa carta?")) {
         library.splice(index, 1);
         saveData();
         renderLibrary();
@@ -621,7 +758,7 @@
     }
 
     function clearLibrary() {
-      if(confirm("Cancellare TUTTO?")) {
+      if (confirm("Cancellare TUTTO?")) {
         library = [];
         saveData();
         renderLibrary();
@@ -637,7 +774,7 @@
 
       const slots = document.querySelectorAll('#mainShelfGrid .shelf-slot');
       item.slots.forEach((src, i) => {
-        if(slots[i]) {
+        if (slots[i]) {
           const matchedItem = items.find(it => it.src === src) || items[0];
           updateSlotVisuals(slots[i], matchedItem);
         }
@@ -651,7 +788,7 @@
     /* --- LOGICA STAMPA MULTIPLA --- */
     function printSelected() {
       const selectedItems = library.filter(i => i.selected);
-      if(selectedItems.length === 0) {
+      if (selectedItems.length === 0) {
         alert("Seleziona almeno una carta dalla lista per stampare.");
         return;
       }
@@ -672,9 +809,9 @@
               <div class="sketch-label">Sketch Configurazione</div>
               <div class="shelf-grid">
                 ${item.slots.map(src => {
-                  const isEmpty = (!src || src === '') ? 'is-empty' : 'has-item';
-                  return `<div class="shelf-slot ${isEmpty}"><img class="vhs-icon" src="${src}"></div>`;
-                }).join('')}
+          const isEmpty = (!src || src === '') ? 'is-empty' : 'has-item';
+          return `<div class="shelf-slot ${isEmpty}"><img class="vhs-icon" src="${src}"></div>`;
+        }).join('')}
               </div>
             </div>
           </div>
@@ -691,10 +828,10 @@
     }
 
     // Init
-    window.onload = function() {
+    window.onload = function () {
       const slots = document.querySelectorAll('#mainShelfGrid .shelf-slot');
       const blackItem = items.find(i => i.id === 'black');
-      if(slots[0] && slots[1]) {
+      if (slots[0] && slots[1]) {
         updateSlotVisuals(slots[0], blackItem);
         updateSlotVisuals(slots[1], blackItem);
       }
@@ -703,4 +840,5 @@
     };
   </script>
 </body>
+
 </html>
