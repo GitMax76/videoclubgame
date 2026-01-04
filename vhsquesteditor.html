@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Quest Card Editor - VHS Style</title>
+  <!-- Importiamo un font stile "scritto a mano" e uno stile "marker" -->
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --card-size: 70mm;
+      --bg-color: #fdfd96; /* Giallo Post-it classico */
+      --ink-color: #2c2c2c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #333;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: white;
+    }
+
+    h1 { margin-top: 20px; font-weight: 300; color: #ffd400; }
+
+    /* --- LAYOUT EDITOR --- */
+    .workspace {
+      display: flex;
+      gap: 40px;
+      padding: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      justify-content: center;
+      flex-grow: 1;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    /* Classe per layout verticale forzato */
+    .workspace.layout-column {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .controls {
+      background: #444;
+      padding: 20px;
+      border-radius: 8px;
+      width: 350px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .control-group { margin-bottom: 15px; border-bottom: 1px solid #555; padding-bottom: 15px; }
+    .control-group:last-child { border-bottom: none; }
+    
+    label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #aaa; }
+    
+    button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:active { transform: scale(0.98); }
+
+    .btn-print { background: #ffd400; color: #000; }
+    .btn-print:hover { background: #ffea00; }
+    
+    .btn-save { background: #4CAF50; color: white; }
+    .btn-save:hover { background: #45a049; }
+
+    .btn-danger { background: #f44336; color: white; margin-top: 10px;}
+    
+    /* Bottoni Navigazione */
+    .btn-nav { background: #6c757d; color: white; }
+    .btn-nav:hover { background: #5a6268; }
+
+    /* Bottone Layout */
+    .btn-layout { background: #17a2b8; color: white; }
+    .btn-layout:hover { background: #138496; }
+
+    .btn-audio { background: #334155; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-audio.playing { background: #28a745; }
+    
+    .btn-color { display: inline-block; width: 30px; height: 30px; margin-right: 5px; border-radius: 50%; border: 2px solid #555; }
+    .btn-color:hover { transform: scale(1.1); }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #666;
+      background: #222;
+      color: white;
+      margin-bottom: 5px;
+    }
+
+    /* --- LIBRERIA --- */
+    .library-list {
+      max-height: 200px;
+      overflow-y: auto;
+      background: #222;
+      border: 1px solid #555;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+
+    .lib-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid #333;
+      font-size: 0.9rem;
+    }
+    
+    .lib-item:hover { background: #333; }
+
+    .lib-item input[type="checkbox"] { margin-right: 10px; transform: scale(1.2); cursor: pointer; }
+    .lib-name { flex-grow: 1; cursor: pointer; }
+    .lib-del { background: none; border: none; color: #f44336; cursor: pointer; width: auto; padding: 0 5px; margin: 0; }
+    .lib-del:hover { color: #d32f2f; }
+
+
+    /* --- LA CARTA (POST-IT) --- */
+    .card-wrapper {
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+      transform-origin: top center;
+    }
+
+    .card {
+      width: var(--card-size);
+      height: var(--card-size);
+      background-color: var(--bg-color);
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=');
+      padding: 5mm;
+      position: relative;
+      overflow: hidden;
+      color: var(--ink-color);
+      font-family: 'Kalam', cursive;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 15%;
+      background: rgba(0,0,0,0.05);
+      pointer-events: none;
+    }
+
+    .card-title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 16pt;
+      line-height: 1.1;
+      border-bottom: 2px dashed rgba(0,0,0,0.2);
+      padding-bottom: 2mm;
+      margin-bottom: 3mm;
+      outline: none;
+      min-height: 1.2em;
+    }
+
+    .card-desc {
+      font-size: 10pt;
+      line-height: 1.2;
+      flex-grow: 1;
+      outline: none;
+    }
+
+    /* --- LO SKETCH DELLO SCAFFALE --- */
+    .sketch-area {
+      margin-top: auto;
+      border: 2px solid rgba(0,0,0,0.3);
+      border-radius: 4px;
+      padding: 2px;
+      position: relative;
+      background: rgba(255,255,255,0.3);
+    }
+    
+    .sketch-label {
+      font-size: 8pt;
+      text-transform: uppercase;
+      font-weight: bold;
+      opacity: 0.6;
+      text-align: center;
+      margin-bottom: 2px;
+      letter-spacing: 1px;
+    }
+
+    .shelf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 3px;
+      width: 100%;
+      height: 25mm;
+    }
+
+    .shelf-slot {
+      border: 1px solid rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.2s;
+      overflow: hidden;
+    }
+
+    .shelf-slot:hover {
+      border-color: rgba(0,0,0,0.5);
+      background: rgba(255,255,255,0.4);
+    }
+
+    .vhs-icon {
+      width: 90%;
+      height: auto;
+      max-height: 90%;
+      object-fit: contain;
+      display: none;
+      pointer-events: none;
+      filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3));
+    }
+    
+    .shelf-slot.has-item .vhs-icon { display: block; }
+
+    .shelf-slot.is-empty::after {
+      content: "";
+      width: 80%; height: 60%;
+      border: 1px dashed #999;
+      border-radius: 2px;
+      opacity: 0.3;
+    }
+
+    /* --- FOOTER CONTATTI --- */
+    footer {
+      width: 100%;
+      text-align: center;
+      padding: 2rem;
+      background: #222;
+      border-top: 3px solid #555;
+      color: #fff;
+      margin-top: 2rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .footer-link {
+      color: #ccc;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border: 1px solid #444;
+      border-radius: 5px;
+      transition: all 0.2s;
+    }
+    .footer-link:hover { background: #333; color: white; }
+
+    /* Area Stampa Multipla (nascosta a schermo) */
+    #print-grid-area { display: none; }
+
+    /* --- STAMPA --- */
+    @media print {
+      body { background: white; margin: 0; padding: 0; display: block; }
+      .controls, h1, footer { display: none !important; }
+      body.printing-grid .workspace { display: none !important; }
+      body.printing-grid #print-grid-area { display: block !important; }
+
+      .print-page {
+        width: 210mm; height: 297mm;
+        page-break-after: always; break-after: page;
+        display: grid;
+        grid-template-columns: 70mm 70mm;
+        grid-template-rows: 70mm 70mm 70mm;
+        gap: 10mm;
+        justify-content: center;
+        padding-top: 15mm;
+      }
+
+      .card {
+        border: 1px dashed #ccc;
+        page-break-inside: avoid;
+        margin: 0;
+        box-shadow: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body:not(.printing-grid) .workspace { padding: 0; margin: 0; display: block; }
+      body:not(.printing-grid) .card-wrapper { box-shadow: none; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>VHS Quest Editor <small style="font-size:0.5em; opacity:0.7">v2.2</small></h1>
+
+  <!-- SOUNDCLOUD WIDGET (HIDDEN) -->
+  <iframe id="sc-widget" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/synthwave80s/sets/dreams&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"
+    style="display:none;">
+  </iframe>
+
+  <div class="workspace">
+    
+    <!-- CARD PREVIEW -->
+    <div class="card-wrapper">
+      <div class="card" id="questCard">
+        <div class="card-title" id="cardTitle" contenteditable="true">Horror Week</div>
+        <div class="card-desc" id="cardDesc" contenteditable="true">
+          Obiettivo:<br>
+          Posiziona cassette <b>Horror</b> su tutte le file più alte degli scaffali comuni.
+        </div>
+        
+        <div class="sketch-area">
+          <div class="sketch-label">Sketch Configurazione</div>
+          <div class="shelf-grid" id="mainShelfGrid">
+            <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+            <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+            <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+            <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+            <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+            <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      
+      <!-- NAVIGAZIONE & AUDIO -->
+      <div class="control-group">
+        <label>Navigazione</label>
+        <div style="display:flex; gap:5px; margin-bottom: 5px;">
+            <button class="btn-nav" onclick="goHome()">🏠 Home</button>
+            <button class="btn-nav" onclick="scrollToContacts()">📞 Contatti</button>
+        </div>
+        <button id="layoutBtn" class="btn-layout" style="margin-bottom: 5px;" onclick="toggleLayout()">Layout: ↔ Orizzontale</button>
+        <button id="btn-music" class="btn-audio" onclick="toggleMusic()">
+          <span>🎵 AUDIO: OFF</span>
+          <span style="font-size:0.7em; opacity:0.7">(Synthwave80s)</span>
+        </button>
+      </div>
+
+      <!-- COLORI -->
+      <div class="control-group">
+        <label>Colore Carta</label>
+        <button class="btn-color" style="background:#fdfd96" onclick="setBg('#fdfd96')"></button>
+        <button class="btn-color" style="background:#ffccbc" onclick="setBg('#ffccbc')"></button>
+        <button class="btn-color" style="background:#c5e1a5" onclick="setBg('#c5e1a5')"></button>
+        <button class="btn-color" style="background:#b3e5fc" onclick="setBg('#b3e5fc')"></button>
+        <button class="btn-color" style="background:#ffffff" onclick="setBg('#ffffff')"></button>
+      </div>
+
+      <!-- AZIONI IMMEDIATE -->
+      <div class="control-group">
+        <label>Editor</label>
+        <button onclick="resetGrid()">Pulisci Sketch</button>
+        <button onclick="window.print()">🖨️ Stampa SOLO QUESTA</button>
+      </div>
+
+      <!-- LIBRERIA -->
+      <div class="control-group">
+        <label>Libreria & Salvataggio</label>
+        <input type="text" id="configName" placeholder="Nome Configurazione..." />
+        <button class="btn-save" onclick="saveToLibrary()">💾 Salva in Libreria</button>
+        
+        <div class="library-list" id="libraryList">
+          <!-- Qui appariranno gli item salvati -->
+        </div>
+
+        <button class="btn-print" style="margin-top:15px;" onclick="printSelected()">🖨️ Stampa SELEZIONATI (A4)</button>
+        <button class="btn-danger" onclick="clearLibrary()">🗑️ Svuota Tutto</button>
+      </div>
+      
+    </div>
+  </div>
+
+  <footer id="contacts-footer">
+    <h3 style="margin-bottom: 1rem; font-size: 1.5rem; color: #ffd400;">👋 PARLIAMO?</h3>
+    <div class="footer-links">
+      <a href="mailto:massi.sabato@gmail.com" class="footer-link">📧 massi.sabato@gmail.com</a>
+      <a href="https://wa.me/393295644852" target="_blank" class="footer-link" style="color:#4caf50; border-color:#4caf50;">💬 WhatsApp</a>
+      <a href="https://linktr.ee/JustMax76" target="_blank" class="footer-link" style="color:#e040fb; border-color:#e040fb;">🌲 Linktree</a>
+    </div>
+  </footer>
+
+  <!-- CONTAINER NASCOSTO PER STAMPA GRIGLIA -->
+  <div id="print-grid-area"></div>
+
+  <script>
+    /* --- CONFIGURAZIONE ICONE (SVG INLINE) --- */
+    const createVhsSvg = (color) => `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='${encodeURIComponent(color)}' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>`;
+    const createXSvg = () => `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><text x='50' y='45' font-size='50' fill='%23d32f2f' font-family='sans-serif' font-weight='bold' text-anchor='middle'>✕</text></svg>`;
+
+    const items = [
+      { id: 'empty',  src: '' },
+      { id: 'black',  src: createVhsSvg('#222222') },
+      { id: 'blue',   src: createVhsSvg('#0047AB') },
+      { id: 'red',    src: createVhsSvg('#D32F2F') },
+      { id: 'yellow', src: createVhsSvg('#FBC02D') },
+      { id: 'green',  src: createVhsSvg('#388E3C') },
+      { id: 'x',      src: createXSvg() }
+    ];
+
+    /* --- LOGICA EDITOR --- */
+    function cycleSlot(element) {
+      if(element.getAttribute('onclick') === null) return;
+
+      const img = element.querySelector('.vhs-icon');
+      let currentIndex = 0;
+      if (!element.classList.contains('is-empty')) {
+        const currentSrc = img.getAttribute('src');
+        currentIndex = items.findIndex(i => i.src === currentSrc);
+        if (currentIndex === -1) currentIndex = 0;
+      }
+      let nextIndex = (currentIndex + 1) % items.length;
+      let nextItem = items[nextIndex];
+
+      updateSlotVisuals(element, nextItem);
+    }
+
+    function updateSlotVisuals(element, item) {
+      const img = element.querySelector('.vhs-icon');
+      if (item.id === 'empty') {
+        element.classList.add('is-empty');
+        element.classList.remove('has-item');
+        img.src = "";
+      } else {
+        element.classList.remove('is-empty');
+        element.classList.add('has-item');
+        img.src = item.src;
+      }
+    }
+
+    function setBg(color) {
+      document.getElementById('questCard').style.backgroundColor = color;
+    }
+
+    function resetGrid() {
+      const slots = document.querySelectorAll('#mainShelfGrid .shelf-slot');
+      slots.forEach(slot => updateSlotVisuals(slot, items[0]));
+    }
+
+    /* --- NAVIGAZIONE & UTILITY --- */
+    function goHome() {
+      sessionStorage.setItem('skip_splash', 'true');
+      window.location.href='index.html';
+    }
+
+    function scrollToContacts() {
+      document.getElementById('contacts-footer').scrollIntoView({behavior: 'smooth'});
+    }
+
+    function toggleLayout() {
+      const ws = document.querySelector('.workspace');
+      ws.classList.toggle('layout-column');
+      const isCol = ws.classList.contains('layout-column');
+      const btn = document.getElementById('layoutBtn');
+      btn.innerText = isCol ? "Layout: ↕ Verticale" : "Layout: ↔ Orizzontale";
+    }
+
+    /* --- AUDIO ENGINE --- */
+    let scWidget = null;
+    let isPlaying = false;
+    let currentPos = 0;
+
+    function initAudio() {
+      const script = document.createElement('script');
+      script.src = "https://w.soundcloud.com/player/api.js";
+      script.onload = () => {
+        const iframe = document.getElementById('sc-widget');
+        scWidget = SC.Widget(iframe);
+        scWidget.bind(SC.Widget.Events.READY, () => {
+          const storedPos = sessionStorage.getItem('audio_pos');
+          const storedPlaying = sessionStorage.getItem('audio_playing');
+
+          if (storedPos) {
+            currentPos = parseFloat(storedPos);
+            scWidget.seekTo(currentPos);
+          }
+
+          if (storedPlaying === 'true') {
+            setTimeout(() => {
+              scWidget.play();
+              updateAudioUI(true);
+            }, 500);
+          }
+        });
+        
+        scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
+          currentPos = data.currentPosition;
+        });
+      };
+      document.head.appendChild(script);
+
+      window.addEventListener('beforeunload', () => {
+        sessionStorage.setItem('audio_pos', currentPos);
+        sessionStorage.setItem('audio_playing', isPlaying);
+      });
+    }
+
+    function toggleMusic() {
+      if (!scWidget) return;
+      scWidget.isPaused((paused) => {
+        if (paused) {
+          scWidget.play();
+          updateAudioUI(true);
+        } else {
+          scWidget.pause();
+          updateAudioUI(false);
+        }
+      });
+    }
+
+    function updateAudioUI(playing) {
+      isPlaying = playing;
+      const btn = document.getElementById('btn-music');
+      if (playing) {
+        btn.innerHTML = "<span>🎵 AUDIO: ON</span>";
+        btn.classList.add('playing');
+      } else {
+        btn.innerHTML = "<span>🎵 AUDIO: OFF</span> <span style='font-size:0.7em; opacity:0.7'>(Synthwave80s)</span>";
+        btn.classList.remove('playing');
+      }
+    }
+
+    /* --- LIBRERIA & LOCALSTORAGE --- */
+    const STORAGE_KEY = "vhs_quest_library_v1";
+    let library = [];
+
+    function initLibrary() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) library = JSON.parse(stored);
+      renderLibrary();
+    }
+
+    function saveToLibrary() {
+      const name = document.getElementById('configName').value.trim() || "Senza Nome";
+      const cardTitle = document.getElementById('cardTitle').innerHTML;
+      const cardDesc = document.getElementById('cardDesc').innerHTML;
+      const bgColor = document.getElementById('questCard').style.backgroundColor || '#fdfd96';
+      
+      const slotStates = [];
+      document.querySelectorAll('#mainShelfGrid .shelf-slot').forEach(slot => {
+        const img = slot.querySelector('img');
+        slotStates.push(img.getAttribute('src'));
+      });
+
+      const data = {
+        id: Date.now(),
+        name: name,
+        title: cardTitle,
+        desc: cardDesc,
+        bg: bgColor,
+        slots: slotStates,
+        selected: true
+      };
+
+      library.push(data);
+      saveData();
+      renderLibrary();
+      document.getElementById('configName').value = "";
+    }
+
+    function renderLibrary() {
+      const list = document.getElementById('libraryList');
+      list.innerHTML = "";
+      if (library.length === 0) {
+        list.innerHTML = "<div style='padding:10px; color:#666; font-size:0.8rem;'>Nessuna carta salvata.</div>";
+        return;
+      }
+      library.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'lib-item';
+        div.innerHTML = `
+          <input type="checkbox" onchange="toggleSelect(${index})" ${item.selected ? 'checked' : ''}>
+          <span class="lib-name" onclick="loadFromLibrary(${index})">📄 ${item.name}</span>
+          <button class="lib-del" onclick="deleteItem(${index})">✕</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function toggleSelect(index) {
+      library[index].selected = !library[index].selected;
+      saveData();
+    }
+
+    function deleteItem(index) {
+      if(confirm("Eliminare questa carta?")) {
+        library.splice(index, 1);
+        saveData();
+        renderLibrary();
+      }
+    }
+
+    function clearLibrary() {
+      if(confirm("Cancellare TUTTO?")) {
+        library = [];
+        saveData();
+        renderLibrary();
+      }
+    }
+
+    function loadFromLibrary(index) {
+      const item = library[index];
+      document.getElementById('cardTitle').innerHTML = item.title;
+      document.getElementById('cardDesc').innerHTML = item.desc;
+      setBg(item.bg);
+      document.getElementById('configName').value = item.name;
+
+      const slots = document.querySelectorAll('#mainShelfGrid .shelf-slot');
+      item.slots.forEach((src, i) => {
+        if(slots[i]) {
+          const matchedItem = items.find(it => it.src === src) || items[0];
+          updateSlotVisuals(slots[i], matchedItem);
+        }
+      });
+    }
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(library));
+    }
+
+    /* --- LOGICA STAMPA MULTIPLA --- */
+    function printSelected() {
+      const selectedItems = library.filter(i => i.selected);
+      if(selectedItems.length === 0) {
+        alert("Seleziona almeno una carta dalla lista per stampare.");
+        return;
+      }
+      const container = document.getElementById('print-grid-area');
+      container.innerHTML = "";
+      let currentPage = null;
+      selectedItems.forEach((item, index) => {
+        if (index % 6 === 0) {
+          currentPage = document.createElement('div');
+          currentPage.className = 'print-page';
+          container.appendChild(currentPage);
+        }
+        const cardHtml = `
+          <div class="card" style="background-color: ${item.bg}">
+            <div class="card-title">${item.title}</div>
+            <div class="card-desc">${item.desc}</div>
+            <div class="sketch-area">
+              <div class="sketch-label">Sketch Configurazione</div>
+              <div class="shelf-grid">
+                ${item.slots.map(src => {
+                  const isEmpty = (!src || src === '') ? 'is-empty' : 'has-item';
+                  return `<div class="shelf-slot ${isEmpty}"><img class="vhs-icon" src="${src}"></div>`;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = cardHtml;
+        currentPage.appendChild(wrapper.firstElementChild);
+      });
+      document.body.classList.add('printing-grid');
+      setTimeout(() => {
+        window.print();
+        setTimeout(() => document.body.classList.remove('printing-grid'), 500);
+      }, 200);
+    }
+
+    // Init
+    window.onload = function() {
+      const slots = document.querySelectorAll('#mainShelfGrid .shelf-slot');
+      const blackItem = items.find(i => i.id === 'black');
+      if(slots[0] && slots[1]) {
+        updateSlotVisuals(slots[0], blackItem);
+        updateSlotVisuals(slots[1], blackItem);
+      }
+      initLibrary();
+      initAudio();
+    };
+  </script>
+</body>
+</html>
