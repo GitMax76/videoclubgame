@@ -1148,7 +1148,7 @@
       savedLibrary.push({ name: name, data: getCurrentStateObject(), selected: false });
       updateLibraryStorage();
       renderLibrary();
-      document.getElementById('configName').value = "";
+      // document.getElementById('configName').value = ""; // REMOVED TO KEEP NAME FOR EXPORT
     }
 
     window.clearLibrary = function () {
