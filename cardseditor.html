@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <title>VHS Card - Editor Finale v35 (Visibilità Pers.)</title>
   <link rel="preload" href="https://w.soundcloud.com/player/api.js" as="script">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
     /* --- STILI ORIGINALI --- */
     * {
@@ -823,6 +826,7 @@
         <button class="btn-print-multi" onclick="printSelectedSheets()">🖨️ Stampa Selezionate (4 x Foglio)</button>
         <div class="io-group">
           <button class="btn-io" onclick="downloadJSON()">⬇ Esporta JSON</button>
+          <button class="btn-io" style="background:#ff9800;" onclick="exportSelectedPNGs()">⬇ Esporta PNG (ZIP)</button>
           <button class="btn-io import" style="position:relative;">⬆ Importa JSON <input type="file" id="fileInput"
               class="file-input" accept=".json" onchange="uploadJSON()"></button>
           <button class="btn-del-all" onclick="clearLibrary()">🗑️ Svuota Libreria</button>
@@ -850,6 +854,9 @@
           📞 Contatti
         </button>
         <button id="printBtn" onclick="printSingle()">Stampa Editor</button>
+        <button onclick="downloadSinglePNG()"
+          style="flex: 1; padding: 12px; background: #00bcd4; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">📸
+          PNG</button>
       </div>
     </div>
   </div>
@@ -1291,6 +1298,136 @@
       const r = new FileReader();
       r.onload = (e) => { try { const d = JSON.parse(e.target.result); if (Array.isArray(d)) { savedLibrary = savedLibrary.concat(d); updateLibraryStorage(); renderLibrary(); alert("OK"); } } catch (e) { alert("Err"); } };
       r.readAsText(f);
+    }
+
+    // --- PNG EXPORT ---
+    window.downloadSinglePNG = function () {
+      const card = document.querySelector('.card');
+      deselectAll(); // Clean selection before capture
+
+      html2canvas(card, {
+        useCORS: true,
+        scale: 2 // Better quality
+      }).then(canvas => {
+        canvas.toBlob(blob => {
+          saveAs(blob, "vhs_card_" + Date.now() + ".png");
+        });
+      });
+    }
+
+    window.exportSelectedPNGs = async function () {
+      const selectedLibItems = savedLibrary.filter(i => i.selected);
+      if (selectedLibItems.length === 0) {
+        alert("Nessuna carta selezionata per l'export.");
+        return;
+      }
+
+      if (selectedLibItems.length === 1) {
+        // If only 1, simple export
+        // But we need to render it first. 
+        // Strategy: Load it efficiently or render in background?
+        // Simplest: Render in a hidden DOM element.
+      }
+
+      const zip = new JSZip();
+      const folder = zip.folder("vhs_cards_png");
+
+      // Container for rendering hidden cards
+      const renderArea = document.createElement('div');
+      renderArea.style.position = 'fixed';
+      renderArea.style.top = '-9999px';
+      renderArea.style.left = '-9999px';
+      renderArea.style.width = '120mm'; // Standard size
+      renderArea.style.height = '70mm';
+      document.body.appendChild(renderArea);
+
+      updateStatus("Rendering PNGs...");
+
+      for (let i = 0; i < selectedLibItems.length; i++) {
+        const item = selectedLibItems[i];
+
+        // Build card DOM structure (simplified clone logic)
+        renderArea.innerHTML = '';
+        const clone = document.createElement('div');
+        clone.className = 'card';
+        clone.style.width = '1000px'; // Higher res base
+        clone.style.height = '583px'; // Ratio 120/70 approx
+        clone.style.position = 'relative';
+        clone.style.overflow = 'hidden';
+
+        // Re-create internal structure similar to print
+        let tapesHtml = '<div class="shelf-colors" style="position:absolute;z-index:3;top:0;left:0;width:100%;height:100%;">';
+        for (let r of ['A', 'B', 'C']) {
+          for (let c = 1; c <= 5; c++) { tapesHtml += `<div class="tape-color" data-clone-id="${r + c}" style="position:absolute; background:#FFD800; border-radius:1px;"></div>`; }
+        }
+        tapesHtml += `</div>
+            <img src="rowA.png" class="tape-row" style="position:absolute;z-index:5;width:83%;height:auto;top:0%;left:-1%">
+            <img src="rowB.png" class="tape-row" style="position:absolute;z-index:5;width:83%;height:auto;top:32%;left:-1%">
+            <img src="rowC.png" class="tape-row" style="position:absolute;z-index:5;width:83%;height:auto;top:64%;left:-1%">`;
+
+        clone.innerHTML = `
+            <img src="sfondo120x70.png" class="bg" style="position:absolute;z-index:1;width:100%;height:100%;top:0;left:0;object-fit:cover;">
+            <img src="shelf120x70.png" class="shelf" style="position:absolute;z-index:2;width:70%;height:auto;top:60%;left:50%;transform:translate(-50%,-50%);">
+            <div class="tape-group" style="position:absolute;z-index:4;width:68%;aspect-ratio:405/215;top:62%;left:57%;transform:translate(-50%,-50%);">${tapesHtml}</div>
+            <img src="" class="char-img" id="exp-char-left" style="position:absolute;z-index:6;width:25%;height:auto;">
+            <img src="" class="char-img" id="exp-char-right" style="position:absolute;z-index:6;width:25%;height:auto;">
+        `;
+        renderArea.appendChild(clone);
+
+        // Apply styles
+        const data = item.data;
+        const helperStyle = (sel, d) => {
+          const el = clone.querySelector(sel);
+          if (!el || !d) return;
+          if (d.left) el.style.left = d.left;
+          if (d.top) el.style.top = d.top;
+          if (d.width) el.style.width = d.width;
+          if (d.height) el.style.height = d.height;
+          el.style.opacity = d.opacity;
+          let baseTrans = (sel.includes('shelf') || sel.includes('group')) ? 'translate(-50%, -50%)' : '';
+          el.style.transform = `${baseTrans} rotate(${d.rotation || 0}deg) scaleX(${d.mirror || 1})`;
+          if (sel.includes('char') && d.charIndex !== undefined) el.src = charImages[d.charIndex];
+        };
+
+        if (data.layers['layer-bg']) helperStyle('.bg', data.layers['layer-bg']);
+        if (data.layers['layer-shelf']) helperStyle('.shelf', data.layers['layer-shelf']);
+        if (data.layers['layer-group']) helperStyle('.tape-group', data.layers['layer-group']);
+
+        // Tapes
+        clone.querySelectorAll('.tape-color').forEach(ct => {
+          const id = ct.getAttribute('data-clone-id');
+          const tData = data.tapes[id];
+          if (tData) {
+            ct.style.left = tData.left; ct.style.top = tData.top; ct.style.width = tData.width;
+            if (tData.height) ct.style.height = tData.height;
+            ct.style.opacity = tData.opacity;
+            ct.style.transform = `rotate(${tData.rotation || 0}deg) scaleX(${tData.mirror || 1})`;
+            if (tData.colorIndex !== undefined) ct.style.backgroundColor = palette[tData.colorIndex].value;
+          }
+        });
+
+        // Chars
+        helperStyle('#exp-char-left', data.layers['layer-char-left']);
+        helperStyle('#exp-char-right', data.layers['layer-char-right']);
+
+        // Wait a tick for images to init
+        await new Promise(r => setTimeout(r, 100));
+
+        // Capture
+        const canvas = await html2canvas(clone, { useCORS: true, scale: 1 });
+        const blob = await new Promise(r => canvas.toBlob(r));
+        const cleanName = item.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        folder.file(`${cleanName}_${i}.png`, blob);
+      }
+
+      document.body.removeChild(renderArea);
+
+      // Generate Zip
+      updateStatus("Generazione ZIP...");
+      zip.generateAsync({ type: "blob" }).then(function (content) {
+        saveAs(content, "vhs_cards_export.zip");
+        updateStatus("Export completato!");
+      });
     }
 
     // --- NUOVA FUNZIONE UNICA DI EXPORT ---
