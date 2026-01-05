@@ -603,11 +603,13 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-/* regola per non stampare footer */
-  footer,
-  #contacts-footer {
-    display: none !important;
-  }
+
+      /* regola per non stampare footer */
+      footer,
+      #contacts-footer {
+        display: none !important;
+      }
+
       body:not(.printing-grid) .controls {
         display: none;
       }
@@ -1303,6 +1305,14 @@
     // --- PNG EXPORT ---
     window.downloadSinglePNG = function () {
       const card = document.querySelector('.card');
+      const nameInput = document.getElementById('configName');
+      let fileName = "vhs_card_" + Date.now();
+
+      if (nameInput && nameInput.value.trim() !== "") {
+        // Sanitize filename: allow letters, numbers, spaces, dashes, underscores
+        fileName = nameInput.value.trim().replace(/[^a-z0-9\s\-\_]/gi, '_');
+      }
+
       deselectAll(); // Clean selection before capture
 
       html2canvas(card, {
@@ -1310,7 +1320,7 @@
         scale: 2 // Better quality
       }).then(canvas => {
         canvas.toBlob(blob => {
-          saveAs(blob, "vhs_card_" + Date.now() + ".png");
+          saveAs(blob, fileName + ".png");
         });
       });
     }
@@ -1416,8 +1426,10 @@
         // Capture
         const canvas = await html2canvas(clone, { useCORS: true, scale: 1 });
         const blob = await new Promise(r => canvas.toBlob(r));
-        const cleanName = item.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-        folder.file(`${cleanName}_${i}.png`, blob);
+        // More permissible sanitization for zip files
+        const cleanName = item.name.trim().replace(/[^a-z0-9\s\-\_]/gi, '_');
+        // Check for duplicates in folder if needed, but for now simple index suffix if multiple
+        folder.file(`${cleanName}.png`, blob);
       }
 
       document.body.removeChild(renderArea);
