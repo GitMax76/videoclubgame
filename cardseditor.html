@@ -118,7 +118,7 @@
     .char-img {
       position: absolute;
       z-index: 6;
-      width: 25%;
+      width: 15%;
       height: auto;
       cursor: grab;
       min-height: 50px;
@@ -1505,7 +1505,39 @@ const defaultLayerStates = ${JSON.stringify(newDefaults)};
     }
 
     // --- UI ---
-    function selectTape(tape) { deselectAll(); selectedElement = tape; selectedElement.classList.add('selected'); editorTools.classList.add('active'); colorAction.style.display = 'flex'; updateStatus(`Cassetta ${tape.dataset.id}`); }
+    function selectTape(tape) {
+      deselectAll();
+      selectedElement = tape;
+      selectedElement.classList.add('selected');
+      editorTools.classList.add('active');
+
+      // Update Color Palette UI
+      colorAction.innerHTML = "";
+      colorAction.style.display = 'flex';
+      colorAction.style.gap = '5px';
+      colorAction.style.padding = '5px';
+
+      palette.forEach((p, idx) => {
+        const btn = document.createElement('button');
+        btn.style.width = '24px';
+        btn.style.height = '24px';
+        btn.style.backgroundColor = p.value;
+        btn.style.border = (tape.dataset.colorIndex == idx) ? '2px solid #fff' : '1px solid #555';
+        btn.style.borderRadius = '4px';
+        btn.style.cursor = 'pointer';
+        btn.title = p.name;
+        btn.onclick = () => {
+          tape.dataset.colorIndex = idx;
+          tape.style.backgroundColor = p.value;
+          updateStatus(`Colore: ${p.name}`);
+          saveCurrentState();
+          selectTape(tape); // Re-render to update selection border
+        };
+        colorAction.appendChild(btn);
+      });
+
+      updateStatus(`Cassetta ${tape.dataset.id}`);
+    }
     window.selectLayer = function (layerId) {
       deselectAll(); selectedElement = document.getElementById(layerId);
       if (selectedElement) {
