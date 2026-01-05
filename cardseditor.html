@@ -600,7 +600,11 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-
+/* regola per non stampare footer */
+  footer,
+  #contacts-footer {
+    display: none !important;
+  }
       body:not(.printing-grid) .controls {
         display: none;
       }
