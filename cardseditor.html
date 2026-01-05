@@ -1178,6 +1178,8 @@
     window.loadFromLibrary = function (index) {
       if (confirm("Caricare?")) {
         applyState(savedLibrary[index].data);
+        // Set name for export
+        document.getElementById('configName').value = savedLibrary[index].name;
         saveCurrentState();
         updateVisButton('layer-char-left');
         updateVisButton('layer-char-right');
