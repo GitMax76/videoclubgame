@@ -736,25 +736,23 @@
 
       <div class="tape-group layer-selectable" id="layer-group">
         <div class="shelf-colors" id="shelfColors">
-          <div class="tape-color" data-id="A1"></div>
-          <div class="tape-color" data-id="A2"></div>
-          <div class="tape-color" data-id="A3"></div>
-          <div class="tape-color" data-id="A4"></div>
-          <div class="tape-color" data-id="A5"></div>
-          <div class="tape-color" data-id="B1"></div>
-          <div class="tape-color" data-id="B2"></div>
-          <div class="tape-color" data-id="B3"></div>
-          <div class="tape-color" data-id="B4"></div>
-          <div class="tape-color" data-id="B5"></div>
-          <div class="tape-color" data-id="C1"></div>
-          <div class="tape-color" data-id="C2"></div>
-          <div class="tape-color" data-id="C3"></div>
-          <div class="tape-color" data-id="C4"></div>
-          <div class="tape-color" data-id="C5"></div>
+          <img class="tape-color" data-id="A1" src="vhs-black.svg">
+          <img class="tape-color" data-id="A2" src="vhs-black.svg">
+          <img class="tape-color" data-id="A3" src="vhs-black.svg">
+          <img class="tape-color" data-id="A4" src="vhs-black.svg">
+          <img class="tape-color" data-id="A5" src="vhs-black.svg">
+          <img class="tape-color" data-id="B1" src="vhs-black.svg">
+          <img class="tape-color" data-id="B2" src="vhs-black.svg">
+          <img class="tape-color" data-id="B3" src="vhs-black.svg">
+          <img class="tape-color" data-id="B4" src="vhs-black.svg">
+          <img class="tape-color" data-id="B5" src="vhs-black.svg">
+          <img class="tape-color" data-id="C1" src="vhs-black.svg">
+          <img class="tape-color" data-id="C2" src="vhs-black.svg">
+          <img class="tape-color" data-id="C3" src="vhs-black.svg">
+          <img class="tape-color" data-id="C4" src="vhs-black.svg">
+          <img class="tape-color" data-id="C5" src="vhs-black.svg">
         </div>
-        <img src="rowA.png" class="tape-row layer-selectable" id="layer-row-a" style="top: 0%;">
-        <img src="rowB.png" class="tape-row layer-selectable" id="layer-row-b" style="top: 32%;">
-        <img src="rowC.png" class="tape-row layer-selectable" id="layer-row-c" style="top: 64%;">
+
       </div>
 
       <img src="char1.png" class="char-img layer-selectable" id="layer-char-left" style="top: 40%; left: 2%;"
@@ -892,7 +890,7 @@
   <script>
     const STORAGE_KEY = 'vhs_freedom_v35_vis';
     const LIBRARY_KEY = 'vhs_lib_v9';
-    const palette = [{ name: 'Nero', value: '#000000' }, { name: 'Rosso', value: '#E52020' }, { name: 'Rosa', value: '#FF66CC' }, { name: 'Verde', value: '#1E9E47' }, { name: 'Blu', value: '#0047AB' }];
+    const palette = [{ name: 'Nero', value: 'vhs-black.svg' }, { name: 'Rosso', value: 'vhs-red.svg' }, { name: 'Blu', value: 'vhs-blu.svg' }, { name: 'Verde', value: 'vhs-green.svg' }, { name: 'Giallo', value: 'vhs-yellow.svg' }];
 
     const charImages = [
       "char1.png", "char2.png", "char3.png", "char4.png",
@@ -907,7 +905,7 @@
 
     const fixedPositions = { "A1": { "left": "-0.593522%", "top": "2.12335%", "width": "9.2%", "height": "21%", "rotation": 2 }, "A2": { "left": "17.8872%", "top": "2.5994%", "width": "9.8%", "height": "21.4%", "rotation": 2 }, "A3": { "left": "37.172%", "top": "1.9988%", "width": "9.1%", "height": "22%", "rotation": 2 }, "A4": { "left": "53.7022%", "top": "2.22425%", "width": "10.1%", "height": "21.4%", "rotation": -1 }, "A5": { "left": "70.6346%", "top": "2.14851%", "width": "10.2%", "height": "21.2%", "rotation": -1 }, "B1": { "left": "-0.897228%", "top": "33.377%", "width": "9%", "height": "23%", "rotation": 2 }, "B2": { "left": "18.0069%", "top": "34.0533%", "width": "9.2%", "height": "22.4%", "rotation": 2 }, "B3": { "left": "37.1719%", "top": "33.6024%", "width": "8.8%", "height": "22.4%", "rotation": 0 }, "B4": { "left": "54.0432%", "top": "34.4539%", "width": "10%", "height": "21.8%", "rotation": -1 }, "B5": { "left": "70.3733%", "top": "33.8278%", "width": "10.3%", "height": "21.4%", "rotation": 0 }, "C1": { "left": "-0.596071%", "top": "66.032%", "width": "9.4%", "height": "22.4%", "rotation": 2 }, "C2": { "left": "17.7282%", "top": "65.8569%", "width": "8.6%", "height": "23%", "rotation": 1 }, "C3": { "left": "37.4904%", "top": "66.0329%", "width": "8.9%", "height": "23.2%", "rotation": 2 }, "C4": { "left": "54.0026%", "top": "65.5063%", "width": "10%", "height": "22.4%", "rotation": 0 }, "C5": { "left": "70.5547%", "top": "64.88%", "width": "9.8%", "height": "21.8%", "rotation": -1 } };
 
-    const defaultLayerStates = { "layer-bg": { "rotation": 0, "opacity": 1, "transform": "none" }, "layer-shelf": { "rotation": 0, "opacity": 1, "transform": "translate(-50%, -50%)" }, "layer-group": { "rotation": 0, "opacity": 1, "transform": "translate(-50%, -50%)" }, "layer-row-a": { "rotation": 0, "opacity": 1, "transform": "none", "top": "0%" }, "layer-row-b": { "rotation": 0, "opacity": 1, "transform": "none", "top": "32%" }, "layer-row-c": { "rotation": 0, "opacity": 1, "transform": "none", "top": "64%" }, "layer-char-left": { "left": "7.82684%", "top": "27.3839%", "width": "13.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 0 }, "layer-char-right": { "left": "75.1165%", "top": "28.2002%", "width": "13%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 0 } };
+    const defaultLayerStates = { "layer-bg": { "rotation": 0, "opacity": 1, "transform": "none" }, "layer-shelf": { "rotation": 0, "opacity": 1, "transform": "translate(-50%, -50%)" }, "layer-group": { "rotation": 0, "opacity": 1, "transform": "translate(-50%, -50%)" }, "layer-char-left": { "left": "7.82684%", "top": "27.3839%", "width": "13.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 0 }, "layer-char-right": { "left": "75.1165%", "top": "28.2002%", "width": "13%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 0 } };
 
     /* ==================================================================================== */
 
@@ -918,9 +916,6 @@
       document.getElementById('layer-bg'),
       document.getElementById('layer-shelf'),
       document.getElementById('layer-group'),
-      document.getElementById('layer-row-a'),
-      document.getElementById('layer-row-b'),
-      document.getElementById('layer-row-c'),
       document.getElementById('layer-char-left'),
       document.getElementById('layer-char-right')
     ];
@@ -980,7 +975,7 @@
     function applyDefaults() {
       for (const [id, data] of Object.entries(fixedPositions)) {
         const tape = document.querySelector(`.tape-color[data-id="${id}"]`);
-        if (tape) applyTapeStyle(tape, { ...data, opacity: 1, colorIndex: 2 });
+        if (tape) applyTapeStyle(tape, { ...data, opacity: 1, colorIndex: 0 }); // Default to black tape
       }
       for (const [id, data] of Object.entries(defaultLayerStates)) {
         const el = document.getElementById(id);
@@ -998,7 +993,7 @@
         tapes.forEach(tape => {
           const id = tape.dataset.id;
           const s = data.tapes[id] || fixedPositions[id];
-          if (s.colorIndex === undefined) s.colorIndex = 2;
+          if (s.colorIndex === undefined) s.colorIndex = 0; // Default to black tape
           applyTapeStyle(tape, s);
         });
       } else applyDefaults();
@@ -1032,7 +1027,7 @@
       updateElementTransform(el);
       if (data.colorIndex !== undefined) {
         el.dataset.colorIndex = data.colorIndex;
-        el.style.backgroundColor = palette[data.colorIndex].value;
+        el.src = palette[data.colorIndex].value;
       }
     }
 
@@ -1229,12 +1224,9 @@
 
         let tapesHtml = '<div class="shelf-colors">';
         for (let r of ['A', 'B', 'C']) {
-          for (let c = 1; c <= 5; c++) { tapesHtml += `<div class="tape-color" data-clone-id="${r + c}"></div>`; }
+          for (let c = 1; c <= 5; c++) { tapesHtml += `<img class="tape-color" data-clone-id="${r + c}">`; }
         }
-        tapesHtml += `</div>
-            <img src="rowA.png" class="tape-row" id="clone-row-a" style="top: 0%;">
-            <img src="rowB.png" class="tape-row" id="clone-row-b" style="top: 32%;">
-            <img src="rowC.png" class="tape-row" id="clone-row-c" style="top: 64%;">`;
+        tapesHtml += `</div>`;
 
         clone.innerHTML = `
             <img src="sfondo120x70.png" class="bg layer-obj" id="c-bg">
@@ -1263,9 +1255,6 @@
         if (data.layers['layer-bg']) applyCloneStyle(clone.querySelector('#c-bg'), data.layers['layer-bg']);
         if (data.layers['layer-shelf']) applyCloneStyle(clone.querySelector('#c-shelf'), data.layers['layer-shelf']);
         if (data.layers['layer-group']) applyCloneStyle(clone.querySelector('#c-group'), data.layers['layer-group']);
-        applyCloneStyle(clone.querySelector('#clone-row-a'), data.layers['layer-row-a']);
-        applyCloneStyle(clone.querySelector('#clone-row-b'), data.layers['layer-row-b']);
-        applyCloneStyle(clone.querySelector('#clone-row-c'), data.layers['layer-row-c']);
         applyCloneStyle(clone.querySelector('#clone-char-left'), data.layers['layer-char-left']);
         applyCloneStyle(clone.querySelector('#clone-char-right'), data.layers['layer-char-right']);
 
@@ -1277,7 +1266,7 @@
             if (tData.height) ct.style.height = tData.height;
             ct.style.opacity = tData.opacity;
             ct.style.transform = `rotate(${tData.rotation || 0}deg) scaleX(${tData.mirror || 1})`;
-            if (tData.colorIndex !== undefined) ct.style.backgroundColor = palette[tData.colorIndex].value;
+            if (tData.colorIndex !== undefined) ct.src = palette[tData.colorIndex].value;
           }
         });
       });
@@ -1336,7 +1325,7 @@
 
       if (selectedLibItems.length === 1) {
         // If only 1, simple export
-        // But we need to render it first. 
+        // But we need to render it first.
         // Strategy: Load it efficiently or render in background?
         // Simplest: Render in a hidden DOM element.
       }
@@ -1370,12 +1359,9 @@
         // Re-create internal structure similar to print
         let tapesHtml = '<div class="shelf-colors" style="position:absolute;z-index:3;top:0;left:0;width:100%;height:100%;">';
         for (let r of ['A', 'B', 'C']) {
-          for (let c = 1; c <= 5; c++) { tapesHtml += `<div class="tape-color" data-clone-id="${r + c}" style="position:absolute; background:#FFD800; border-radius:1px;"></div>`; }
+          for (let c = 1; c <= 5; c++) { tapesHtml += `<img class="tape-color" data-clone-id="${r + c}" style="position:absolute; border-radius:1px;">`; }
         }
-        tapesHtml += `</div>
-            <img src="rowA.png" class="tape-row" style="position:absolute;z-index:5;width:83%;height:auto;top:0%;left:-1%">
-            <img src="rowB.png" class="tape-row" style="position:absolute;z-index:5;width:83%;height:auto;top:32%;left:-1%">
-            <img src="rowC.png" class="tape-row" style="position:absolute;z-index:5;width:83%;height:auto;top:64%;left:-1%">`;
+        tapesHtml += `</div>`;
 
         clone.innerHTML = `
             <img src="sfondo120x70.png" class="bg" style="position:absolute;z-index:1;width:100%;height:100%;top:0;left:0;object-fit:cover;">
@@ -1414,7 +1400,7 @@
             if (tData.height) ct.style.height = tData.height;
             ct.style.opacity = tData.opacity;
             ct.style.transform = `rotate(${tData.rotation || 0}deg) scaleX(${tData.mirror || 1})`;
-            if (tData.colorIndex !== undefined) ct.style.backgroundColor = palette[tData.colorIndex].value;
+            if (tData.colorIndex !== undefined) ct.src = palette[tData.colorIndex].value;
           }
         });
 
@@ -1458,7 +1444,7 @@
 
       // 2. Layers Defaults
       let newDefaults = {};
-      const layerIds = ['layer-bg', 'layer-shelf', 'layer-group', 'layer-row-a', 'layer-row-b', 'layer-row-c', 'layer-char-left', 'layer-char-right'];
+      const layerIds = ['layer-bg', 'layer-shelf', 'layer-group', 'layer-char-left', 'layer-char-right'];
       layerIds.forEach(id => {
         let el = document.getElementById(id);
         if (el) {
@@ -1511,6 +1497,14 @@ const defaultLayerStates = ${JSON.stringify(newDefaults)};
       selectedElement.classList.add('selected');
       editorTools.classList.add('active');
 
+      const applyColor = (idx) => {
+        tape.dataset.colorIndex = idx;
+        tape.src = palette[idx].value;
+        updateStatus(`Colore: ${palette[idx].name}`);
+        saveCurrentState();
+        selectTape(tape);
+      };
+
       // Update Color Palette UI
       colorAction.innerHTML = "";
       colorAction.style.display = 'flex';
@@ -1519,20 +1513,19 @@ const defaultLayerStates = ${JSON.stringify(newDefaults)};
 
       palette.forEach((p, idx) => {
         const btn = document.createElement('button');
-        btn.style.width = '24px';
-        btn.style.height = '24px';
-        btn.style.backgroundColor = p.value;
-        btn.style.border = (tape.dataset.colorIndex == idx) ? '2px solid #fff' : '1px solid #555';
-        btn.style.borderRadius = '4px';
-        btn.style.cursor = 'pointer';
+        btn.onclick = () => { applyColor(idx); };
         btn.title = p.name;
-        btn.onclick = () => {
-          tape.dataset.colorIndex = idx;
-          tape.style.backgroundColor = p.value;
-          updateStatus(`Colore: ${p.name}`);
-          saveCurrentState();
-          selectTape(tape); // Re-render to update selection border
-        };
+        // Button style
+        btn.style.width = '28px';
+        btn.style.height = '28px';
+        btn.style.borderRadius = '50%';
+        btn.style.border = (tape.dataset.colorIndex == idx) ? '2px solid #fff' : '1px solid #555';
+        btn.style.cursor = 'pointer';
+        // Use background image for button preview
+        btn.style.background = `url(${p.value}) no-repeat center center`;
+        btn.style.backgroundSize = 'contain';
+        btn.style.backgroundColor = '#ccc'; // Fallback
+
         colorAction.appendChild(btn);
       });
 
@@ -1564,7 +1557,7 @@ const defaultLayerStates = ${JSON.stringify(newDefaults)};
       function onMove(e) { if (!isDragging) return; if (Math.abs(e.clientX - startX) > 3 || Math.abs(e.clientY - startY) > 3) hasMoved = true; el.style.left = (initL + ((e.clientX - startX) / pW) * 100) + '%'; el.style.top = (initT + ((e.clientY - startY) / pH) * 100) + '%'; }
       function onUp() { if (!isDragging) return; isDragging = false; document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); if (hasMoved) saveCurrentState(); else if (onUpCallback) onUpCallback(hasMoved); }
     }
-    function changeColor(tape) { let idx = parseInt(tape.dataset.colorIndex, 10); if (isNaN(idx)) idx = 1; idx = (idx + 1) % palette.length; tape.dataset.colorIndex = idx; tape.style.backgroundColor = palette[idx].value; updateStatus(`Colore: ${palette[idx].name}`); saveCurrentState(); }
+    function changeColor(tape) { let idx = parseInt(tape.dataset.colorIndex, 10); if (isNaN(idx)) idx = 0; idx = (idx + 1) % palette.length; tape.dataset.colorIndex = idx; tape.src = palette[idx].value; updateStatus(`Colore: ${palette[idx].name}`); saveCurrentState(); }
     window.cycleColorSelected = function () { if (selectedElement && selectedElement.classList.contains('tape-color')) changeColor(selectedElement); }
     window.toggleMirror = function () { if (!selectedElement) return; let m = parseFloat(selectedElement.dataset.mirror) || 1; selectedElement.dataset.mirror = m * -1; updateElementTransform(selectedElement); saveCurrentState(); updateStatus(m * -1 === -1 ? "Specchiato" : "Normale"); }
     window.adjust = function (type, amount) {
