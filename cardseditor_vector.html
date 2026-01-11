@@ -2,7 +2,17 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>VHS Card - Editor Finale v35 (Visibilità Pers.)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VideoClub - VHS Editor</title>
+
+  <!-- OPEN GRAPH / SOCIAL SHARE -->
+  <meta property="og:title" content="VideoClub - VHS Editor" />
+  <meta property="og:description" content="Crea e personalizza le tue carte VHS per VideoClub Boardgame." />
+  <meta property="og:image" content="https://gitmax76.github.io/videoclubgame/og-preview.png" />
+  <meta property="og:url" content="https://gitmax76.github.io/videoclubgame/cardseditor_vector.html" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/png" href="favicon.png">
+
   <link rel="preload" href="https://w.soundcloud.com/player/api.js" as="script">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -151,6 +161,7 @@
       cursor: grab;
       border-radius: 2px;
       transform: rotate(-90deg);
+      clip-path: inset(12%);
       /* Add -90deg rotation */
     }
 
@@ -716,7 +727,7 @@
 
       .print-card-clone .tape-color {
         position: absolute;
-
+        clip-path: inset(12%);
         border-radius: 1px;
       }
     }
@@ -837,6 +848,9 @@
       </div>
 
       <div class="actions">
+        <button id="btnSaveState" onclick="manualSaveState()"
+          style="padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">💾
+          Salva</button>
         <button id="resetBtn">Reset Totale</button>
         <button id="layoutBtn" onclick="toggleLayout()">Layout: ↕ Verticale</button>
 
@@ -892,7 +906,7 @@
   <script>
     const STORAGE_KEY = 'vhs_freedom_v36_svg_fix';
     const LIBRARY_KEY = 'vhs_lib_v9';
-    const palette = [{ name: 'Nero', value: 'vhs-black.svg' }, { name: 'Rosso', value: 'vhs-red.svg' }, { name: 'Blu', value: 'vhs-blu.svg' }, { name: 'Verde', value: 'vhs-green.svg' }, { name: 'Giallo', value: 'vhs-yellow.svg' }, { name: 'Rosa', value: 'vhs-pink.svg' }];
+    const palette = [{ name: 'Nero', value: 'vhs-black.svg' }, { name: 'Rosso', value: 'vhs-red.svg' }, { name: 'Blu', value: 'vhs-blu.svg' }, { name: 'Verde', value: 'vhs-green.svg' }, { name: 'Giallo', value: 'vhs-yellow.svg' }, { name: 'Rosa', value: 'vhs-pink.svg' }, { name: 'Invisibile', value: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' }];
     const backgrounds = [
       "bg-1.png", "bg-2.png", "bg-3.png", "bg-4.png",
       "bg-5.png", "bg-6.png", "bg-7.png"
@@ -944,8 +958,16 @@
       charStates = JSON.parse(JSON.stringify(HARDCODED_CHAR_MEMORY));
 
       // 2. Load Library
-      const libData = localStorage.getItem(LIBRARY_KEY);
-      if (libData) savedLibrary = JSON.parse(libData);
+      try {
+        const libData = localStorage.getItem(LIBRARY_KEY);
+        if (libData) {
+          savedLibrary = JSON.parse(libData);
+          if (!Array.isArray(savedLibrary)) savedLibrary = [];
+        }
+      } catch (e) {
+        console.error("Errore caricamento libreria:", e);
+        savedLibrary = [];
+      }
       renderLibrary();
 
       // 3. Load Layout Preference & State
@@ -1039,7 +1061,16 @@
       updateElementTransform(el);
       if (data.colorIndex !== undefined) {
         el.dataset.colorIndex = data.colorIndex;
-        el.src = palette[data.colorIndex].value; // ADDED
+        const p = palette[data.colorIndex];
+        // Now p.value is always a string (data URI or filename)
+        if (p) {
+          el.src = p.value;
+          // If implicit opacity is 0 (legacy), we might leave it. 
+          // But if current p is Invisible, the image itself is transparent.
+          // We generally trust data.opacity, but if we want to ensure visibility of the transparent placeholder:
+          // el.style.opacity = data.opacity !== undefined ? data.opacity : 1; 
+          // (Already set above).
+        }
       }
     }
 
@@ -1090,6 +1121,16 @@
         saveSpecificCharState(selectedElement);
       }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(getCurrentStateObject()));
+    }
+
+    function manualSaveState() {
+      try {
+        saveCurrentState();
+        alert("Configurazione salvata con successo!");
+      } catch (e) {
+        alert("Errore durante il salvataggio: " + e.message);
+        console.error(e);
+      }
     }
 
     function saveSpecificCharState(el) {
@@ -1561,6 +1602,37 @@ const defaultLayerStates = ${JSON.stringify(newDefaults)};
         colorAction.appendChild(btn);
       });
 
+      // --- VISIBILITY TOGGLE BUTTON ---
+      const visBtn = document.createElement('button');
+      visBtn.title = "Visibilità On/Off";
+      visBtn.style.width = '28px';
+      visBtn.style.height = '28px';
+      visBtn.style.borderRadius = '6px'; // Square-ish
+      visBtn.style.border = '1px solid #555';
+      visBtn.style.cursor = 'pointer';
+      visBtn.style.display = 'flex';
+      visBtn.style.alignItems = 'center';
+      visBtn.style.justifyContent = 'center';
+      visBtn.style.background = '#eee';
+      visBtn.style.fontSize = '1.2rem';
+
+      const updateVisIcon = () => {
+        const op = parseFloat(tape.style.opacity);
+        visBtn.innerHTML = (isNaN(op) || op > 0) ? '👁️' : '🚫';
+        visBtn.style.opacity = (isNaN(op) || op > 0) ? 1 : 0.5;
+      };
+      updateVisIcon();
+
+      visBtn.onclick = () => {
+        const currentOp = parseFloat(tape.style.opacity);
+        // Toggle: if visible (>0) -> 0; else -> 1
+        const newOp = (isNaN(currentOp) || currentOp > 0) ? 0 : 1;
+        tape.style.opacity = newOp;
+        updateVisIcon();
+        saveCurrentState();
+      };
+      colorAction.appendChild(visBtn);
+
       updateStatus(`Cassetta ${tape.dataset.id}`);
     }
     window.selectLayer = function (layerId) {
@@ -1606,7 +1678,26 @@ const defaultLayerStates = ${JSON.stringify(newDefaults)};
       function onMove(e) { if (!isDragging) return; if (Math.abs(e.clientX - startX) > 3 || Math.abs(e.clientY - startY) > 3) hasMoved = true; el.style.left = (initL + ((e.clientX - startX) / pW) * 100) + '%'; el.style.top = (initT + ((e.clientY - startY) / pH) * 100) + '%'; }
       function onUp() { if (!isDragging) return; isDragging = false; document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); if (hasMoved) saveCurrentState(); else if (onUpCallback) onUpCallback(hasMoved); }
     }
-    function changeColor(tape) { let idx = parseInt(tape.dataset.colorIndex, 10); if (isNaN(idx)) idx = 0; idx = (idx + 1) % palette.length; tape.dataset.colorIndex = idx; tape.src = palette[idx].value; updateStatus(`Colore: ${palette[idx].name}`); saveCurrentState(); }
+    function changeColor(tape) {
+      let idx = parseInt(tape.dataset.colorIndex, 10);
+      if (isNaN(idx)) idx = 0;
+      idx = (idx + 1) % palette.length;
+      tape.dataset.colorIndex = idx;
+
+      const p = palette[idx];
+      // ALWAYS restore visibility when changing color. 
+      // User picked a color, so they want to see it.
+      tape.style.opacity = 1;
+      tape.src = p.value;
+
+      // Update UI if this tape is currently selected
+      if (selectedElement === tape) {
+        selectTape(tape); // Re-render controls to update Vis button state if needed
+      }
+
+      updateStatus(`Colore: ${p.name}`);
+      saveCurrentState();
+    }
     function changeBackground(bgLayer) {
       let idx = parseInt(bgLayer.dataset.bgIndex, 10);
       if (isNaN(idx)) idx = 0;
