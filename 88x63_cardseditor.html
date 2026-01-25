@@ -1,0 +1,1867 @@
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VideoClub - VHS Editor (88x66)</title>
+
+  <!-- OPEN GRAPH / SOCIAL SHARE -->
+  <meta property="og:title" content="VideoClub - VHS Editor" />
+  <meta property="og:description" content="Crea e personalizza le tue carte VHS per VideoClub Boardgame." />
+  <meta property="og:image" content="https://gitmax76.github.io/videoclubgame/og-preview.png" />
+  <meta property="og:url" content="https://gitmax76.github.io/videoclubgame/cardseditor_vector.html" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <link rel="preload" href="https://w.soundcloud.com/player/api.js" as="script">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <style>
+    /* --- STILI ORIGINALI --- */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 2rem;
+      background: #1a1a1a;
+      color: #fff;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      text-align: center;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .app.layout-row {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      position: relative;
+      width: 60vw;
+      aspect-ratio: 88 / 66;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+      margin: 0 auto;
+      transition: width 0.3s ease;
+    }
+
+    .app.layout-row .card {
+      width: 50vw;
+      margin: 0;
+    }
+
+    .card::after,
+    .print-card-clone::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 999;
+      pointer-events: none;
+      border: 2mm solid #ffffff;
+      border-radius: 0;
+      box-sizing: border-box;
+    }
+
+    /* --- LIVELLI --- */
+    .bg,
+    .shelf {
+      position: absolute;
+      pointer-events: none;
+      display: block;
+    }
+
+    .bg {
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+    }
+
+    .shelf {
+      z-index: 2;
+      width: 70%;
+      height: auto;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .tape-group {
+      position: absolute;
+      z-index: 4;
+      width: 68%;
+      aspect-ratio: 405 / 215;
+      top: 62%;
+      left: 57%;
+      transform: translate(-50%, -50%);
+    }
+
+    .tape-row {
+      position: absolute;
+      z-index: 5;
+      width: 83%;
+      height: auto;
+      left: -1%;
+      pointer-events: none;
+    }
+
+    .char-img {
+      position: absolute;
+      z-index: 6;
+      width: 25%;
+      height: auto;
+      cursor: grab;
+      min-height: 50px;
+      min-width: 50px;
+      transition: opacity 0.2s ease;
+    }
+
+    .char-img:active {
+      cursor: grabbing;
+    }
+
+    .char-img[src=""],
+    .char-img:not([src]) {
+      border: 2px dashed red;
+      background: rgba(255, 0, 0, 0.2);
+    }
+
+    .shelf-colors {
+      position: absolute;
+      z-index: 3;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .tape-color {
+      position: absolute;
+      /* background: #FFD800; REMOVED */
+      cursor: grab;
+      border-radius: 2px;
+      transform: rotate(-90deg);
+      clip-path: inset(12%);
+      /* Add -90deg rotation */
+    }
+
+    .tape-color:active {
+      cursor: grabbing;
+    }
+
+    /* --- CONTROLLI --- */
+    .controls {
+      background: #2a2a2a;
+      padding: 1rem;
+      border-radius: 12px;
+      width: 60vw;
+      border: 1px solid #444;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: width 0.3s ease;
+    }
+
+    .app.layout-row .controls {
+      width: 35vw;
+    }
+
+    .info-panel {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-bottom: 0.5rem;
+    }
+
+    .selected-info {
+      color: #ffd400;
+      font-weight: bold;
+    }
+
+    /* CONTROLLI VISIBILITA PERSONAGGI */
+    .char-vis-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+
+    .btn-vis {
+      flex: 1;
+      padding: 8px;
+      background: #555;
+      color: #fff;
+      border: 1px solid #666;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .btn-vis:hover {
+      background: #666;
+    }
+
+    .btn-vis.hidden-state {
+      opacity: 0.5;
+      background: #333;
+    }
+
+    .layer-select-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      justify-content: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #444;
+    }
+
+    .layer-btn {
+      background: #444;
+      color: #ccc;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .layer-btn:hover {
+      background: #555;
+    }
+
+    .layer-btn.active {
+      background: #ffd400;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .selected {
+      outline: 2px dashed #ffd400;
+    }
+
+    .editor-tools {
+      display: none;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.5rem;
+      padding-top: 1rem;
+    }
+
+    .editor-tools.active {
+      display: grid;
+    }
+
+    .tool-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    small {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .pad {
+      display: grid;
+      grid-template-columns: 25px 25px 25px;
+      gap: 3px;
+    }
+
+    .pad button,
+    .tool-btn {
+      background: #444;
+      color: #fff;
+      border: none;
+      padding: 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      min-width: 28px;
+      font-size: 0.8rem;
+    }
+
+    .pad button:hover,
+    .tool-btn:hover {
+      background: #666;
+    }
+
+    .pad button:active,
+    .tool-btn:active {
+      background: #ffd400;
+      color: #000;
+    }
+
+    .color-actions {
+      display: none;
+      justify-content: center;
+      margin-top: 5px;
+    }
+
+    .btn-change-col {
+      background: linear-gradient(90deg, #f00, #ff0, #00f);
+      border: none;
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #fff;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    /* --- LIBRERIA --- */
+    .library-section {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #555;
+      text-align: left;
+    }
+
+    .library-input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .library-input-group input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background: #333;
+      color: #fff;
+    }
+
+    .btn-save-lib {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .saved-list {
+      max-height: 150px;
+      overflow-y: auto;
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 4px;
+      margin-bottom: 5px;
+    }
+
+    .saved-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 10px;
+      border-bottom: 1px solid #333;
+    }
+
+    .saved-item:hover {
+      background: #333;
+    }
+
+    .item-checkbox {
+      margin-right: 10px;
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+
+    .saved-name {
+      cursor: pointer;
+      flex: 1;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .btn-del-item {
+      background: #d93025;
+      color: white;
+      border: none;
+      padding: 2px 6px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      margin-left: 10px;
+    }
+
+    .select-actions {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .btn-sel-opt {
+      flex: 1;
+      padding: 6px;
+      background: #444;
+      color: #ccc;
+      border: 1px solid #555;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .btn-sel-opt:hover {
+      background: #555;
+      color: #fff;
+    }
+
+    .btn-print-multi {
+      width: 100%;
+      padding: 12px;
+      background: #6f42c1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-print-multi:hover {
+      background: #5a32a3;
+    }
+
+    .io-group {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-top: 5px;
+      flex-wrap: wrap;
+    }
+
+    .btn-io {
+      flex: 1;
+      padding: 8px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .btn-del-all {
+      flex: 1;
+      padding: 8px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    .btn-del-all:hover {
+      background: #c82333;
+    }
+
+    .btn-dev {
+      flex: 2;
+      padding: 8px;
+      background: #e83e8c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: bold;
+      min-width: 200px;
+    }
+
+    .file-input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    button#printBtn {
+      flex: 2;
+      padding: 12px;
+      background: #ffd400;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button#resetBtn {
+      flex: 1;
+      padding: 12px;
+      background: #d93025;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button#layoutBtn {
+      flex: 1;
+      padding: 12px;
+      background: #17a2b8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button#layoutBtn:hover {
+      background: #138496;
+    }
+
+    /* Modal Dev */
+    .dev-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .dev-modal.active {
+      display: flex;
+    }
+
+    .dev-modal textarea {
+      width: 80%;
+      height: 60%;
+      background: #222;
+      color: #0f0;
+      padding: 10px;
+      font-family: monospace;
+      border: 1px solid #444;
+      font-size: 12px;
+    }
+
+    .dev-modal-head {
+      color: #fff;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+      max-width: 80%;
+      text-align: center;
+    }
+
+    .dev-modal-close {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #print-grid-area {
+      display: none;
+    }
+
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* regola per non stampare footer */
+      footer,
+      #contacts-footer {
+        display: none !important;
+      }
+
+      body:not(.printing-grid) .controls {
+        display: none;
+      }
+
+      body:not(.printing-grid) .card {
+        width: 88mm !important;
+        height: 66mm !important;
+        box-shadow: none;
+        border: none;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      body.printing-grid .app {
+        display: none !important;
+      }
+
+      body.printing-grid #print-grid-area {
+        display: block !important;
+        width: 100%;
+        height: auto;
+      }
+
+      .print-sheet {
+        width: 297mm;
+        height: 209mm;
+        /* Reduced slightly from 210 to prevent overflow */
+        display: grid;
+        /* Grid for 94mm cards (88+6) */
+        grid-template-columns: repeat(3, 94mm);
+        grid-template-rows: repeat(2, 69mm);
+        justify-content: center;
+        align-content: center;
+        column-gap: 5mm;
+        row-gap: 0mm;
+        /* Tight fit: 69*3 = 207mm. 209-207=2mm margin */
+        page-break-after: always;
+        break-after: page;
+        overflow: hidden;
+      }
+
+      .print-sheet:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+
+      .print-card-clone {
+        position: relative;
+        /* Bleed Size: 94x69 */
+        width: 94mm;
+        height: 69mm;
+        overflow: visible;
+        background: white;
+        /* Bleed Color */
+        page-break-inside: avoid;
+        outline: none;
+
+        /* Centering the 88x63 content */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .print-inner-content {
+        width: 88mm;
+        height: 63mm;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Crop Marks via Pseudo-element */
+      .print-card-clone::before {
+        content: "";
+        position: absolute;
+        /* 
+           Card Bleed Size: 94x69.
+           Cut Size: 88x63.
+           Bleed: 3mm each side.
+           
+           Crop Marks Area margin: 5mm.
+           Total Area: 104x79 (94+10, 69+10).
+           
+           SVG Logic (ViewBox 0 0 104 79):
+           - Content Start (TL): 5, 5
+           - Cut Line (TL): 5+3 = 8, 8
+           - Content End (BR): 5+94=99, 5+69=74
+           - Cut Line (BR): 99-3=96, 74-3=71
+        */
+        top: -5mm;
+        left: -5mm;
+        width: calc(100% + 10mm);
+        height: calc(100% + 10mm);
+        z-index: 1000;
+        pointer-events: none;
+
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 104 79'%3E%3Cstyle%3Eline%7Bstroke:black;stroke-width:0.25;%7D%3C/style%3E%3C!-- TL --%3E%3Cline x1='0' y1='8' x2='5' y2='8' /%3E%3Cline x1='8' y1='0' x2='8' y2='5' /%3E%3C!-- TR --%3E%3Cline x1='99' y1='8' x2='104' y2='8' /%3E%3Cline x1='96' y1='0' x2='96' y2='5' /%3E%3C!-- BL --%3E%3Cline x1='0' y1='71' x2='5' y2='71' /%3E%3Cline x1='8' y1='74' x2='8' y2='79' /%3E%3C!-- BR --%3E%3Cline x1='99' y1='71' x2='104' y2='71' /%3E%3Cline x1='96' y1='74' x2='96' y2='79' /%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+      }
+
+      .print-card-clone .bg {
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+        position: absolute;
+      }
+
+      .print-card-clone .shelf {
+        z-index: 2;
+        width: 70%;
+        height: auto;
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: absolute;
+      }
+
+      .print-card-clone .tape-group {
+        z-index: 4;
+        width: 68%;
+        aspect-ratio: 405/215;
+        top: 62%;
+        left: 57%;
+        transform: translate(-50%, -50%);
+        position: absolute;
+      }
+
+      .print-card-clone .tape-row {
+        position: absolute;
+        z-index: 5;
+        width: 83%;
+        height: auto;
+        left: -1%;
+      }
+
+      .print-card-clone .char-img {
+        position: absolute;
+        z-index: 6;
+        width: 25%;
+        height: auto;
+      }
+
+      .print-card-clone .shelf-colors {
+        z-index: 3;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+      }
+
+      .print-card-clone .tape-color {
+        position: absolute;
+        clip-path: inset(12%);
+        border-radius: 1px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app" id="mainApp">
+
+    <!-- SOUNDCLOUD WIDGET (HIDDEN) -->
+    <iframe id="sc-widget" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+      src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/synthwave80s/sets/dreams&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"
+      style="display:none;">
+    </iframe>
+    <div class="card">
+      <img src="sfondo120x70.png" class="bg layer-selectable" id="layer-bg">
+      <img src="shelf120x70.png" class="shelf layer-selectable" id="layer-shelf">
+
+      <div class="tape-group layer-selectable" id="layer-group">
+        <div class="shelf-colors" id="shelfColors">
+          <img class="tape-color" data-id="A1" src="vhs-black.svg">
+          <img class="tape-color" data-id="A2" src="vhs-black.svg">
+          <img class="tape-color" data-id="A3" src="vhs-black.svg">
+          <img class="tape-color" data-id="A4" src="vhs-black.svg">
+          <img class="tape-color" data-id="A5" src="vhs-black.svg">
+          <img class="tape-color" data-id="B1" src="vhs-black.svg">
+          <img class="tape-color" data-id="B2" src="vhs-black.svg">
+          <img class="tape-color" data-id="B3" src="vhs-black.svg">
+          <img class="tape-color" data-id="B4" src="vhs-black.svg">
+          <img class="tape-color" data-id="B5" src="vhs-black.svg">
+          <img class="tape-color" data-id="C1" src="vhs-black.svg">
+          <img class="tape-color" data-id="C2" src="vhs-black.svg">
+          <img class="tape-color" data-id="C3" src="vhs-black.svg">
+          <img class="tape-color" data-id="C4" src="vhs-black.svg">
+          <img class="tape-color" data-id="C5" src="vhs-black.svg">
+        </div>
+
+      </div>
+
+      <img src="char1.png" class="char-img layer-selectable" id="layer-char-left" style="top: 40%; left: 2%;"
+        data-char-index="0">
+      <img src="char2.png" class="char-img layer-selectable" id="layer-char-right" style="top: 40%; left: 73%;"
+        data-char-index="1">
+    </div>
+
+    <div class="controls">
+      <div class="info-panel"><span id="statusText" class="selected-info">Seleziona un elemento</span></div>
+
+      <div class="char-vis-group">
+        <button class="btn-vis" id="btnVisLeft" onclick="toggleCharVisibility('layer-char-left')">👁️ SX On/Off</button>
+        <button class="btn-vis" id="btnVisRight" onclick="toggleCharVisibility('layer-char-right')">👁️ DX
+          On/Off</button>
+      </div>
+
+      <div class="layer-select-btns">
+        <button class="layer-btn" onclick="selectLayer('layer-bg')">Sfondo</button>
+        <button class="layer-btn" onclick="selectLayer('layer-shelf')">Scaffale</button>
+        <button class="layer-btn" onclick="selectLayer('layer-group')">Gruppo</button>
+        <button class="layer-btn" onclick="selectLayer('layer-char-left')">Pers. SX</button>
+        <button class="layer-btn" onclick="selectLayer('layer-char-right')">Pers. DX</button>
+      </div>
+
+      <div class="editor-tools" id="editorTools">
+        <div class="tool-group"><small>Pos</small>
+          <div class="pad">
+            <div></div><button onclick="adjust('y', -0.5)">▲</button>
+            <div></div><button onclick="adjust('x', -0.5)">◄</button>
+            <div></div><button onclick="adjust('x', 0.5)">►</button>
+            <div></div><button onclick="adjust('y', 0.5)">▼</button>
+            <div></div>
+          </div>
+        </div>
+        <div class="tool-group"><small>Dim</small>
+          <div style="display:flex; gap:3px; margin-bottom:3px;"><button class="tool-btn"
+              onclick="adjust('w', -0.5)">W-</button><button class="tool-btn" onclick="adjust('w', 0.5)">W+</button>
+          </div>
+          <div style="display:flex; gap:3px;"><button class="tool-btn" onclick="adjust('h', -0.5)">H-</button><button
+              class="tool-btn" onclick="adjust('h', 0.5)">H+</button></div>
+        </div>
+        <div class="tool-group"><small>Scala</small>
+          <div style="display:flex; gap:3px; align-items:center; height:100%;"><button class="tool-btn"
+              onclick="adjust('s', -2)">S-</button><button class="tool-btn" onclick="adjust('s', 2)">S+</button></div>
+        </div>
+        <div class="tool-group"><small>Rot</small>
+          <div style="display:flex; gap:3px; align-items:center; height:100%;"><button class="tool-btn"
+              onclick="adjust('r', -1)">↺</button><button class="tool-btn" onclick="adjust('r', 1)">↻</button></div>
+        </div>
+        <div class="tool-group"><small>Flip</small><button class="tool-btn" onclick="toggleMirror()"
+            style="height:100%; font-size: 1.2rem;">↔</button></div>
+      </div>
+
+      <div class="color-actions" id="colorAction">
+        <button class="btn-change-col" onclick="cycleColorSelected()">Cambia Colore</button>
+      </div>
+
+      <div class="library-section">
+        <div class="library-input-group">
+          <input type="text" id="configName" placeholder="Nome configurazione...">
+          <button class="btn-save-lib" onclick="saveToLibrary()">Salva in Libreria</button>
+        </div>
+        <div class="saved-list" id="savedList"></div>
+
+        <div class="select-actions">
+          <button class="btn-sel-opt" onclick="selectAllLibraryItems()">☑ Seleziona Tutto</button>
+          <button class="btn-sel-opt" onclick="deselectAllLibraryItems()">☒ Deseleziona Tutto</button>
+        </div>
+
+        <button class="btn-print-multi" onclick="printSelectedSheets()">🖨️ Stampa Selezionate (6 x Foglio)</button>
+        <div class="io-group">
+          <button class="btn-io" onclick="downloadJSON()">⬇ Esporta JSON</button>
+          <button class="btn-io" style="background:#ff9800;" onclick="exportSelectedPNGs()">⬇ Esporta PNG (ZIP)</button>
+          <button class="btn-io import" style="position:relative;">⬆ Importa JSON <input type="file" id="fileInput"
+              class="file-input" accept=".json" onchange="uploadJSON()"></button>
+          <button class="btn-del-all" onclick="clearLibrary()">🗑️ Svuota Libreria</button>
+          <button class="btn-dev" onclick="exportFullCode()">💾 Genera Codice Completo</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="btnSaveState" onclick="manualSaveState()"
+          style="padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">💾
+          Salva</button>
+        <button id="resetBtn">Reset Totale</button>
+        <button id="layoutBtn" onclick="toggleLayout()">Layout: ↕ Verticale</button>
+
+        <div style="display:flex; flex-direction:column; align-items:center; flex:1;">
+          <button onclick="toggleMusic()" id="btn-music"
+            style="width:100%; padding: 12px; background: #334155; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">
+            🎵 AUDIO: OFF
+          </button>
+          <span style="font-size:10px; color:#888; font-weight:bold; margin-top:2px;">Music by: Synthwave80s</span>
+        </div>
+
+        <button onclick="sessionStorage.setItem('skip_splash', 'true'); window.location.href='index.html'"
+          style="flex: 1; padding: 12px; background: #6c757d; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">🏠
+          Home</button>
+        <button onclick="document.getElementById('contacts-footer').scrollIntoView({behavior: 'smooth'})"
+          style="flex: 1; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">
+          📞 Contatti
+        </button>
+        <button id="printBtn" onclick="printSingle()">Stampa Editor</button>
+        <button onclick="downloadSinglePNG()"
+          style="flex: 1; padding: 12px; background: #00bcd4; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">📸
+          PNG</button>
+      </div>
+    </div>
+  </div>
+
+  <footer id="contacts-footer"
+    style="width: 100%; text-align: center; margin-top: 3rem; margin-bottom: 2rem; padding: 1.5rem; background: #222; border-top: 3px solid #555; color: #fff;">
+    <h3 style="margin-bottom: 1rem; font-size: 1.5rem; color: #ffd400;">👋 Info? Suggerimenti? Collaborazioni? Demo?
+      Parliamo!</h3>
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; font-size: 1.5rem;">
+      <a href="mailto:massi.sabato@gmail.com"
+        style="color: #ccc; text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid #444; border-radius: 5px; transition: all 0.2s;">📧
+        massi.sabato@gmail.com</a>
+      <a href="https://wa.me/393295644852" target="_blank"
+        style="color: #4caf50; text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid #444; border-radius: 5px; transition: all 0.2s;">💬
+        WhatsApp</a>
+      <a href="https://linktr.ee/JustMax76" target="_blank"
+        style="color: #e040fb; text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid #444; border-radius: 5px; transition: all 0.2s;">🌲
+        Linktree</a>
+    </div>
+  </footer>
+
+  <div id="devModal" class="dev-modal">
+    <div class="dev-modal-head" id="devModalTitle">Titolo</div>
+    <textarea id="devOutput" readonly></textarea>
+    <button class="dev-modal-close"
+      onclick="document.getElementById('devModal').classList.remove('active')">Chiudi</button>
+  </div>
+
+  <div id="print-grid-area"></div>
+
+  <script>
+    const STORAGE_KEY = 'vhs_freedom_v36_svg_fix';
+    const LIBRARY_KEY = 'vhs_lib_v9';
+    const palette = [{ name: 'Nero', value: 'vhs-black.svg' }, { name: 'Rosso', value: 'vhs-red.svg' }, { name: 'Blu', value: 'vhs-blu.svg' }, { name: 'Verde', value: 'vhs-green.svg' }, { name: 'Giallo', value: 'vhs-yellow.svg' }, { name: 'Rosa', value: 'vhs-pink.svg' }, { name: 'Invisibile', value: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' }];
+    const backgrounds = [
+      "bg-1.png", "bg-2.png", "bg-3.png", "bg-4.png",
+      "bg-5.png", "bg-6.png", "bg-7.png"
+    ];
+
+    const charImages = [
+      "char1.png", "char2.png", "char3.png", "char4.png",
+      "char5.png", "char6.png", "char7.png", "char8.png",
+      "char10.png", "char11.png", "char12.png", "char13.png",
+      "char14.png", "char16.png", "char15.png", "char17.png",
+      "char18.png", "char19.png", "char20.png", "char21.png",
+      "char22.png", "char23.png"
+    ];
+
+    const HARDCODED_CHAR_MEMORY = { "layer-char-left": { "0": { "left": "7.82684%", "top": "27.3839%", "width": "13.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 0 }, "1": { "left": "10.1046%", "top": "49.8362%", "width": "13.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 1 }, "2": { "left": "9.19349%", "top": "47.8838%", "width": "17.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 2 }, "3": { "left": "11.1296%", "top": "33.4362%", "width": "13.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 3 }, "4": { "left": "10.674%", "top": "41.6362%", "width": "15.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 4 }, "5": { "left": "10.3323%", "top": "40.2695%", "width": "19.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 5 }, "6": { "left": "5.66286%", "top": "33.6314%", "width": "21.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 6 }, "7": { "left": "6.68785%", "top": "29.3363%", "width": "23.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 7 }, "8": { "left": "4.29619%", "top": "38.3173%", "width": "23.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 8 }, "9": { "left": "7.1434%", "top": "34.0221%", "width": "21.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 9 }, "10": { "left": "7.25729%", "top": "31.8745%", "width": "17.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 10 }, "11": { "left": "8.85173%", "top": "32.265%", "width": "17.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 11 }, "12": { "left": "7.48507%", "top": "48.0792%", "width": "19.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 12 }, "13": { "left": "6.68785%", "top": "41.6364%", "width": "23.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 13 }, "14": { "left": "7.71284%", "top": "44.5649%", "width": "21.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 14 }, "15": { "left": "7.82674%", "top": "52.5696%", "width": "15.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 15 }, "16": { "left": "8.1684%", "top": "38.122%", "width": "31.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 16 }, "17": { "left": "8.39618%", "top": "36.7553%", "width": "33.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 17 }, "18": { "left": "8.05452%", "top": "42.4172%", "width": "17.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 18 }, "19": { "left": "11.0156%", "top": "37.9268%", "width": "15.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 19 }, "20": { "left": "8.51004%", "top": "26.603%", "width": "29.5%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 20 }, "21": { "left": "4.52402%", "top": "30.8983%", "width": "23.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 21 } }, "layer-char-right": { "0": { "left": "75.1165%", "top": "28.2002%", "width": "13%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 0 }, "1": { "left": "74.7746%", "top": "44.2096%", "width": "15%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 1 }, "2": { "left": "72.9524%", "top": "47.3334%", "width": "17%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 2 }, "3": { "left": "75.1163%", "top": "35.2287%", "width": "13%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 3 }, "4": { "left": "72.6108%", "top": "42.062%", "width": "15%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 4 }, "5": { "left": "69.4219%", "top": "37.3763%", "width": "21%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 5 }, "6": { "left": "71.5858%", "top": "33.862%", "width": "21%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 6 }, "7": { "left": "69.0802%", "top": "29.5667%", "width": "23%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 7 }, "8": { "left": "70.9025%", "top": "38.7428%", "width": "23%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 8 }, "9": { "left": "69.422%", "top": "29.9572%", "width": "23%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 9 }, "10": { "left": "72.9525%", "top": "28.0048%", "width": "19%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 10 }, "11": { "left": "71.0164%", "top": "29.762%", "width": "19%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 11 }, "12": { "left": "71.6997%", "top": "47.3334%", "width": "19%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 12 }, "13": { "left": "67.7137%", "top": "42.6477%", "width": "23%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 13 }, "14": { "left": "71.3581%", "top": "43.8191%", "width": "21%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 14 }, "15": { "left": "75.5719%", "top": "52.9954%", "width": "15%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 15 }, "16": { "left": "58.7165%", "top": "36.205%", "width": "33%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 16 }, "17": { "left": "52.1111%", "top": "30.1525%", "width": "37%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 17 }, "18": { "left": "71.1304%", "top": "37.5715%", "width": "19%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 18 }, "19": { "left": "72.611%", "top": "38.9381%", "width": "15%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 19 }, "20": { "left": "62.8165%", "top": "33.0811%", "width": "27%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 20 }, "21": { "left": "67.3722%", "top": "32.6906%", "width": "23%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 21 } } };
+
+    const fixedPositions = { "A1": { "left": "-0.593522%", "top": "2.12335%", "width": "19%", "height": "42%", "rotation": 2 }, "A2": { "left": "17.8872%", "top": "2.5994%", "width": "20%", "height": "43%", "rotation": 2 }, "A3": { "left": "37.172%", "top": "1.9988%", "width": "18.5%", "height": "44%", "rotation": 2 }, "A4": { "left": "53.7022%", "top": "2.22425%", "width": "20.5%", "height": "43%", "rotation": -1 }, "A5": { "left": "70.6346%", "top": "2.14851%", "width": "20.5%", "height": "42.5%", "rotation": -1 }, "B1": { "left": "-0.897228%", "top": "33.377%", "width": "18.5%", "height": "46%", "rotation": 2 }, "B2": { "left": "18.0069%", "top": "34.0533%", "width": "18.5%", "height": "45%", "rotation": 2 }, "B3": { "left": "37.1719%", "top": "33.6024%", "width": "18%", "height": "45%", "rotation": 0 }, "B4": { "left": "54.0432%", "top": "34.4539%", "width": "20%", "height": "44%", "rotation": -1 }, "B5": { "left": "70.3733%", "top": "33.8278%", "width": "21%", "height": "43%", "rotation": 0 }, "C1": { "left": "-0.596071%", "top": "66.032%", "width": "19%", "height": "45%", "rotation": 2 }, "C2": { "left": "17.7282%", "top": "65.8569%", "width": "17.5%", "height": "46%", "rotation": 1 }, "C3": { "left": "37.4904%", "top": "66.0329%", "width": "18%", "height": "46.5%", "rotation": 2 }, "C4": { "left": "54.0026%", "top": "65.5063%", "width": "20%", "height": "45%", "rotation": 0 }, "C5": { "left": "70.5547%", "top": "64.88%", "width": "20%", "height": "44%", "rotation": -1 } };
+
+    const defaultLayerStates = { "layer-bg": { "rotation": 0, "opacity": 1, "transform": "none", "bgIndex": 0 }, "layer-shelf": { "rotation": 0, "opacity": 1, "transform": "translate(-50%, -50%)" }, "layer-group": { "rotation": 0, "opacity": 1, "transform": "translate(-50%, -50%)" }, "layer-char-left": { "left": "7.82684%", "top": "27.3839%", "width": "13.5%", "rotation": 0, "mirror": -1, "opacity": 1, "charIndex": 0 }, "layer-char-right": { "left": "75.1165%", "top": "28.2002%", "width": "13%", "rotation": 0, "mirror": 1, "opacity": 1, "charIndex": 0 } };
+
+    /* ==================================================================================== */
+
+    let selectedElement = null;
+    const tapes = document.querySelectorAll('.tape-color');
+
+    const layers = [
+      document.getElementById('layer-bg'),
+      document.getElementById('layer-shelf'),
+      document.getElementById('layer-group'),
+      document.getElementById('layer-char-left'),
+      document.getElementById('layer-char-right')
+    ];
+
+    const statusText = document.getElementById('statusText');
+    const editorTools = document.getElementById('editorTools');
+    const layerBtns = document.querySelectorAll('.layer-btn');
+    const colorAction = document.getElementById('colorAction');
+    const layoutBtn = document.getElementById('layoutBtn');
+    const btnVisLeft = document.getElementById('btnVisLeft');
+    const btnVisRight = document.getElementById('btnVisRight');
+
+    let savedLibrary = [];
+
+    // Questa variabile verrà popolata da HARDCODED_CHAR_MEMORY
+    let charStates = { "layer-char-left": {}, "layer-char-right": {} };
+
+    function init() {
+      // 1. Carica la memoria hardcoded
+      charStates = JSON.parse(JSON.stringify(HARDCODED_CHAR_MEMORY));
+
+      // 2. Load Library
+      try {
+        const libData = localStorage.getItem(LIBRARY_KEY);
+        if (libData) {
+          savedLibrary = JSON.parse(libData);
+          if (!Array.isArray(savedLibrary)) savedLibrary = [];
+        }
+      } catch (e) {
+        console.error("Errore caricamento libreria:", e);
+        savedLibrary = [];
+      }
+      renderLibrary();
+
+      // 3. Load Layout Preference & State
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      let stateToApply = null;
+
+      if (savedData) {
+        stateToApply = JSON.parse(savedData);
+        if (stateToApply.layout === 'row') {
+          document.getElementById('mainApp').classList.add('layout-row');
+          layoutBtn.innerHTML = "Layout: ↔ Orizzontale";
+        }
+      } else {
+        applyDefaults();
+      }
+
+      if (stateToApply) applyState(stateToApply);
+
+      // Sync button states
+      updateVisButton('layer-char-left');
+      updateVisButton('layer-char-right');
+
+      tapes.forEach(tape => enableDragAndClick(tape));
+
+      // BG
+      const bg = document.getElementById('layer-bg');
+      if (bg) enableDragAndClick(bg, false, true); // Enable click for BG to change it
+
+      layers.forEach(layer => {
+        if (layer.classList.contains('char-img')) {
+          enableDragAndClick(layer, true);
+        } else if (layer.id !== 'layer-bg') { // BG handled above
+          enableDrag(layer);
+        }
+      });
+    }
+
+    function applyDefaults() {
+      for (const [id, data] of Object.entries(fixedPositions)) {
+        const tape = document.querySelector(`.tape-color[data-id="${id}"]`);
+        if (tape) applyTapeStyle(tape, { ...data, opacity: 1, colorIndex: 0 }); // Default to black tape
+      }
+      for (const [id, data] of Object.entries(defaultLayerStates)) {
+        const el = document.getElementById(id);
+        if (el) applyLayerStyle(el, data);
+      }
+    }
+
+    function applyState(data) {
+      if (data.charStates) {
+        charStates["layer-char-left"] = { ...charStates["layer-char-left"], ...data.charStates["layer-char-left"] };
+        charStates["layer-char-right"] = { ...charStates["layer-char-right"], ...data.charStates["layer-char-right"] };
+      }
+
+      if (data.tapes) {
+        tapes.forEach(tape => {
+          const id = tape.dataset.id;
+          const s = data.tapes[id] || fixedPositions[id];
+          if (s.colorIndex === undefined) s.colorIndex = 0; // Default to black tape
+          applyTapeStyle(tape, s);
+        });
+      } else applyDefaults();
+
+      if (data.layers) {
+        layers.forEach(layer => {
+          const s = data.layers[layer.id];
+          if (s) applyLayerStyle(layer, s);
+        });
+      }
+    }
+
+    function updateElementTransform(el) {
+      let rot = parseFloat(el.dataset.rotation) || 0;
+      if (el.classList.contains('tape-color')) rot -= 90; // Apply -90deg rotation for tapes
+      let mirror = parseFloat(el.dataset.mirror) || 1;
+      let baseTrans = '';
+      if (defaultLayerStates[el.id] && defaultLayerStates[el.id].transform && defaultLayerStates[el.id].transform !== 'none') {
+        baseTrans = defaultLayerStates[el.id].transform;
+      }
+      el.style.transform = `${baseTrans} rotate(${rot}deg) scaleX(${mirror})`;
+    }
+
+    function applyTapeStyle(el, data) {
+      el.style.left = data.left; el.style.top = data.top;
+      el.style.width = data.width;
+      if (data.height !== undefined) el.style.height = data.height;
+      else el.style.removeProperty('height');
+      el.style.opacity = data.opacity !== undefined ? data.opacity : 1;
+      el.dataset.rotation = data.rotation || 0;
+      el.dataset.mirror = data.mirror || 1;
+      updateElementTransform(el);
+      if (data.colorIndex !== undefined) {
+        el.dataset.colorIndex = data.colorIndex;
+        const p = palette[data.colorIndex];
+        // Now p.value is always a string (data URI or filename)
+        if (p) {
+          el.src = p.value;
+          // If implicit opacity is 0 (legacy), we might leave it. 
+          // But if current p is Invisible, the image itself is transparent.
+          // We generally trust data.opacity, but if we want to ensure visibility of the transparent placeholder:
+          // el.style.opacity = data.opacity !== undefined ? data.opacity : 1; 
+          // (Already set above).
+        }
+      }
+    }
+
+    function applyLayerStyle(el, data) {
+      if (data.left) el.style.left = data.left;
+      if (data.top) el.style.top = data.top;
+      if (data.width) el.style.width = data.width;
+      if (data.height) el.style.height = data.height;
+      el.style.opacity = data.opacity !== undefined ? data.opacity : 1;
+      el.dataset.rotation = data.rotation || 0;
+      el.dataset.mirror = data.mirror || 1;
+      updateElementTransform(el);
+
+      if (el.classList.contains('char-img') && data.charIndex !== undefined) {
+        el.dataset.charIndex = data.charIndex;
+        el.src = charImages[data.charIndex];
+      }
+
+      // Handle Background Images
+      if (el.id === 'layer-bg') {
+        if (data.bgIndex !== undefined) {
+          el.dataset.bgIndex = data.bgIndex;
+          el.src = backgrounds[data.bgIndex];
+        } else {
+          if (!el.dataset.bgIndex) {
+            el.dataset.bgIndex = 0;
+            el.src = backgrounds[0];
+          }
+        }
+      }
+    }
+
+    function getCurrentStateObject() {
+      const isRow = document.getElementById('mainApp').classList.contains('layout-row');
+      const data = {
+        tapes: {},
+        layers: {},
+        charStates: charStates,
+        layout: isRow ? 'row' : 'col'
+      };
+      tapes.forEach(tape => data.tapes[tape.dataset.id] = getElementState(tape));
+      layers.forEach(layer => data.layers[layer.id] = getElementState(layer));
+      return data;
+    }
+
+    function saveCurrentState() {
+      if (selectedElement && selectedElement.classList.contains('char-img')) {
+        saveSpecificCharState(selectedElement);
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(getCurrentStateObject()));
+    }
+
+    function manualSaveState() {
+      try {
+        saveCurrentState();
+        alert("Configurazione salvata con successo!");
+      } catch (e) {
+        alert("Errore durante il salvataggio: " + e.message);
+        console.error(e);
+      }
+    }
+
+    function saveSpecificCharState(el) {
+      const idx = el.dataset.charIndex;
+      if (!charStates[el.id]) charStates[el.id] = {};
+      charStates[el.id][idx] = getElementState(el);
+    }
+
+    function getElementState(el) {
+      let h = el.style.height;
+      if (!h || h === 'auto') h = undefined;
+      const state = {
+        left: el.style.left, top: el.style.top, width: el.style.width, height: h,
+        rotation: parseFloat(el.dataset.rotation) || 0,
+        mirror: parseFloat(el.dataset.mirror) || 1,
+        opacity: parseFloat(el.style.opacity) || 1
+      };
+      if (el.classList.contains('tape-color')) state.colorIndex = el.dataset.colorIndex ? parseInt(el.dataset.colorIndex, 10) : undefined;
+      if (el.classList.contains('char-img')) state.charIndex = el.dataset.charIndex ? parseInt(el.dataset.charIndex, 10) : 0;
+      if (el.id === 'layer-bg') state.bgIndex = el.dataset.bgIndex ? parseInt(el.dataset.bgIndex, 10) : undefined;
+      return state;
+    }
+
+    // --- VISIBILITA PERSONAGGI ---
+    window.toggleCharVisibility = function (id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const currentOp = parseFloat(el.style.opacity);
+      const newOp = (isNaN(currentOp) || currentOp > 0) ? 0 : 1;
+      el.style.opacity = newOp;
+      updateVisButton(id);
+      saveCurrentState();
+    }
+
+    function updateVisButton(id) {
+      const el = document.getElementById(id);
+      const btn = id === 'layer-char-left' ? btnVisLeft : btnVisRight;
+      if (!el || !btn) return;
+      const op = parseFloat(el.style.opacity);
+      if (op === 0) {
+        btn.classList.add('hidden-state');
+        btn.innerHTML = (id.includes('left') ? 'SX' : 'DX') + ' OFF';
+      } else {
+        btn.classList.remove('hidden-state');
+        btn.innerHTML = '👁️ ' + (id.includes('left') ? 'SX' : 'DX') + ' ON';
+      }
+    }
+
+    // --- LOGICA CAMBIO PERSONAGGIO (ANTI-FLICKER) ---
+    function changeCharacter(charEl) {
+      saveSpecificCharState(charEl);
+
+      let idx = parseInt(charEl.dataset.charIndex, 10);
+      if (isNaN(idx)) idx = 0;
+      idx = (idx + 1) % charImages.length;
+
+      const nextSrc = charImages[idx];
+
+      const loader = new Image();
+      loader.onload = function () {
+        charEl.src = nextSrc;
+        charEl.dataset.charIndex = idx;
+        if (charStates[charEl.id] && charStates[charEl.id][idx]) {
+          applyLayerStyle(charEl, charStates[charEl.id][idx]);
+        }
+        // Ensure visibility button state is correct if op changed in memory
+        updateVisButton(charEl.id);
+        updateStatus(`Personaggio cambiato`);
+        saveCurrentState();
+      };
+      loader.src = nextSrc;
+    }
+
+    // --- LIBRERIA ---
+    window.saveToLibrary = function () {
+      const name = document.getElementById('configName').value.trim();
+      if (!name) { alert("Nome richiesto."); return; }
+      savedLibrary.push({ name: name, data: getCurrentStateObject(), selected: false });
+      updateLibraryStorage();
+      renderLibrary();
+      // document.getElementById('configName').value = ""; // REMOVED TO KEEP NAME FOR EXPORT
+    }
+
+    window.clearLibrary = function () {
+      if (savedLibrary.length === 0) { alert("Libreria già vuota."); return; }
+      if (confirm("Sei sicuro di voler CANCELLARE TUTTE le configurazioni salvate nella libreria?")) {
+        savedLibrary = [];
+        updateLibraryStorage();
+        renderLibrary();
+      }
+    }
+
+    // --- DESELECT ALL / SELECT ALL ---
+    window.deselectAllLibraryItems = function () {
+      if (savedLibrary.length === 0) return;
+      savedLibrary.forEach(item => item.selected = false);
+      updateLibraryStorage();
+      renderLibrary();
+    }
+
+    window.selectAllLibraryItems = function () {
+      if (savedLibrary.length === 0) return;
+      savedLibrary.forEach(item => item.selected = true);
+      updateLibraryStorage();
+      renderLibrary();
+    }
+
+    window.loadFromLibrary = function (index) {
+      if (confirm("Caricare?")) {
+        applyState(savedLibrary[index].data);
+        // Set name for export
+        document.getElementById('configName').value = savedLibrary[index].name;
+        saveCurrentState();
+        updateVisButton('layer-char-left');
+        updateVisButton('layer-char-right');
+      }
+    }
+    window.deleteFromLibrary = function (index) {
+      if (confirm("Eliminare?")) { savedLibrary.splice(index, 1); updateLibraryStorage(); renderLibrary(); }
+    }
+    window.toggleSelection = function (index) {
+      savedLibrary[index].selected = !savedLibrary[index].selected;
+      updateLibraryStorage();
+      renderLibrary();
+    }
+    function updateLibraryStorage() { localStorage.setItem(LIBRARY_KEY, JSON.stringify(savedLibrary)); }
+    function renderLibrary() {
+      const list = document.getElementById('savedList');
+      list.innerHTML = savedLibrary.length ? "" : "<div style='padding:5px;color:#666;'>Nessun salvataggio</div>";
+      savedLibrary.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'saved-item';
+        const checked = item.selected ? 'checked' : '';
+        div.innerHTML = `<div style="display:flex; align-items:center;"><input type="checkbox" class="item-checkbox" ${checked} onchange="toggleSelection(${idx})"><span class="saved-name" onclick="loadFromLibrary(${idx})">📁 ${item.name}</span></div><button class="btn-del-item" onclick="deleteFromLibrary(${idx})">X</button>`;
+        list.appendChild(div);
+      });
+    }
+
+    // --- STAMPA MULTIPLA ---
+    window.printSelectedSheets = function () {
+      const selected = savedLibrary.filter(i => i.selected);
+      if (selected.length === 0) { alert("Seleziona almeno una carta."); return; }
+
+      const container = document.getElementById('print-grid-area');
+      container.innerHTML = "";
+
+      let currentSheet = null;
+
+      selected.forEach((item, index) => {
+        if (index % 6 === 0) {
+          currentSheet = document.createElement('div');
+          currentSheet.className = 'print-sheet';
+          container.appendChild(currentSheet);
+        }
+
+        const data = item.data;
+        const clone = document.createElement('div');
+        clone.className = 'print-card-clone';
+
+        let tapesHtml = '<div class="shelf-colors">';
+        for (let r of ['A', 'B', 'C']) {
+          for (let c = 1; c <= 5; c++) { tapesHtml += `<img class="tape-color" data-clone-id="${r + c}">`; }
+        }
+        tapesHtml += `</div>`;
+
+        clone.innerHTML = `
+      <div class="print-inner-content">
+        <img src="sfondo120x70.png" class="bg layer-obj" id="c-bg">
+        <img src="shelf120x70.png" class="shelf layer-obj" id="c-shelf">
+        <div class="tape-group layer-obj" id="c-group">${tapesHtml}</div>
+        <img src="" class="char-img layer-obj" id="clone-char-left">
+        <img src="" class="char-img layer-obj" id="clone-char-right">
+      </div>
+      `;
+        currentSheet.appendChild(clone);
+
+        // Helper applicazione stili clone
+        const applyCloneStyle = (el, d) => {
+          if (!d) return;
+          if (d.left) el.style.left = d.left;
+          if (d.top) el.style.top = d.top;
+          if (d.width) el.style.width = d.width;
+          if (d.height) el.style.height = d.height;
+          el.style.opacity = d.opacity;
+          let rot = d.rotation || 0; let mirror = d.mirror || 1;
+          let baseTrans = (el.id.includes('shelf') || el.id.includes('group')) ? 'translate(-50%, -50%)' : '';
+          el.style.transform = `${baseTrans} rotate(${rot}deg) scaleX(${mirror})`;
+          if (el.classList.contains('char-img') && d.charIndex !== undefined) el.src = charImages[d.charIndex];
+          if (el.id.includes('bg') && d.bgIndex !== undefined) el.src = backgrounds[d.bgIndex];
+        };
+
+        if (data.layers['layer-bg']) applyCloneStyle(clone.querySelector('#c-bg'), data.layers['layer-bg']);
+        if (data.layers['layer-shelf']) applyCloneStyle(clone.querySelector('#c-shelf'), data.layers['layer-shelf']);
+        if (data.layers['layer-group']) applyCloneStyle(clone.querySelector('#c-group'), data.layers['layer-group']);
+        applyCloneStyle(clone.querySelector('#clone-char-left'), data.layers['layer-char-left']);
+        applyCloneStyle(clone.querySelector('#clone-char-right'), data.layers['layer-char-right']);
+
+        clone.querySelectorAll('.tape-color').forEach(ct => {
+          const id = ct.getAttribute('data-clone-id');
+          const tData = data.tapes[id];
+          if (tData) {
+            ct.style.left = tData.left; ct.style.top = tData.top; ct.style.width = tData.width;
+            if (tData.height) ct.style.height = tData.height;
+            ct.style.opacity = tData.opacity;
+            let finalRot = (tData.rotation || 0) - 90; // Apply -90deg rotation in print
+            ct.style.transform = `rotate(${finalRot}deg) scaleX(${tData.mirror || 1})`;
+            if (tData.colorIndex !== undefined) ct.src = palette[tData.colorIndex].value;
+          }
+        });
+      });
+
+      document.body.classList.add('printing-grid');
+      setTimeout(() => { window.print(); setTimeout(() => document.body.classList.remove('printing-grid'), 1000); }, 700);
+    }
+
+    window.printSingle = function () { document.body.classList.remove('printing-grid'); window.print(); }
+
+    // --- EXPORT TOOLS ---
+    window.downloadJSON = function () {
+      if (!savedLibrary.length) { alert("Libreria vuota."); return; }
+      const a = document.createElement('a');
+      a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedLibrary));
+      a.download = "vhs_library.json";
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+    window.uploadJSON = function () {
+      const f = document.getElementById('fileInput').files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = (e) => { try { const d = JSON.parse(e.target.result); if (Array.isArray(d)) { savedLibrary = savedLibrary.concat(d); updateLibraryStorage(); renderLibrary(); alert("OK"); } } catch (e) { alert("Err"); } };
+      r.readAsText(f);
+    }
+
+    // --- PNG EXPORT ---
+    window.downloadSinglePNG = function () {
+      const card = document.querySelector('.card');
+      const nameInput = document.getElementById('configName');
+      let fileName = "vhs_card_" + Date.now();
+
+      if (nameInput && nameInput.value.trim() !== "") {
+        // Sanitize filename: allow letters, numbers, spaces, dashes, underscores
+        fileName = nameInput.value.trim().replace(/[^a-z0-9\s\-\_]/gi, '_');
+      }
+
+      deselectAll(); // Clean selection before capture
+
+      html2canvas(card, {
+        useCORS: true,
+        scale: 2 // Better quality
+      }).then(canvas => {
+        canvas.toBlob(blob => {
+          saveAs(blob, fileName + ".png");
+        });
+      });
+    }
+
+    window.exportSelectedPNGs = async function () {
+      const selectedLibItems = savedLibrary.filter(i => i.selected);
+      if (selectedLibItems.length === 0) {
+        alert("Nessuna carta selezionata per l'export.");
+        return;
+      }
+
+      if (selectedLibItems.length === 1) {
+        // If only 1, simple export
+        // But we need to render it first.
+        // Strategy: Load it efficiently or render in background?
+        // Simplest: Render in a hidden DOM element.
+      }
+
+      const zip = new JSZip();
+      const folder = zip.folder("vhs_cards_png");
+
+      // Container for rendering hidden cards
+      const renderArea = document.createElement('div');
+      renderArea.style.position = 'fixed';
+      renderArea.style.top = '-9999px';
+      renderArea.style.left = '-9999px';
+      renderArea.style.width = '88mm'; // Standard size
+      renderArea.style.height = '63mm'; // Correct height for 88x63
+      document.body.appendChild(renderArea);
+
+      updateStatus("Rendering PNGs...");
+
+      for (let i = 0; i < selectedLibItems.length; i++) {
+        const item = selectedLibItems[i];
+
+        // Build card DOM structure (simplified clone logic)
+        renderArea.innerHTML = '';
+        const clone = document.createElement('div');
+        clone.className = 'card';
+        clone.style.width = '1000px'; // Higher res base
+        clone.style.height = '716px'; // Ratio 88/63 = 1.3966... 1000 / 1.3966 = ~716
+        clone.style.position = 'relative';
+        clone.style.overflow = 'hidden';
+
+        // Re-create internal structure similar to print
+        let tapesHtml = '<div class="shelf-colors" style="position:absolute;z-index:3;top:0;left:0;width:100%;height:100%;">';
+        for (let r of ['A', 'B', 'C']) {
+          for (let c = 1; c <= 5; c++) { tapesHtml += `<img class="tape-color" data-clone-id="${r + c}" style="position:absolute; border-radius:1px;">`; }
+        }
+        tapesHtml += `</div>`;
+
+        clone.innerHTML = `
+            <img src="sfondo120x70.png" class="bg" style="position:absolute;z-index:1;width:100%;height:100%;top:0;left:0;object-fit:cover;">
+            <img src="shelf120x70.png" class="shelf" style="position:absolute;z-index:2;width:70%;height:auto;top:60%;left:50%;transform:translate(-50%,-50%);">
+            <div class="tape-group" style="position:absolute;z-index:4;width:68%;aspect-ratio:405/215;top:62%;left:57%;transform:translate(-50%,-50%);">${tapesHtml}</div>
+            <img src="" class="char-img" id="exp-char-left" style="position:absolute;z-index:6;width:25%;height:auto;">
+            <img src="" class="char-img" id="exp-char-right" style="position:absolute;z-index:6;width:25%;height:auto;">
+        `;
+        renderArea.appendChild(clone);
+
+        // Apply styles
+        const data = item.data;
+        const helperStyle = (sel, d) => {
+          const el = clone.querySelector(sel);
+          if (!el || !d) return;
+          if (d.left) el.style.left = d.left;
+          if (d.top) el.style.top = d.top;
+          if (d.width) el.style.width = d.width;
+          if (d.height) el.style.height = d.height;
+          el.style.opacity = d.opacity;
+          let baseTrans = (sel.includes('shelf') || sel.includes('group')) ? 'translate(-50%, -50%)' : '';
+          el.style.transform = `${baseTrans} rotate(${d.rotation || 0}deg) scaleX(${d.mirror || 1})`;
+          if (sel.includes('char') && d.charIndex !== undefined) el.src = charImages[d.charIndex];
+          if (sel.includes('bg') && d.bgIndex !== undefined) el.src = backgrounds[d.bgIndex];
+        };
+
+        if (data.layers['layer-bg']) helperStyle('.bg', data.layers['layer-bg']);
+        if (data.layers['layer-shelf']) helperStyle('.shelf', data.layers['layer-shelf']);
+        if (data.layers['layer-group']) helperStyle('.tape-group', data.layers['layer-group']);
+
+        // Tapes
+        clone.querySelectorAll('.tape-color').forEach(ct => {
+          const id = ct.getAttribute('data-clone-id');
+          const tData = data.tapes[id];
+          if (tData) {
+            ct.style.left = tData.left; ct.style.top = tData.top; ct.style.width = tData.width;
+            if (tData.height) ct.style.height = tData.height;
+            ct.style.opacity = tData.opacity;
+            let finalRot = (tData.rotation || 0) - 90; // Apply -90deg rotation in export
+            ct.style.transform = `rotate(${finalRot}deg) scaleX(${tData.mirror || 1})`;
+            if (tData.colorIndex !== undefined) ct.src = palette[tData.colorIndex].value;
+          }
+        });
+
+        // Chars
+        helperStyle('#exp-char-left', data.layers['layer-char-left']);
+        helperStyle('#exp-char-right', data.layers['layer-char-right']);
+
+        // Wait a tick for images to init
+        await new Promise(r => setTimeout(r, 100));
+
+        // Capture
+        const canvas = await html2canvas(clone, { useCORS: true, scale: 1 });
+        const blob = await new Promise(r => canvas.toBlob(r));
+        // More permissible sanitization for zip files
+        const cleanName = item.name.trim().replace(/[^a-z0-9\s\-\_]/gi, '_');
+        // Check for duplicates in folder if needed, but for now simple index suffix if multiple
+        folder.file(`${cleanName}.png`, blob);
+      }
+
+      document.body.removeChild(renderArea);
+
+      // Generate Zip
+      updateStatus("Generazione ZIP...");
+      zip.generateAsync({ type: "blob" }).then(function (content) {
+        saveAs(content, "vhs_cards_export.zip");
+        updateStatus("Export completato!");
+      });
+    }
+
+    // --- NUOVA FUNZIONE UNICA DI EXPORT ---
+    window.exportFullCode = function () {
+      // 1. Fixed Positions (Tapes)
+      let newFixed = {};
+      document.querySelectorAll('.tape-color').forEach(el => {
+        let id = el.dataset.id;
+        newFixed[id] = {
+          left: el.style.left, top: el.style.top, width: el.style.width, height: el.style.height,
+          rotation: parseFloat(el.dataset.rotation) || 0
+        };
+      });
+
+      // 2. Layers Defaults
+      let newDefaults = {};
+      const layerIds = ['layer-bg', 'layer-shelf', 'layer-group', 'layer-char-left', 'layer-char-right'];
+      layerIds.forEach(id => {
+        let el = document.getElementById(id);
+        if (el) {
+          let st = getElementState(el);
+          let baseTrans = (id.includes('shelf') || id.includes('group')) ? 'translate(-50%, -50%)' : 'none';
+          let obj = { rotation: st.rotation, opacity: st.opacity, transform: baseTrans };
+          if (el.style.top) obj.top = el.style.top;
+          if (el.style.left) obj.left = el.style.left;
+          if (el.style.width) obj.width = el.style.width;
+          if (el.style.height) obj.height = el.style.height;
+          if (st.mirror !== 1) obj.mirror = st.mirror;
+          if (st.charIndex !== undefined) obj.charIndex = st.charIndex;
+          if (id === 'layer-bg' && st.bgIndex !== undefined) obj.bgIndex = st.bgIndex;
+          newDefaults[id] = obj;
+        }
+      });
+
+      // 3. Char Memory
+      // Usiamo la variabile globale charStates che contiene la memoria aggiornata
+      const memoryString = JSON.stringify(charStates);
+
+      const output = `
+const HARDCODED_CHAR_MEMORY = ${memoryString};
+
+const fixedPositions = ${JSON.stringify(newFixed)};
+
+const defaultLayerStates = ${JSON.stringify(newDefaults)};
+`;
+
+      document.getElementById('devModalTitle').textContent = "Copia questo blocco intero e sostituiscilo all'inizio dello script";
+      document.getElementById('devOutput').value = output;
+      document.getElementById('devModal').classList.add('active');
+    }
+
+    // --- LAYOUT TOGGLE ---
+    window.toggleLayout = function () {
+      const app = document.getElementById('mainApp');
+      const btn = document.getElementById('layoutBtn');
+      app.classList.toggle('layout-row');
+
+      const isRow = app.classList.contains('layout-row');
+      btn.innerHTML = isRow ? "Layout: ↔ Orizzontale" : "Layout: ↕ Verticale";
+
+      saveCurrentState();
+    }
+
+    // --- UI ---
+    function selectTape(tape) {
+      deselectAll();
+      selectedElement = tape;
+      selectedElement.classList.add('selected');
+      editorTools.classList.add('active');
+
+      const applyColor = (idx) => {
+        tape.dataset.colorIndex = idx;
+        tape.src = palette[idx].value;
+        updateStatus(`Colore: ${palette[idx].name}`);
+        saveCurrentState();
+        selectTape(tape);
+      };
+
+      // Update Color Palette UI
+      colorAction.innerHTML = "";
+      colorAction.style.display = 'flex';
+      colorAction.style.gap = '5px';
+      colorAction.style.padding = '5px';
+
+      palette.forEach((p, idx) => {
+        const btn = document.createElement('button');
+        btn.onclick = () => { applyColor(idx); };
+        btn.title = p.name;
+        // Button style
+        btn.style.width = '28px';
+        btn.style.height = '28px';
+        btn.style.borderRadius = '50%';
+        btn.style.border = (tape.dataset.colorIndex == idx) ? '2px solid #fff' : '1px solid #555';
+        btn.style.cursor = 'pointer';
+        // Use background image for button preview
+        btn.style.background = `url(${p.value}) no-repeat center center`;
+        btn.style.backgroundSize = 'contain';
+        btn.style.backgroundColor = '#ccc'; // Fallback
+
+        colorAction.appendChild(btn);
+      });
+
+      // --- VISIBILITY TOGGLE BUTTON ---
+      const visBtn = document.createElement('button');
+      visBtn.title = "Visibilità On/Off";
+      visBtn.style.width = '28px';
+      visBtn.style.height = '28px';
+      visBtn.style.borderRadius = '6px'; // Square-ish
+      visBtn.style.border = '1px solid #555';
+      visBtn.style.cursor = 'pointer';
+      visBtn.style.display = 'flex';
+      visBtn.style.alignItems = 'center';
+      visBtn.style.justifyContent = 'center';
+      visBtn.style.background = '#eee';
+      visBtn.style.fontSize = '1.2rem';
+
+      const updateVisIcon = () => {
+        const op = parseFloat(tape.style.opacity);
+        visBtn.innerHTML = (isNaN(op) || op > 0) ? '👁️' : '🚫';
+        visBtn.style.opacity = (isNaN(op) || op > 0) ? 1 : 0.5;
+      };
+      updateVisIcon();
+
+      visBtn.onclick = () => {
+        const currentOp = parseFloat(tape.style.opacity);
+        // Toggle: if visible (>0) -> 0; else -> 1
+        const newOp = (isNaN(currentOp) || currentOp > 0) ? 0 : 1;
+        tape.style.opacity = newOp;
+        updateVisIcon();
+        saveCurrentState();
+      };
+      colorAction.appendChild(visBtn);
+
+      updateStatus(`Cassetta ${tape.dataset.id}`);
+    }
+    window.selectLayer = function (layerId) {
+      deselectAll(); selectedElement = document.getElementById(layerId);
+      if (selectedElement) {
+        selectedElement.classList.add('selected'); editorTools.classList.add('active');
+        layerBtns.forEach(btn => btn.classList.toggle('active', btn.getAttribute('onclick').includes(layerId)));
+
+        // Show color action for BG too if we want manual button
+        if (layerId === 'layer-bg') {
+          colorAction.style.display = 'flex';
+          colorAction.innerHTML = `<button onclick="cycleColorSelected()" style="padding:5px;">Cambia Sfondo</button>`;
+        } else {
+          colorAction.style.display = 'none';
+        }
+
+        updateStatus(layerId);
+      }
+    }
+    function deselectAll() { if (selectedElement) selectedElement.classList.remove('selected'); selectedElement = null; editorTools.classList.remove('active'); layerBtns.forEach(btn => btn.classList.remove('active')); colorAction.style.display = 'none'; updateStatus("Seleziona elemento"); }
+    function updateStatus(msg) { statusText.textContent = msg; }
+    document.body.addEventListener('mousedown', (e) => { if (!e.target.closest('.tape-color') && !e.target.closest('.controls') && !e.target.closest('.layer-selectable') && !e.target.closest('.saved-list') && !e.target.closest('.dev-modal')) deselectAll(); });
+    function enableDragAndClick(tape, isChar = false, isBg = false) {
+      setupDrag(tape, (moved) => {
+        if (!moved) {
+          if (isChar) changeCharacter(tape);
+          else if (isBg) changeBackground(tape);
+          else changeColor(tape);
+        }
+      });
+    }
+    function enableDrag(layer) { setupDrag(layer, null); }
+    function setupDrag(el, onUpCallback) {
+      let isDragging = false, startX, startY, initL, initT, pW, pH, hasMoved = false;
+      el.addEventListener('mousedown', (e) => {
+        if (el.classList.contains('layer-selectable') && !el.classList.contains('tape-color') && !el.classList.contains('char-img')) { if (selectedElement !== el) return; }
+        e.preventDefault(); e.stopPropagation(); isDragging = true; hasMoved = false;
+        if (el.classList.contains('tape-color')) selectTape(el); else if (el.classList.contains('char-img')) selectLayer(el.id);
+        startX = e.clientX; startY = e.clientY; initL = parseFloat(el.style.left) || 0; initT = parseFloat(el.style.top) || 0;
+        const rect = el.parentElement.getBoundingClientRect(); pW = rect.width; pH = rect.height;
+        document.addEventListener('mousemove', onMove); document.addEventListener('mouseup', onUp);
+      });
+      function onMove(e) { if (!isDragging) return; if (Math.abs(e.clientX - startX) > 3 || Math.abs(e.clientY - startY) > 3) hasMoved = true; el.style.left = (initL + ((e.clientX - startX) / pW) * 100) + '%'; el.style.top = (initT + ((e.clientY - startY) / pH) * 100) + '%'; }
+      function onUp() { if (!isDragging) return; isDragging = false; document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); if (hasMoved) saveCurrentState(); else if (onUpCallback) onUpCallback(hasMoved); }
+    }
+    function changeColor(tape) {
+      let idx = parseInt(tape.dataset.colorIndex, 10);
+      if (isNaN(idx)) idx = 0;
+      idx = (idx + 1) % palette.length;
+      tape.dataset.colorIndex = idx;
+
+      const p = palette[idx];
+      // ALWAYS restore visibility when changing color. 
+      // User picked a color, so they want to see it.
+      tape.style.opacity = 1;
+      tape.src = p.value;
+
+      // Update UI if this tape is currently selected
+      if (selectedElement === tape) {
+        selectTape(tape); // Re-render controls to update Vis button state if needed
+      }
+
+      updateStatus(`Colore: ${p.name}`);
+      saveCurrentState();
+    }
+    function changeBackground(bgLayer) {
+      let idx = parseInt(bgLayer.dataset.bgIndex, 10);
+      if (isNaN(idx)) idx = 0;
+      idx = (idx + 1) % backgrounds.length;
+      bgLayer.dataset.bgIndex = idx;
+      bgLayer.src = backgrounds[idx];
+      updateStatus(`Sfondo: ${backgrounds[idx]}`);
+      saveCurrentState();
+    }
+
+    // Existing functions...
+    window.cycleColorSelected = function () {
+      if (selectedElement) {
+        if (selectedElement.classList.contains('tape-color')) changeColor(selectedElement);
+        else if (selectedElement.id === 'layer-bg') changeBackground(selectedElement);
+      }
+    }
+
+    window.toggleMirror = function () { if (!selectedElement) return; let m = parseFloat(selectedElement.dataset.mirror) || 1; selectedElement.dataset.mirror = m * -1; updateElementTransform(selectedElement); saveCurrentState(); updateStatus(m * -1 === -1 ? "Specchiato" : "Normale"); }
+    window.adjust = function (type, amount) {
+      if (!selectedElement) return; let el = selectedElement;
+      switch (type) {
+        case 'x': el.style.left = (parseFloat(el.style.left) || 0) + amount + '%'; break;
+        case 'y': el.style.top = (parseFloat(el.style.top) || 0) + amount + '%'; break;
+        case 'w': el.style.width = (parseFloat(el.style.width) || (el.offsetWidth / el.parentElement.offsetWidth * 100)) + amount + '%'; break;
+        case 'h': let currentH = parseFloat(el.style.height); if (isNaN(currentH)) currentH = (el.offsetHeight / el.parentElement.offsetHeight) * 100; el.style.height = (currentH + amount) + '%'; break;
+        case 's': let cW = parseFloat(el.style.width) || (el.offsetWidth / el.parentElement.offsetWidth * 100); el.style.width = (cW + amount) + '%'; if (el.classList.contains('char-img') || el.tagName === 'IMG') { el.style.height = 'auto'; } else { let cH = parseFloat(el.style.height) || (el.offsetHeight / el.parentElement.offsetHeight * 100); el.style.height = (cH + amount) + '%'; } break;
+        case 'r': let newRot = (parseFloat(el.dataset.rotation) || 0) + amount; el.dataset.rotation = newRot; updateElementTransform(el); break;
+        case 'o': let newOp = (parseFloat(el.style.opacity) || 1) + amount; newOp = Math.min(Math.max(newOp, 0), 1); el.style.opacity = newOp; break;
+      }
+      saveCurrentState();
+    }
+    document.getElementById('resetBtn').addEventListener('click', () => { if (confirm("Vuoi resettare tutto?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } });
+    init();
+    // --- SOUNDCLOUD AUDIO ENGINE ---
+    let scWidget = null;
+    let isPlaying = false;
+
+    let currentPos = 0;
+
+    function initAudio() {
+      const script = document.createElement('script');
+      script.src = "https://w.soundcloud.com/player/api.js";
+      script.onload = () => {
+        const iframe = document.getElementById('sc-widget');
+        scWidget = SC.Widget(iframe);
+        scWidget.bind(SC.Widget.Events.READY, () => {
+          console.log('Audio Ready');
+
+          // --- RESTORE STATE ---
+          const storedPos = sessionStorage.getItem('audio_pos');
+          const storedPlaying = sessionStorage.getItem('audio_playing');
+
+          if (storedPos) {
+            currentPos = parseFloat(storedPos);
+            scWidget.seekTo(currentPos);
+          }
+
+          // Attempt to auto-resume
+          if (storedPlaying === 'true') {
+            // Small delay to ensure seek completes and browser is ready
+            setTimeout(() => {
+              scWidget.play();
+              isPlaying = true;
+              const btn = document.getElementById('btn-music');
+              if (btn) {
+                btn.innerText = "🎵 AUDIO: ON";
+                btn.style.background = "#28a745";
+              }
+            }, 100);
+          }
+        });
+
+        // Track progress
+        scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
+          currentPos = data.currentPosition;
+        });
+      };
+      document.head.appendChild(script);
+
+      // --- SAVE STATE ON UNLOAD ---
+      window.addEventListener('beforeunload', () => {
+        sessionStorage.setItem('audio_pos', currentPos);
+        sessionStorage.setItem('audio_playing', isPlaying);
+      });
+    }
+
+    function toggleMusic() {
+      const btn = document.getElementById('btn-music');
+      if (!scWidget) return;
+
+      scWidget.isPaused((paused) => {
+        if (paused) {
+          scWidget.play();
+          isPlaying = true;
+          btn.innerText = "🎵 AUDIO: ON";
+          btn.style.background = "#28a745"; // Green
+        } else {
+          scWidget.pause();
+          isPlaying = false;
+          btn.innerText = "🎵 AUDIO: OFF";
+          btn.style.background = "#334155"; // Slate
+        }
+      });
+    }
+
+    // Initialize Audio on Load
+    window.onload = () => {
+      initAudio();
+    };
+  </script>
+</body>
+
+</html>
