@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VideoClub: Blockbuster Edition V2</title>
+
+    <meta property="og:title" content="The Last VideoClub - Boardgame" />
+    <meta property="og:description"
+        content="Collaboriamo per non fallire...ma solo il migliore diventerà Store Manager! Un gioco di Massimiliano Sabato." />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bangers&family=Courier+New&family=Anton&family=Permanent+Marker&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <style>
+        :root {
+            /* 1990s Blockbuster Brand Colors */
+            --bb-blue: #091F92;
+            /* The Deep Royal Blue */
+            --bb-yellow: #FFC220;
+            /* The Iconic Ticket Yellow */
+            --bb-link: #FFCC00;
+            --vhs-black: #000000;
+            --neon-pink: #FF0099;
+            /* Kept for game highlights */
+            --text-white: #FFFFFF;
+            --site-bg: #003399;
+        }
+
+        body {
+            font-family: 'Verdana', 'Arial', sans-serif !important;
+            /* The 90s Web Font */
+            background-color: var(--site-bg);
+            /* Subtle 90s Memphis Pattern Overlay */
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02)),
+                linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02));
+            background-size: 20px 20px, 20px 20px, 40px 40px, 40px 40px;
+            background-position: 0 0, 10px 10px, 0 0, 20px 20px;
+            /* Subtle tiny grid pattern */
+            color: #333;
+            margin: 0;
+            line-height: normal;
+        }
+
+        /* 90s Web Sidebar Style for Left Column */
+        .vhs-cassette-ui {
+            background: #00458b;
+            /* Lighter blue for sidebar */
+            border: 2px solid #ffcc00;
+            border-radius: 0;
+            padding: 10px;
+            color: #fff;
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Sidebar Specific */
+        #left-column .vhs-cassette-ui {
+            background-color: var(--bb-blue);
+            background-image: linear-gradient(90deg, #091F92 0%, #003399 100%);
+            border: none;
+            border-right: 4px solid var(--bb-yellow);
+        }
+
+        /* Content Area */
+        #right-column .vhs-cassette-ui {
+            background: #FFFFFF !important;
+            /* White Paper Look */
+            border: 2px solid #000;
+            color: #000 !important;
+            min-height: 650px;
+            position: relative;
+        }
+
+        /* Tab Content Containers */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Typography Overrides for Content */
+        h2.bb-heading {
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            color: var(--bb-blue);
+            font-size: 2rem;
+            border-bottom: 4px solid var(--bb-yellow);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        h3.bb-subheading {
+            font-family: 'Arial Black', sans-serif;
+            color: var(--bb-blue);
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p.bb-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        ul.bb-list {
+            list-style-type: square;
+            padding-left: 1.5rem;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        ul.bb-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: #000;
+            font-weight: 900;
+        }
+
+        /* LOGO TICKET STYLE */
+        .bb-ticket {
+            position: relative;
+            background: var(--bb-blue);
+            color: var(--bb-yellow);
+            padding: 1rem 2rem;
+            transform: rotate(-2deg);
+            clip-path: polygon(10px 0, 100% 0, 100% 100%, 0% 100%, 0% 65%, 10px 60%, 0% 55%);
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .bb-title-text {
+            font-family: 'Anton', sans-serif;
+            font-size: 8rem;
+            /* Much larger */
+            line-height: 1;
+            text-transform: uppercase;
+            text-shadow: 6px 6px 0 #000;
+        }
+
+        @media (max-width: 768px) {
+            .bb-title-text {
+                font-size: 4rem;
+                /* Responsive */
+            }
+        }
+
+        .bb-subtitle {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        /* BUTTONS RETRO STYLE */
+        .nav-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: #003399;
+            color: white;
+            border: 2px outset #5577cc;
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .nav-btn:hover {
+            background: #0044cc;
+            color: var(--bb-yellow);
+        }
+
+        .nav-btn.active {
+            background: var(--bb-yellow);
+            color: var(--bb-blue);
+            border-style: inset;
+            border-color: #cc9900;
+        }
+
+        .action-link {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            text-decoration: none;
+            border: 2px solid #000;
+            box-shadow: 3px 3px 0 #000;
+            transition: transform 0.1s;
+        }
+
+        .action-link:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 #000;
+        }
+
+        /* ANIMATED BG TAPES - VIBRANT STYLE */
+        .bg-tape {
+            position: absolute;
+            width: 300px;
+            /* Larger */
+            height: 180px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.8;
+            /* More visible */
+            pointer-events: none;
+            z-index: 0;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+            /* Glow */
+            animation: float-tape 25s linear infinite;
+        }
+
+        @keyframes float-tape {
+            0% {
+                transform: translateY(110vh) rotate(0deg) scale(0.8);
+            }
+
+            100% {
+                transform: translateY(-20vh) rotate(360deg) scale(1.0);
+            }
+        }
+
+        /* SIMULATOR STYLES OVERRIDES (EXACT COPY) */
+        .vhs-tape {
+            width: 42px;
+            height: 62px;
+            background: #222;
+            border: 1px solid #555;
+            border-radius: 2px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-size: 0.7rem;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .vhs-tape::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 3px;
+            right: 3px;
+            height: 34px;
+            background: white;
+            z-index: 0;
+        }
+
+        .vhs-tape span {
+            position: relative;
+            z-index: 10;
+            font-family: 'Arial Narrow', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        .vhs-tape.selected {
+            transform: translateY(-10px) scale(1.1);
+            border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-pink);
+            z-index: 50;
+        }
+
+        .tape-red {
+            background: #b71c1c;
+        }
+
+        .tape-red::before {
+            background: #ffcdd2;
+        }
+
+        .tape-blue {
+            background: #0d47a1;
+        }
+
+        .tape-blue::before {
+            background: #bbdefb;
+        }
+
+        .tape-yellow {
+            background: #fbc02d;
+        }
+
+        .tape-yellow::before {
+            background: #fff9c4;
+        }
+
+        .tape-black {
+            background: #212121;
+        }
+
+        .tape-black::before {
+            background: #e0e0e0;
+        }
+
+        .tape-green {
+            background: #1b5e20;
+        }
+
+        .tape-green::before {
+            background: #c8e6c9;
+        }
+
+        .tape-pink {
+            background: #d81b60;
+        }
+
+        .tape-pink::before {
+            background: #f48fb1;
+        }
+
+        .snack-item {
+            width: 32px;
+            height: 32px;
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 10;
+            box-shadow: 1px 1px 3px black;
+        }
+
+        .meeple {
+            transition: all 0.3s;
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+        }
+
+        .slot {
+            transition: background-color 0.2s;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 md:p-8">
+
+    <!-- SPLASH SCREEN (Tap to Start) -->
+    <div id="splash-screen" onclick="dismissSplash()"
+        class="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-1000">
+        <!-- Black Background -->
+        <div class="absolute inset-0 bg-black z-0"></div>
+
+        <!-- Animated Tapes Container -->
+        <div id="splash-bg" class="absolute inset-0 z-10 overflow-hidden pointer-events-none"></div>
+
+        <!-- Content -->
+        <div class="relative z-20 flex flex-col items-center">
+            <div class="bb-ticket">
+                <div class="bb-title-text text-yellow-400">VideoClub</div>
+            </div>
+            <div class="bb-subtitle mt-4">Un gioco di Massimiliano Sabato</div>
+            <div
+                class="mt-12 text-2xl font-bold text-white blink animate-pulse bg-blue-900 border-4 border-yellow-400 px-8 py-4 rounded shadow-[4px_4px_0_#000] transform rotate-1 hover:scale-105 transition-transform">
+                PRESS START TO PLAY
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
+
+        <!-- HEADER -->
+        <div class="lg:col-span-12 text-center mb-8 relative">
+            <div class="inline-block relative">
+                <div class="bb-ticket transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
+                    <span class="bb-title-text text-yellow-400">VideoClub</span>
+                </div>
+                <div
+                    class="absolute -bottom-6 -right-12 bg-white text-black px-4 py-1 font-bold transform rotate-3 border-2 border-black shadow-lg uppercase text-sm">
+                    Save the Store!
+                </div>
+            </div>
+        </div>
+
+        <!-- LEFT COLUMN: NAVIGATION (SIDEBAR) -->
+        <div id="left-column" class="lg:col-span-4">
+            <div class="vhs-cassette-ui h-full flex flex-col">
+                <div class="bg-black text-white p-2 text-center font-mono text-xs mb-4 border border-gray-600">
+                    MENU SELEZIONE
+                </div>
+
+                <!-- TABS -->
+                <button onclick="switchTab('intro')" id="btn-intro" class="nav-btn active">📼 INTRODUZIONE</button>
+                <button onclick="switchTab('rules')" id="btn-rules" class="nav-btn">📋 REGOLE & TURNO</button>
+                <button onclick="switchTab('sim')" id="btn-sim" class="nav-btn">🕹️ SIMULATORE</button>
+
+                <div class="my-6 border-b-2 border-dashed border-bb-yellow opacity-50"></div>
+
+                <!-- LINKS -->
+                <a href="RegolamentoVideoClub_v2_1.pdf" target="_blank"
+                    class="action-link bg-red-600 text-white hover:bg-red-500">
+                    📄 SCARICA REGOLE (PDF)
+                </a>
+
+                <a href="rules.html" class="action-link bg-orange-600 text-white hover:bg-orange-500">
+                    🌐 REGOLAMENTO INTERATTIVO
+                </a>
+
+                <a href="88x63_cardseditor.html" class="action-link bg-purple-700 text-white hover:bg-purple-600">
+                    🎨 EDITOR CARTE (PERSONALI)
+                </a>
+
+                <a href="63x63_questeditor_v2.html" class="action-link bg-cyan-700 text-white hover:bg-cyan-600">
+                    📼 EDITOR QUEST (COMUNI)
+                </a>
+
+                <div class="mt-auto pt-8 text-center text-xs text-blue-200 font-mono">
+                    <button onclick="document.getElementById('contacts-footer').scrollIntoView({behavior: 'smooth'})"
+                        class="underline hover:text-white">
+                        CONTATTI & CREDITS
+                    </button>
+                    <br><br>
+                    v3.0 - Blockbuster Edition
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: CONTENT (SCREEN) -->
+        <div id="right-column" class="lg:col-span-8">
+            <div class="vhs-cassette-ui">
+
+                <!-- CONTENT: INTRO -->
+                <div id="tab-intro" class="tab-content active p-4 md:p-8">
+                    <h2 class="bb-heading">Benvenuti al VideoClub!</h2>
+                    <p class="bb-text italic text-gray-500 mb-6">"Dove il cinema è ancora una cassetta da riavvolgere."
+                    </p>
+
+                    <p class="bb-text">
+                        Siete i commessi dell’ultimo negozio della catena <strong>VideoClub</strong>.
+                        I tempi sono duri, la concorrenza digitale incombe, e il fallimento è dietro l'angolo.
+                        Il vecchio Store Manager sta per andare in pensione e cerca un sostituto...
+                    </p>
+
+                    <div class="bg-yellow-100 border-l-8 border-yellow-500 p-4 my-6 shadow-sm">
+                        <h3 class="font-bold text-yellow-800 text-xl font-sans uppercase mb-2">Semi-Cooperativo?</h3>
+                        <p class="bb-text mb-0">
+                            Esatto! Se il negozio fallisce (troppi clienti insoddisfatti), <strong>tutti perdono il
+                                lavoro</strong>.
+                            Ma se si salva... solo chi ha lavorato meglio otterrà la promozione a
+                            <strong>Manager</strong>!
+                        </p>
+                    </div>
+
+                    <h3 class="bb-subheading">LA VOSTRA MISSIONE:</h3>
+                    <ul class="bb-list">
+                        <li><strong>Collaborare:</strong> Riempite gli scaffali condivisi con i vostri vicini per
+                            completare le richieste dello Store Manager (Quest).</li>
+                        <li><strong>Competere:</strong> Organizzate il vostro scaffale personale per soddisfare al
+                            meglio i Clienti.</li>
+                        <li><strong>Attenti al Tempo:</strong> Ogni pila sul tavolo è un'ora del turno. Quando
+                            finiscono, si chiude!</li>
+                    </ul>
+                </div>
+
+                <!-- CONTENT: RULES -->
+                <div id="tab-rules" class="tab-content p-4 md:p-8">
+                    <h2 class="bb-heading">Come si Gioca</h2>
+
+                    <div class="bg-blue-100 p-4 border-2 border-blue-800 mb-8 transform -rotate-1 shadow-md">
+                        <h3 class="text-xl font-black text-blue-900 uppercase mb-2">🏆 Scopo del Gioco</h3>
+                        <p class="bb-text mb-0">
+                            Il Videoclub si salva se completate <strong>5 Obiettivi Comuni</strong>.
+                            <br>Se ne fallite <strong>3</strong>, Game Over per tutti.
+                            <br><small class="text-blue-700 block mt-2">(Se il negozio sopravvive, chi ha più punti
+                                vince!)</small>
+                        </p>
+                    </div>
+
+                    <h3 class="bb-subheading">⏱️ IL TUO TURNO (4 Fasi):</h3>
+                    <ol class="list-decimal pl-6 space-y-4 text-lg font-sans text-gray-800">
+                        <li>
+                            <strong class="text-purple-800 uppercase">MUOVI MANAGER:</strong><br>
+                            Sposta il Manager di <strong>1 o 2 spazi</strong> in senso orario attorno al tavolo.
+                        </li>
+                        <li>
+                            <strong class="text-purple-800 uppercase">PRENDI PILA:</strong><br>
+                            Prendi <strong>TUTTE</strong> le cassette dalla pila dove atterra il Manager.
+                        </li>
+                        <li>
+                            <strong class="text-purple-800 uppercase">PIAZZA:</strong><br>
+                            Distribuisci le cassette prese:
+                            <ul class="list-disc pl-6 text-base mt-2 text-gray-700">
+                                <li><strong>2 Cassette</strong> sul TUO Scaffale Personale.</li>
+                                <li><strong>1 Cassetta</strong> a SINISTRA (scaffale condiviso).</li>
+                                <li><strong>1 Cassetta</strong> a DESTRA (scaffale condiviso).</li>
+                                <li class="text-red-600 font-bold italic">Il resto va nei RESI (Scarti).</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong class="text-purple-800 uppercase">PASSA:</strong><br>
+                            Tocca al giocatore alla tua sinistra.
+                        </li>
+                    </ol>
+
+                    <div class="mt-8 p-4 bg-gray-100 border-2 border-gray-400 text-center text-sm font-mono">
+                        Per i dettagli completi su Clienti, Setup ed Eventi, scarica il PDF completo dal menu.
+                    </div>
+                </div>
+
+                <!-- CONTENT: SIMULATOR -->
+                <div id="tab-sim" class="tab-content">
+                    <div class="shadow-2xl">
+                        <div
+                            class="bg-[#444] border-l-4 border-yellow-400 p-4 mb-4 flex justify-between items-center shadow-md">
+                            <div id="controls" class="flex gap-2"></div>
+                            <div
+                                class="bg-black text-white px-3 py-1 text-xs font-mono border border-gray-600 shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                                <span class="text-white">STATE</span>: <span id="sts"
+                                    class="animate-pulse text-white">READY</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="vhs-cassette-ui bg-[#333] relative min-h-[650px] flex flex-col items-center justify-center overflow-hidden">
+                            <div class="absolute inset-0 opacity-20 bg-[url('bg-1.png')] bg-cover pointer-events-none">
+                            </div>
+
+                            <!-- DESK & PILES CONTAINER -->
+                            <div
+                                class="relative z-10 mb-12 flex flex-col md:flex-row items-center justify-center gap-6">
+                                <!-- GOAL LEFT: COMMON -->
+                                <div id="common-goal-container"></div>
+
+                                <!-- DESK -->
+                                <div class="relative w-80 h-80 flex-shrink-0">
+                                    <div
+                                        class="absolute inset-0 rounded-full border-[20px] border-[#555] bg-[#333] flex items-center justify-center shadow-2xl">
+                                        <span
+                                            class="text-5xl font-bangers opacity-10 text-white select-none">DESK</span>
+                                    </div>
+                                    <div id="piles-root" class="absolute inset-0 pointer-events-none"></div>
+
+                                    <!-- MEEPLE -->
+                                    <div id="meeple"
+                                        class="absolute z-[50] transition-all duration-500 w-12 h-12 flex items-center justify-center filter drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]"
+                                        style="top: 50%; left: 50%;">
+                                        <svg viewBox="0 0 512 512"
+                                            style="width: 100%; height: 100%; overflow: visible;">
+                                            <path
+                                                d="M256 0c35.3 0 64 28.7 64 64s-28.7 64-64 64-64-28.7-64-64 28.7-64 64-64zm0 160c-88.4 0-160 71.6-160 160v32c0 35.3 28.7 64 64 64h192c35.3 0 64-28.7 64-64v-32c0-88.4-71.6-160-160-160z"
+                                                fill="#d500f9" stroke="white" stroke-width="15" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <!-- GOAL RIGHT: PERSONAL -->
+                                <div id="personal-goal-container"></div>
+                            </div>
+
+                            <!-- SHELVES -->
+                            <div
+                                class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 px-4 z-10 transition-all items-start pb-10">
+                                <!-- Shared L (2x3 Grid) -->
+                                <div
+                                    class="md:row-start-2 md:col-start-1 bg-gray-800/80 border border-gray-600 p-2 rounded flex flex-col items-center backdrop-blur-sm">
+                                    <span class="text-[9px] text-gray-200 mb-1 uppercase tracking-widest">SHARED
+                                        SX</span>
+                                    <div id="s-L"
+                                        class="grid grid-cols-2 gap-1 w-[90px] p-2 border border-white/5 rounded bg-black/20 min-h-[90px]">
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="md:row-start-2 md:col-start-2 bg-[#404040] border-2 border-blue-600 p-3 rounded flex flex-col items-center shadow-2xl relative z-20">
+                                    <div
+                                        class="absolute -top-3 bg-blue-600 text-white text-sm font-bold px-3 py-1 rounded border border-yellow-400 uppercase shadow-lg">
+                                        IL TUO SCAFFALE</div>
+                                    <div id="s-me"
+                                        class="grid grid-cols-5 gap-2 w-full bg-[#2a2a2a] p-2 border border-[#555] min-h-[80px] mt-2 rounded">
+                                    </div>
+                                    <div class="w-full mt-3 pt-2 border-t border-gray-700 bg-white/5 p-2 rounded">
+                                        <div class="text-[9px] text-gray-200 text-center mb-1 uppercase">MANO ATTUALE
+                                        </div>
+                                        <div id="hand" class="flex justify-center flex-wrap gap-2 min-h-[45px]"></div>
+                                    </div>
+                                </div>
+
+                                <!-- SNACK LEGEND (Row 1 Col 3) -->
+                                <div
+                                    class="md:row-start-1 md:col-start-3 bg-gray-700 border border-gray-500 p-2 rounded shadow-lg self-end mb-4 text-white">
+                                    <div class="text-[9px] text-gray-200 mb-1 border-b border-gray-700 pb-1">LEGENDA
+                                        SNACK</div>
+                                    <div class="flex flex-col gap-2">
+                                        <div class="flex items-start gap-2">
+                                            <div
+                                                class="snack-item bg-yellow-400 text-black border-white scale-75 flex-shrink-0">
+                                                🍿</div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-white block">POP</span>
+                                                <span class="text-[9px] text-gray-200 leading-tight block">Prendi 1 da
+                                                    Resi e gioca subito.</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-2">
+                                            <div
+                                                class="snack-item bg-cyan-400 text-black border-white scale-75 flex-shrink-0">
+                                                🍦</div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-white block">ICE</span>
+                                                <span class="text-[9px] text-gray-200 leading-tight block">Sposta 1 tua
+                                                    VHS in slot adiacente.</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-2">
+                                            <div
+                                                class="snack-item bg-fuchsia-500 text-white border-white scale-75 flex-shrink-0">
+                                                🍬</div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-white block">CND</span>
+                                                <span class="text-[9px] text-gray-200 leading-tight block">+1
+                                                    movimento Manager.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Shared R (Row 2 Col 3) -->
+                                <div
+                                    class="md:row-start-2 md:col-start-3 bg-gray-800/80 border border-gray-600 p-2 rounded flex flex-col items-center backdrop-blur-sm">
+                                    <span class="text-[9px] text-gray-200 mb-1 uppercase tracking-widest">SHARED
+                                        DX</span>
+                                    <div id="s-R"
+                                        class="grid grid-cols-2 gap-1 w-[90px] p-2 border border-white/5 rounded bg-black/20 min-h-[90px]">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DISCARD -->
+                            <div id="disc-zone"
+                                class="absolute bottom-4 right-4 w-20 h-24 border-2 border-dashed border-gray-600 flex flex-col items-center justify-center cursor-pointer hover:border-red-500 bg-black/80 transition-all z-10 group">
+                                <span class="text-[9px] text-gray-200 group-hover:text-red-400">RESI</span>
+                                <span id="disc-cnt"
+                                    class="text-3xl font-bold text-white group-hover:text-red-500">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- BACKGROUND FLOATING TAPES (JS Injected) -->
+    <!-- Removed from here, moved inside splash screen -->
+
+    <!-- FOOTER -->
+    <!-- FOOTER -->
+    <style>
+        .retro-banner {
+            background-color: #000080;
+            /* Windows 95 Title Bar Blue */
+            border: 4px ridge #c0c0c0;
+            box-shadow: 10px 10px 0 #000;
+        }
+
+        .retro-marquee-container {
+            background: #000;
+            border: 2px inset #fff;
+            color: #0f0;
+            /* Hacker Green */
+            font-family: 'Courier New', monospace;
+            padding: 5px;
+            overflow: hidden;
+            white-space: nowrap;
+            margin-bottom: 15px;
+        }
+
+        .retro-marquee-text {
+            display: inline-block;
+            animation: marquee 10s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .retro-btn {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            color: #000;
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            padding: 5px 10px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .retro-btn:active {
+            border-style: inset;
+            transform: translate(1px, 1px);
+        }
+    </style>
+
+    <footer id="contacts-footer" class="max-w-4xl mx-auto mt-12 mb-12 retro-banner p-6 text-center">
+        <div class="retro-marquee-container">
+            <span class="retro-marquee-text">*** RIMANIAMO IN CONTATTO *** VISITA I MIEI SOCIAL *** SCRIVIMI UNA MAIL
+                ***</span>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="mailto:massi.sabato@gmail.com" class="retro-btn">
+                <span>📧</span> EMAIL ME!
+            </a>
+            <a href="https://wa.me/393295644852" target="_blank" class="retro-btn">
+                <span>💬</span> WHATSAPP
+            </a>
+            <a href="https://linktr.ee/JustMax76" target="_blank" class="retro-btn">
+                <span>🌲</span> LINKTREE
+            </a>
+        </div>
+
+        <div class="mt-4 text-white font-mono text-xs">
+            (c) 1999 - 2026 VideoClub Inc. <br> Best viewed with Netscape Navigator 4.0
+            <br>
+            <img src="https://web.archive.org/web/20090830080447/http://geocities.com/Heartland/Plains/6268/ie_logo.gif"
+                alt="IE Logo"
+                style="display:inline; width:20px; vertical-align:middle; filter: grayscale(100%); opacity: 0.5;">
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <audio id="sfx-tape" src="vhs-tape.mp3" preload="auto"></audio>
+
+    <script>
+        function dismissSplash() {
+            const s = document.getElementById('splash-screen');
+            const audio = document.getElementById('sfx-tape');
+
+            // Try to play audio
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log("Audio play failed:", e));
+
+            s.style.opacity = '0';
+            setTimeout(() => s.style.display = 'none', 1000);
+            initGame(); // Start game when splash is dismissed
+        }
+
+        function switchTab(id) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+            // Show selected
+            document.getElementById(`tab-${id}`).classList.add('active');
+            document.getElementById(`btn-${id}`).classList.add('active');
+        }
+
+        // --- SIMULATOR LOGIC (Full Version) ---
+        // --- SIMULATOR LOGIC (Full Version) ---
+        const G = [
+            { id: 'act', l: 'ACT', c: 'tape-red' },
+            { id: 'sci', l: 'SCI', c: 'tape-blue' },
+            { id: 'com', l: 'COM', c: 'tape-yellow' },
+            { id: 'hor', l: 'HOR', c: 'tape-black' },
+            { id: 'rom', l: 'ROM', c: 'tape-pink' },
+            { id: 'doc', l: 'DOC', c: 'tape-green' }
+        ];
+        const N = 7; // 7 Piles? Wait, logic says 7. Original sim was 7 or 8. Let's stick to 7 if that matches angles.
+
+        // Goals Data
+        const GOALS_DATA = {
+            common: [
+                { t: '"HORROR WEEK"', d: 'Almeno 1 VHS <span class="bg-black text-white px-1">NERA</span> su tutti.', c: 'bg-black' },
+                { t: '"ACTION HERO"', d: 'Almeno 1 VHS <span class="bg-red-700 text-white px-1">ROSSA</span> su tutti.', c: 'bg-red-700' },
+                { t: '"COMEDY CLUB"', d: 'Almeno 1 VHS <span class="bg-yellow-500 text-black px-1">GIALLA</span> su tutti.', c: 'bg-yellow-500' }
+            ],
+            personal: [
+                { n: 'TRIS ROSSO' }, { n: 'COPPIA BLU' }, { n: 'MIX MASTER' }
+            ]
+        };
+        const PERSONAL_TAPES = [['bg-red-700', 'bg-red-700', 'bg-red-700'], ['bg-blue-700', 'bg-blue-700'], ['bg-red-700', 'bg-blue-700', 'bg-yellow-500']];
+        let cgIdx = 0; let pgIdx = 0;
+
+        const SNACKS = {
+            POP: { id: 'pop', l: '🍿', c: 'bg-yellow-400 text-black border-white', n: 'POPCORN' },
+            ICE: { id: 'ice', l: '🍦', c: 'bg-cyan-400 text-black border-white', n: 'GELATO' },
+            CND: { id: 'cnd', l: '🍬', c: 'bg-fuchsia-500 text-white border-white', n: 'CARAMELLE' }
+        };
+        const SNK_KEYS = ['POP', 'ICE', 'CND'];
+
+        let s = { step: 0, mPos: 0, piles: [], snk: [], hand: [], me: Array(15).fill(null), L: Array(6).fill(null), R: Array(6).fill(null), d: [], sel: null, mode: 'normal', iceIdx: null };
+
+        function initGame() {
+            s.piles = []; s.snk = [];
+            for (let i = 0; i < N; i++) {
+                let p = []; for (let k = 0; k < 4; k++) p.push(G[Math.floor(Math.random() * G.length)]);
+                s.piles.push(p);
+                if (i % 2 === 0) {
+                    const rKey = SNK_KEYS[Math.floor(Math.random() * SNK_KEYS.length)];
+                    s.snk.push(SNACKS[rKey]);
+                } else s.snk.push(null);
+            }
+            s.mPos = 0; s.hand = []; s.me = Array(15).fill(null);
+            s.L = Array(6).fill(null); s.R = Array(6).fill(null); s.L[0] = G[0]; s.R[3] = G[1];
+            s.d = []; s.step = 0; s.mode = 'normal'; s.iceIdx = null; cgIdx = Math.floor(Math.random() * 3); pgIdx = Math.floor(Math.random() * 3);
+            render(); renderGoals();
+        }
+
+        function renderGoals() {
+            // Ensure Goal Data matches
+            const cg = GOALS_DATA.common[cgIdx];
+
+            // Post-it HTML Structure - FORCED BACKGROUND COLOR & SQUARE SHAPE
+            document.getElementById('common-goal-container').innerHTML = `
+                <div class="post-it relative transform rotate-3" style="font-family: 'Permanent Marker', cursive; z-index: 50; opacity: 1; visibility: visible; display: block; background-color: #fef08a !important; border: 1px solid #eab308; width: 140px; min-height: 140px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
+                    <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-red-500 rounded-full opacity-80 shadow-sm"></div>
+                    <div class="font-bold border-b border-black/20 mb-1 leading-tight text-black">OBIETTIVO COMUNE</div>
+                    <p class="mb-1 leading-tight text-sm text-black font-sans font-bold flex-grow flex items-center justify-center text-center">${cg.t}</p>
+                    <p class="text-[10px] leading-tight text-gray-800 font-sans text-center">${cg.d}</p>
+                </div>`;
+
+            const pgTapes = PERSONAL_TAPES[pgIdx];
+            let tapesHtml = ''; pgTapes.forEach(c => tapesHtml += `<div class="w-4 h-6 ${c} border border-black shadow-sm"></div>`);
+            document.getElementById('personal-goal-container').innerHTML = `
+                <div class="personal-goal-card transform rotate-[-2deg]" style="width: 140px; background:white; border:4px solid #333; padding:5px; border-radius:8px; z-index: 50; opacity: 1;  visibility: visible; display: block;">
+                    <div class="text-[9px] font-bold text-gray-500 mb-1 uppercase tracking-tighter">OBIETTIVO PERSONALE</div>
+                    <div class="flex gap-1 justify-center my-1">${tapesHtml}</div>
+                    <div class="text-[8px] text-center mt-1 text-gray-400 font-mono">${GOALS_DATA.personal[pgIdx].n}</div>
+                </div>`;
+        }
+
+        function move(n) {
+            if (n === 3) { const idx = s.hand.findIndex(x => x && x.id === 'cnd'); if (idx !== -1) s.hand.splice(idx, 1); }
+            s.mPos = (s.mPos + n) % N; s.step = 1; render();
+        }
+
+        function take() {
+            if (s.piles[s.mPos].length === 0 && !s.snk[s.mPos]) return;
+            s.hand.push(...s.piles[s.mPos]);
+            if (s.snk[s.mPos]) { s.hand.push({ ...s.snk[s.mPos], type: 'snack' }); s.snk[s.mPos] = null; }
+            s.piles[s.mPos] = []; s.step = 2; render();
+        }
+
+        function sel(i) {
+            if (s.step === 2 || s.mode === 'ice_place') { s.sel = (s.sel === i) ? null : i; render(); }
+        }
+
+        function place(z, i = null) {
+            if (s.mode === 'ice_place') {
+                if (z === 'me' && i !== null && !s.me[i]) {
+                    s.me[i] = s.me[s.iceIdx]; s.me[s.iceIdx] = null;
+                    s.mode = 'normal'; s.iceIdx = null; render();
+                }
+                return;
+            }
+            if (s.mode === 'pop_pick') return;
+
+            if (s.sel === null) return;
+            let it = s.hand[s.sel];
+
+            // USE SNACK LOGIC
+            // Wait, snack usage... simplified here for v2 port.
+            // But basic Place logic:
+            if (it.type === 'snack') return; // Cannot place snacks on shelf directly in this logic
+
+            let arr = (z === 'me') ? s.me : (z === 'L') ? s.L : (z === 'd') ? s.d : s.R;
+            if (z === 'd') { s.d.push(it); s.hand.splice(s.sel, 1); s.sel = null; render(); return; }
+
+            if (arr[i] === null) {
+                arr[i] = it; s.hand.splice(s.sel, 1); s.sel = null; render();
+            }
+            if (s.hand.length === 0 && s.step === 2) { setTimeout(() => { s.step = 0; initGame(); }, 2000); } // Auto reset for demo
+        }
+
+        // SNACK CLICKS
+        function useSnack() {
+            if (s.sel === null || s.hand[s.sel].type !== 'snack') return;
+            const snk = s.hand[s.sel];
+            if (snk.id === 'ice') {
+                // Trigger ICE mode
+                // Requires picking a shelf item first?
+                s.hand.splice(s.sel, 1); s.sel = null;
+                // Simpler: Just say "Click a shelf item to move"
+                alert("Scegli una cassetta dal tuo scaffale da spostare!");
+                s.mode = 'ice_pick';
+                render();
+            } else if (snk.id === 'pop') {
+                s.hand.splice(s.sel, 1); s.sel = null;
+                if (s.d.length > 0) s.mode = 'pop_pick';
+                else alert("Nessun reso da recuperare!");
+                render();
+            } else if (snk.id === 'cnd') {
+                s.step = 0; // Go back to move?
+                // Usually move phase.
+                alert("Usa il tasto MUOVI 3 nella fase movimento!");
+            }
+        }
+
+        // ICE PICK HELPER
+        function pickIce(ix) {
+            if (s.mode === 'ice_pick' && s.me[ix]) {
+                s.iceIdx = ix;
+                s.mode = 'ice_place';
+                render();
+            }
+        }
+
+        // POP PICK HELPER
+        function pickPop(ix) {
+            if (s.mode === 'pop_pick') {
+                s.hand.push(s.d[ix]); s.d.splice(ix, 1);
+                s.mode = 'normal'; render();
+            }
+        }
+
+        function render() {
+            const ctrls = document.getElementById('controls');
+            const st = document.getElementById('sts');
+
+            if (s.step === 0) {
+                // Check for CND
+                const hasCnd = s.hand.some(x => x && x.id === 'cnd');
+                let html = `<button onclick="move(1)" class="bg-blue-600 text-white px-3 py-1 mr-1">MUOVI 1</button>
+                             <button onclick="move(2)" class="bg-blue-600 text-white px-3 py-1">MUOVI 2</button>`;
+                if (hasCnd) html += `<button onclick="move(3)" class="bg-fuchsia-600 text-white px-3 py-1 ml-1">CND (+3)</button>`;
+                ctrls.innerHTML = html; st.innerText = "MUOVI MANAGER";
+            } else if (s.step === 1) {
+                ctrls.innerHTML = `<button onclick="take()" class="bg-purple-600 text-white px-4 py-1 animate-pulse">PRENDI TUTTO</button>`;
+                st.innerText = "PRENDI PILA";
+            } else {
+                let html = `<span class="text-xs text-white">Piazza cassette...</span>`;
+                if (s.sel !== null && s.hand[s.sel].type === 'snack') html = `<button onclick="useSnack()" class="bg-green-600 text-white px-3 py-1">USA SNACK</button>`;
+                if (s.mode === 'ice_pick') html = `<span class="text-xs text-cyan-400">Scegli cassetta da spostare...</span>`;
+                if (s.mode === 'ice_place') html = `<span class="text-xs text-cyan-400">Scegli slot vuoto...</span>`;
+                if (s.mode === 'pop_pick') html = `<span class="text-xs text-yellow-400">Recupera dai Resi...</span>`;
+
+                ctrls.innerHTML = html + `<button onclick="initGame()" class="bg-red-900 border border-red-500 text-white px-2 py-0 text-xs ml-4">RESET</button>`;
+                st.innerText = "PIAZZA / AZIONI";
+            }
+
+            // Piles
+            const r = document.getElementById('piles-root'); r.innerHTML = '';
+            const rad = 120; // Exact radius from original
+            for (let i = 0; i < N; i++) {
+                const ang = (i * (360 / N)) - 90, rd = ang * (Math.PI / 180);
+                const ox = rad * Math.cos(rd) - 10; // -10 to center 20px wide tape
+                const oy = rad * Math.sin(rd) - 14; // -14 to center 28px tall tape
+
+                const d = document.createElement('div');
+                d.className = 'absolute';
+                d.style.left = '50%'; d.style.top = '50%';
+                d.style.transform = `translate(${ox}px, ${oy}px)`;
+
+                s.piles[i].forEach((t, ix) => {
+                    const el = document.createElement('div');
+                    el.className = `w-5 h-7 border border-black rounded absolute ${t.c} shadow-sm`;
+                    el.style.top = (-ix * 3) + 'px'; el.style.left = (ix * 1) + 'px';
+                    d.appendChild(el);
+                });
+                if (s.snk[i]) {
+                    // Render specific snack icon OUTSIDE
+                    // Offset from the centered tape position
+                    const delta = 40;
+                    const sx = 10 + delta * Math.cos(rd);
+                    const sy = 14 + delta * Math.sin(rd);
+
+                    const sk = document.createElement('div');
+                    sk.className = `snack-item transform scale-75 absolute shadow-lg ${s.snk[i].c}`;
+                    sk.style.left = sx + 'px';
+                    sk.style.top = sy + 'px';
+                    sk.style.transform = 'translate(-50%, -50%) scale(0.75)'; // Center snack on its point
+                    sk.innerText = s.snk[i].l;
+                    d.appendChild(sk);
+                }
+                r.appendChild(d);
+            }
+
+            // Manager INSIDE (Radius 90)
+            const m = document.getElementById('meeple');
+            const ma = ((s.mPos * (360 / N)) - 90) * (Math.PI / 180);
+            m.style.left = '50%'; m.style.top = '50%';
+            // Use translate for position + centering meeple itself (-50%)
+            m.style.transform = `translate(-50%, -50%) translate(${90 * Math.cos(ma)}px, ${90 * Math.sin(ma)}px)`;
+
+            // Hand
+            const h = document.getElementById('hand'); h.innerHTML = '';
+            s.hand.forEach((t, ix) => {
+                const d = document.createElement('div');
+                if (t.type === 'snack') {
+                    d.className = `snack-item cursor-pointer transform hover:scale-110 ${t.c} ${s.sel === ix ? 'ring-2 ring-green-400 scale-125' : ''}`;
+                    d.innerText = t.l;
+                } else {
+                    d.className = `vhs-tape ${t.c} scale-90 cursor-pointer hover:scale-100 ${s.sel === ix ? 'border-2 border-green-400 ring-2 ring-green-400' : ''}`;
+                    d.innerHTML = `<span>${t.l}</span>`;
+                }
+                d.onclick = () => sel(ix); h.appendChild(d);
+            });
+
+            // Shelves (Restored Full Logic from Blockbuster)
+            const renderGrid = (arr, id, z, cols) => {
+                const e = document.getElementById(id); e.innerHTML = '';
+                arr.forEach((it, ix) => {
+                    const d = document.createElement('div');
+                    d.className = 'w-full h-10 border border-[#333] relative bg-black/20 transition-colors flex items-center justify-center';
+
+                    // ICE PICK
+                    if (s.mode === 'ice_pick') {
+                        if (it && it.type !== 'snack') { // Can only move VHS
+                            d.className += ' cursor-pointer border-pink-500 border-dashed animate-pulse bg-pink-900/20';
+                            d.onclick = () => pickIce(ix); // Updated call to use global helper check or direct
+                        } else { d.className += ' opacity-30'; }
+                    }
+                    // ICE PLACE
+                    else if (s.mode === 'ice_place') {
+                        if (!it) {
+                            // Adjacency check to s.iceIdx
+                            let valid = false;
+                            if (Math.abs(ix - s.iceIdx) === 1) valid = true; // Left/Right
+                            if (Math.abs(ix - s.iceIdx) === cols) valid = true; // Up/Down
+
+                            // Advanced Manhattan check for grid wrapping?
+                            // Simple distance check usually enough for this game scale
+                            const c1 = s.iceIdx % cols; const r1 = Math.floor(s.iceIdx / cols);
+                            const c2 = ix % cols; const r2 = Math.floor(ix / cols);
+                            if (Math.abs(c1 - c2) + Math.abs(r1 - r2) === 1) valid = true;
+
+                            if (valid) {
+                                d.className += ' cursor-pointer border-pink-500 border-dashed animate-pulse bg-pink-900/20';
+                                d.onclick = () => place('me', ix);
+                            } else { d.className += ' opacity-30'; }
+                        } else { d.className += ' opacity-30'; }
+                    }
+                    // NORMAL PLACE
+                    else if (it) {
+                        if (it.type === 'snack') d.innerHTML = `<div class="snack-item transform scale-75 m-auto ${it.c}">${it.l}</div>`;
+                        else d.innerHTML = `<div class="vhs-tape ${it.c} scale-[0.6]"><span>${it.l}</span></div>`;
+                    }
+                    else if (s.sel !== null && s.mode === 'normal') {
+                        const item = s.hand[s.sel];
+                        if (item.type !== 'snack') {
+                            let valid = false;
+                            const c = ix % cols;
+                            if (c === 0 || c === cols - 1) valid = true; // Edges (Board Game Rule: Start from edges or adjacent)
+                            if (ix - cols >= 0 && arr[ix - cols]) valid = true; // Up
+                            if (ix + cols < arr.length && arr[ix + cols]) valid = true; // Down
+                            if (c > 0 && arr[ix - 1]) valid = true; // Left
+                            if (c < cols - 1 && arr[ix + 1]) valid = true; // Right
+
+                            if (valid) {
+                                d.className += ' cursor-pointer bg-green-900/20 border-green-500 border-dashed animate-pulse hover:border-white';
+                                d.onclick = () => place(z, ix);
+                            } else { d.className += ' opacity-30 cursor-not-allowed bg-red-900/10'; }
+                        } else { d.className += ' opacity-30 cursor-not-allowed'; }
+                    }
+                    e.appendChild(d);
+                });
+            };
+            renderGrid(s.me, 's-me', 'me', 5);
+            renderGrid(s.L, 's-L', 'L', 2);
+            renderGrid(s.R, 's-R', 'R', 2);
+
+            // Discard
+            document.getElementById('disc-cnt').innerText = s.d.length;
+            const dz = document.getElementById('disc-zone');
+            if (s.mode === 'pop_pick') {
+                // Show pop pick overlay? Or just use discard box?
+                // Let's make discard box clickable to show overlay
+                dz.onclick = () => {
+                    // Render overlay
+                    const ov = document.createElement('div');
+                    ov.className = 'absolute inset-0 bg-black/90 z-50 p-4 flex flex-wrap gap-2 justify-center items-center';
+                    s.d.forEach((t, ix) => {
+                        const d = document.createElement('div');
+                        d.className = `vhs-tape ${t.c} cursor-pointer hover:scale-110`;
+                        d.innerHTML = `<span>${t.l}</span>`;
+                        d.onclick = (e) => { e.stopPropagation(); pickPop(ix); ov.remove(); };
+                        ov.appendChild(d);
+                    });
+                    document.getElementById('piles-root').appendChild(ov);
+                };
+                dz.classList.add('border-yellow-400', 'animate-pulse');
+            } else if (s.sel !== null && s.hand[s.sel].type !== 'snack') {
+                dz.onclick = () => place('d');
+                dz.classList.add('border-red-400');
+            } else {
+                dz.onclick = null;
+                dz.classList.remove('border-yellow-400', 'animate-pulse', 'border-red-400');
+            }
+        }
+
+        // --- BG ANIMATION ---
+        const bg = document.getElementById('splash-bg');
+        // Re-using simplified tape anim for bg
+        const imgs = ['vhs-blk.png', 'vhs-blu.png', 'vhs-gre.png', 'vhs-ora.png', 'vhs-pin.png', 'vhs-pur.png', 'vhs-red.png', 'vhs-whi.png', 'vhs-yel.png'];
+        for (let i = 0; i < 15; i++) {
+            const t = document.createElement('div');
+            t.className = 'bg-tape';
+            t.style.backgroundImage = `url('${imgs[i % imgs.length]}')`;
+            t.style.left = Math.random() * 90 + '%';
+            t.style.animationDelay = -(Math.random() * 20) + 's';
+            bg.appendChild(t);
+        }
+
+        // Start
+        // initGame called by Start Button flow
+
+    </script>
+</body>
+
+</html>
