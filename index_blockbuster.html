@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VideoClub: Blockbuster Edition</title>
+
+    <meta property="og:title" content="The Last VideoClub - Boardgame" />
+    <meta property="og:description"
+        content="Collaboriamo per non fallire...ma solo il migliore diventerà Store Manager! Un gioco di Massimiliano Sabato." />
+    <meta property="og:image" content="VIDEOCLUB_LOGO.png" />
+    <meta property="twitter:image" content="VIDEOCLUB_LOGO.png" />
+    <meta property="twitter:card" content="summary_large_image" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bangers&family=Courier+New&family=Anton&family=Permanent+Marker&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <style>
+        :root {
+            /* 1990s Blockbuster Brand Colors */
+            --bb-blue: #091F92;
+            /* The Deep Royal Blue */
+            --bb-yellow: #FFC220;
+            /* The Iconic Ticket Yellow */
+            --bb-link: #FFCC00;
+            --vhs-black: #000000;
+            --neon-pink: #FF0099;
+            /* Kept for game highlights */
+            --text-white: #FFFFFF;
+            --site-bg: #003399;
+        }
+
+        body {
+            font-family: 'Verdana', 'Arial', sans-serif !important;
+            /* The 90s Web Font */
+            background-color: var(--site-bg);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMWgydjJIMUMxeiIgZmlsbD0iIzAwMjA4MCIgZmlsbC1vcGFjaXR5PSIwLjUiLz48L3N2Zz4=');
+            /* Subtle tiny grid pattern */
+            color: #333;
+            margin: 0;
+            line-height: normal;
+        }
+
+        /* 90s Web Sidebar Style for Left Column */
+        .vhs-cassette-ui {
+            background: #00458b;
+            /* Lighter blue for sidebar */
+            border: 2px solid #ffcc00;
+            border-radius: 0;
+            padding: 10px;
+            color: #fff;
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Override specific left column for pure sidebar look */
+        .lg\:col-span-4 .vhs-cassette-ui {
+            background-color: var(--bb-blue);
+            background-image: linear-gradient(90deg, #091F92 0%, #003399 100%);
+            border: none;
+            border-right: 4px solid var(--bb-yellow);
+        }
+
+        /* 90s Web Content Area for Right Column */
+        .lg\:col-span-8 .vhs-cassette-ui {
+            background: #FFFFFF !important;
+            /* White Paper Look */
+            border: 2px solid #000;
+            color: #000 !important;
+            min-height: 650px;
+        }
+
+        /* Make the dark desk stand out on white */
+        /* Make the dark desk stand out on white */
+        .lg\:col-span-8 .absolute.inset-0.opacity-10 {
+            /* Restore desk background */
+            opacity: 0.15 !important;
+        }
+
+        .lg\:col-span-8 .text-gray-500,
+        .lg\:col-span-8 .text-gray-400,
+        .lg\:col-span-8 .text-xs {
+            color: #333 !important;
+            /* Fix visibility on white */
+            font-weight: bold;
+        }
+
+        /* --- HEADERS --- */
+        h2.font-bangers {
+            font-family: 'Arial Black', 'Impact', sans-serif !important;
+            letter-spacing: 1px;
+            color: var(--bb-yellow) !important;
+            text-shadow: 2px 2px #000;
+            text-transform: uppercase;
+            font-style: italic;
+            background: var(--bb-blue);
+            padding: 5px;
+            transform: skewX(-10deg);
+            display: inline-block;
+        }
+
+        /* LOGO TICKET STYLE */
+        .bb-ticket {
+            background: var(--bb-blue);
+            color: var(--bb-yellow);
+            transform: rotate(-3deg);
+            border: 2px dashed #ffcc00;
+            box-shadow: 5px 5px 0 #000;
+        }
+
+        .bb-text {
+            font-family: 'Arial Black', sans-serif;
+            font-style: italic;
+            color: var(--bb-yellow);
+            text-shadow: 3px 3px 0 #091F92, 5px 5px 0 #fff;
+            /* Complex retro shadow */
+        }
+
+        /* Utility overrides */
+        .text-\[var\(--bb-yellow\)\] {
+            color: var(--bb-yellow) !important;
+        }
+
+        .border-\[var\(--bb-blue\)\] {
+            border-color: var(--bb-blue) !important;
+        }
+
+        /* BUTTONS RETRO STYLE */
+        button,
+        .nav-button,
+        a[class*="bg-"] {
+            border: 2px outset #ccc !important;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            border-radius: 0 !important;
+            font-family: 'Verdana', sans-serif;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        button:active {
+            border-style: inset !important;
+        }
+
+        /* Language Switcher */
+        .lang-btn {
+            background: transparent;
+            border: 1px solid #555;
+            color: #888;
+            font-size: 0.7rem;
+            padding: 2px 5px;
+            cursor: pointer;
+            font-family: 'Arial Narrow', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .lang-btn.active-lang {
+            border-color: var(--bb-yellow);
+            color: var(--bb-yellow);
+            font-weight: bold;
+        }
+
+        /* LOGO */
+        .bb-ticket {
+            position: relative;
+            background: var(--bb-blue);
+            color: var(--bb-yellow);
+            padding: 2rem 4rem;
+            transform: rotate(-6deg);
+            clip-path: polygon(20px 0, 100% 0, 100% 100%, 0% 100%, 0% 65%, 20px 60%, 0% 55%);
+        }
+
+        .bb-ticket::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -25px;
+            width: 50px;
+            height: 50px;
+            background: #0b0b0b;
+            border-radius: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            box-shadow: inset -2px 0 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .bb-inner-border {
+            position: absolute;
+            top: 10px;
+            left: 25px;
+            right: 10px;
+            bottom: 10px;
+            border: 4px solid var(--bb-yellow);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .bb-text {
+            font-family: 'Anton', sans-serif;
+            font-size: 6rem;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            transform: scaleY(1.3);
+            margin-left: 20px;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        .bb-sub {
+            font-family: Arial, sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 10px;
+            margin-left: 20px;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        /* UI */
+        .header-bb {
+            background: var(--bb-blue);
+            color: var(--bb-yellow);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 5px solid var(--bb-yellow);
+            box-shadow: 0 0 20px rgba(0, 51, 153, 0.5);
+        }
+
+        .ticket-stub {
+            background: repeating-linear-gradient(45deg, var(--bb-blue), var(--bb-blue) 10px, #002266 10px, #002266 20px);
+            color: var(--bb-yellow);
+            padding: 15px;
+            border: 2px dashed var(--bb-yellow);
+            transform: rotate(-1deg);
+            text-align: center;
+        }
+
+        .vhs-cassette-ui {
+            background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+            border-radius: 5px;
+            padding: 15px;
+            border: 1px solid #444;
+            border-left: 5px solid #333;
+        }
+
+        /* TAPES */
+        .bg-tape {
+            position: absolute;
+            width: 200px;
+            height: 120px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+            animation: float-tape 20s linear infinite;
+        }
+
+        @keyframes float-tape {
+            0% {
+                transform: translateY(110vh) rotate(0deg) scale(0.8);
+            }
+
+            100% {
+                transform: translateY(-30vh) rotate(360deg) scale(1.0);
+            }
+        }
+
+        .vhs-tape {
+            width: 42px;
+            height: 62px;
+            background: #222;
+            border: 1px solid #555;
+            border-radius: 2px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-size: 0.7rem;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .vhs-tape::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 3px;
+            right: 3px;
+            height: 34px;
+            background: white;
+            z-index: 0;
+        }
+
+        .vhs-tape span {
+            position: relative;
+            z-index: 10;
+            font-family: 'Arial Narrow', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        .vhs-tape.selected {
+            transform: translateY(-10px) scale(1.1);
+            border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-pink);
+            z-index: 50;
+        }
+
+        .tape-red {
+            background: #b71c1c;
+        }
+
+        .tape-red::before {
+            background: #ffcdd2;
+        }
+
+        .tape-blue {
+            background: #0d47a1;
+        }
+
+        .tape-blue::before {
+            background: #bbdefb;
+        }
+
+        .tape-yellow {
+            background: #fbc02d;
+        }
+
+        .tape-yellow::before {
+            background: #fff9c4;
+        }
+
+        .tape-black {
+            background: #212121;
+        }
+
+        .tape-black::before {
+            background: #e0e0e0;
+        }
+
+        .snack-item {
+            width: 32px;
+            height: 32px;
+            /* background removed to allow dynamic classes */
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 10;
+            box-shadow: 1px 1px 3px black;
+        }
+
+        /* GOALS */
+        .personal-goal-card {
+            background: #fff;
+            border: 4px solid #333;
+            border-radius: 8px;
+            padding: 5px;
+            width: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.6);
+            transform: rotate(-2deg);
+        }
+
+        .post-it {
+            background: #fef08a;
+            border: 1px solid #eab308;
+            padding: 10px;
+            font-family: 'Permanent Marker', cursive;
+            color: #333;
+            width: 140px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            transform: rotate(3deg);
+            font-size: 0.8rem;
+            line-height: 1.1;
+        }
+
+        .nav-btn {
+            background-color: var(--bb-blue);
+            color: white;
+            font-family: 'Bangers', cursive;
+            font-size: 1.2rem;
+            padding: 8px 16px;
+            border: 2px solid white;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-btn:hover {
+            background-color: var(--bb-yellow);
+            color: var(--bb-blue);
+            border-color: var(--bb-blue);
+            transform: scale(1.05);
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-btn.active-tab {
+            background-color: var(--bb-yellow);
+            color: var(--bb-blue);
+            border-color: var(--bb-blue);
+        }
+
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            background: #0b0b0b;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #audio-hidden-wrapper {
+            position: absolute;
+            top: -500px;
+            left: -500px;
+            width: 1px;
+            height: 1px;
+            opacity: 0.01;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -999;
+        }
+
+        /* FORCE SPLASH SCREEN TO BE DARK & ORIGINAL STYLE */
+        #splash-screen {
+            background-color: #0b0b0b !important;
+            color: white !important;
+            font-family: inherit !important;
+        }
+
+        #splash-screen * {
+            font-family: 'Bangers', cursive !important;
+            border: none !important;
+            /* Remove retro blocky borders */
+            border-radius: 0 !important;
+            /* Reset radius if needed, but original had some */
+            box-shadow: none !important;
+        }
+
+        #splash-screen .bb-ticket {
+            background: #003399 !important;
+            /* Original Blue */
+            color: #ffcc00 !important;
+            transform: rotate(-6deg) !important;
+            clip-path: polygon(20px 0, 100% 0, 100% 100%, 0% 100%, 0% 65%, 20px 60%, 0% 55%) !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            padding: 2rem 4rem !important;
+        }
+
+        #splash-screen .bb-text {
+            font-family: 'Anton', sans-serif !important;
+            color: #ffcc00 !important;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        #splash-screen .bb-inner-border {
+            border: 4px solid #ffcc00 !important;
+        }
+
+        #splash-screen #btn-start {
+            background-color: #33ff00 !important;
+            /* LCD Green */
+            color: black !important;
+            border: 1px solid #33ff00 !important;
+            box-shadow: 0 0 20px #3f0 !important;
+            font-family: 'Bangers', cursive !important;
+        }
+
+        #splash-screen .font-mono {
+            font-family: monospace !important;
+            color: #6b7280 !important;
+            /* Gray-500 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="audio-hidden-wrapper"></div>
+
+    <div id="splash-screen">
+        <div id="splash-bg" class="absolute inset-0 w-full h-full pointer-events-none"></div>
+        <div class="z-20 transform transition-transform hover:scale-105 duration-500">
+            <div class="bb-ticket shadow-[15px_15px_0_rgba(0,0,0,0.5)]">
+                <div class="bb-inner-border"></div>
+                <div class="bb-text">VIDEOCLUB</div>
+                <div class="bb-sub text-center">THE BOARD GAME</div>
+            </div>
+        </div>
+        <div class="z-20 mt-16 text-center">
+            <button id="btn-start" onclick="startGame()"
+                class="bg-[var(--lcd-green)] text-black border-[var(--lcd-green)] px-10 py-5 text-3xl font-bangers transition-all uppercase tracking-wider shadow-[0_0_20px_#3f0] hover:bg-white hover:scale-105">&#9658;
+                PRESS PLAY</button>
+            <div class="mt-2 text-[10px] text-gray-500 font-mono">CLICK TO START GAME & AUDIO</div>
+        </div>
+    </div>
+
+    <div id="vcr"
+        class="hidden fixed inset-0 bg-blue-900 z-[60] flex-col p-10 font-mono text-white text-4xl shadow-inner cursor-wait">
+        <div class="animate-pulse">PLAY &#9658;</div>
+        <div class="mt-4">SP 0:00:00</div>
+        <div class="absolute bottom-10 left-10 text-sm opacity-50">HI-FI STEREO / TRACKING AUTO</div>
+    </div>
+
+    <div id="app" class="hidden max-w-7xl mx-auto p-4 relative z-10 transition-opacity duration-1000">
+        <div class="header-bb rounded flex justify-between items-center mb-6">
+            <div class="text-4xl font-bangers italic tracking-wide">VIDEO<span class="text-white">CLUB</span></div>
+            <div class="text-xs font-mono flex items-center gap-2">
+                <div class="flex gap-1 mr-4">
+                    <button onclick="setLang('it')" id="lang-it" class="lang-btn active-lang">IT</button>
+                    <button onclick="setLang('en')" id="lang-en" class="lang-btn">EN</button>
+                    <button onclick="setLang('fr')" id="lang-fr" class="lang-btn">FR</button>
+                </div>
+                <span data-i18n="managerMode">MANAGER MODE</span><span
+                    class="bg-black text-[var(--lcd-green)] px-2 py-1 border border-white blink"
+                    data-i18n="active">ACTIVE</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-4 flex flex-col gap-4">
+                <div class="ticket-stub shadow-lg">
+                    <h3 class="font-bangers text-xl bg-blue-900 text-white inline-block px-3 py-1 mb-3"
+                        data-i18n="actionMenu">ACTION MENU</h3>
+                    <div class="flex flex-wrap gap-2 justify-center mb-3">
+                        <button onclick="tab('intro')" id="btn-intro" class="nav-btn active-tab"
+                            data-i18n="btnIntro">INTRO</button>
+                        <button onclick="tab('rules')" id="btn-rules" class="nav-btn"
+                            data-i18n="btnRules">RULES</button>
+                    </div>
+                    <div class="flex flex-col gap-2 border-t border-dashed border-blue-900 pt-3">
+                        <a href="rules.html" target="_blank"
+                            class="block bg-indigo-900 text-white text-xs px-2 py-1 border border-indigo-500 hover:bg-indigo-700 hover:border-white text-center font-bold">📜
+                            <span data-i18n="interactiveRules">APRI REGOLAMENTO INTERATTIVO</span></a>
+                        <a href="RegolamentoVideoClub_v2_1.pdf" download
+                            class="block bg-red-800 text-white text-xs px-2 py-1 border border-red-500 hover:bg-red-600 hover:border-white text-center font-bold">📄
+                            <span data-i18n="downloadPdf">SCARICA PDF MANUAL</span></a>
+                    </div>
+                </div>
+                <button id="btn-audio-toggle" onclick="toggleAudio()" (Turn on for 90s vibes!)"
+                    class="bg-[#111] border border-gray-600 text-gray-500 w-full py-2 text-xs font-mono hover:text-white transition-colors">
+                    🎵 SOUNDTRACK: OFF (Tap for 90s vibes!)
+                </button>
+                <div class="vhs-cassette-ui h-[550px] overflow-y-auto custom-scrollbar relative">
+                    <div id="tab-intro">
+                        <h2 class="text-[var(--bb-yellow)] font-bangers text-2xl border-b border-gray-600 mb-2"
+                            data-i18n="welcomeTitle">WELCOME
+                            CLERKS</h2>
+                        <p class="text-xs mb-4 text-justify font-mono leading-relaxed"><span
+                                data-i18n="welcomeText">Siete i commessi dell’ultimo
+                                VideoClub della catena.<br><br>I tempi sono duri, lo streaming incombe e le sorti dello
+                                store sono nelle vostre mani.<br>Ad ogni round le VHS arrivano sul desk centrale e il
+                                vostro
+                                compito è allestire gli scaffali (personali e condivisi) per soddisfare le richieste
+                                dello
+                                store manager e dei clienti.</span><br><br><span
+                                class="text-[var(--neon-pink)] font-bold"><span data-i18n="gameSpirit">Spirito
+                                    del Gioco: SEMI-COOPERATIVO</span></span></p>
+                        <!-- Goals moved to Desk -->
+                        <div class="grid grid-cols-2 gap-2 mt-6"><a href="88x63_cardseditor.html"
+                                class="bg-purple-900 text-center text-[10px] p-2 border border-purple-500 text-white hover:bg-purple-700 transition-colors">OBIETTIVI
+                                PERSONALI</a><a href="63x63_questeditor.html"
+                                class="bg-cyan-900 text-center text-[10px] p-2 border border-cyan-500 text-white hover:bg-cyan-700 transition-colors">OBIETTIVI
+                                COMUNI</a></div>
+                    </div>
+                    <div id="tab-rules" class="hidden">
+                        <h2 class="text-[var(--bb-yellow)] font-bangers text-2xl border-b border-gray-600 mb-2"
+                            data-i18n="turnSequence">TURN
+                            SEQUENCE</h2>
+                        <div class="space-y-4">
+                            <div class="bg-white/5 p-2 border-l-2 border-[var(--neon-pink)]"><strong
+                                    class="text-[var(--neon-pink)] block text-sm mb-1" data-i18n="rule1Title">1. MUOVI
+                                    (MOVE)</strong>
+                                <p class="text-xs text-gray-300" data-i18n="rule1Text">Muovi il Manager di 1 o 2 spazi
+                                    in senso orario (o 3 se
+                                    usi le CND Caramelle).</p>
+                                <p class="text-[10px] text-gray-400 italic mt-1" data-i18n="rule1Note">Importante: Si
+                                    contano solo le pile
+                                    piene. Salta i vuoti! Preleva tutte le VHS e gli Snack dalla pila di destinazione.
+                                </p>
+                            </div>
+                            <div class="bg-white/5 p-2 border-l-2 border-[var(--neon-pink)]"><strong
+                                    class="text-[var(--neon-pink)] block text-sm mb-1" data-i18n="rule2Title">2. PIAZZA
+                                    (PLACE)</strong>
+                                <ul class="list-disc pl-4 text-xs text-gray-300 space-y-1">
+                                    <li data-i18n="rule2Li1"><strong class="text-white">Quantità:</strong> Almeno 2 VHS
+                                        totali.</li>
+                                    <li data-i18n="rule2Li2"><strong class="text-white">Adiacenza:</strong> Vicino a una
+                                        VHS già piazzata o
+                                        ai bordi.</li>
+                                    <li data-i18n="rule2Li3"><strong class="text-white">Limite Shared:</strong> Max 1
+                                        VHS per ogni scaffale
+                                        condiviso (DX/SX).</li>
+                                </ul>
+                                <p class="text-[10px] text-gray-400 mt-1" data-i18n="rule2Note">Non puoi spostare VHS
+                                    già piazzate (salvo
+                                    effetti snack).</p>
+                            </div>
+                            <div class="bg-white/5 p-2 border-l-2 border-[var(--neon-pink)]"><strong
+                                    class="text-[var(--neon-pink)] block text-sm mb-1" data-i18n="rule3Title">3.
+                                    UTILIZZA SNACK</strong>
+                                <p class="text-xs text-gray-300 mb-1" data-i18n="rule3Text">Conservane max 3. Scarta
+                                    l’eccesso.</p>
+                                <ul class="text-xs text-gray-300 space-y-1">
+                                    <li data-i18n="rule3Li1">🍿 <strong>POP (Popcorn):</strong> Prendi 1 VHS dal Box
+                                        Riconsegna e giocala
+                                        subito.</li>
+                                    <li data-i18n="rule3Li2">🍦 <strong>ICE (Gelato):</strong> Sposta 1 VHS del tuo
+                                        Scaffale in uno slot
+                                        vuoto adiacente.</li>
+                                    <li data-i18n="rule3Li3">🍬 <strong>CND (Caramelle):</strong> +1 al movimento del
+                                        Manager.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white/5 p-2 border-l-2 border-[var(--neon-pink)]"><strong
+                                    class="text-[var(--neon-pink)] block text-sm mb-1" data-i18n="rule4Title">4. SCARTA
+                                    VHS</strong>
+                                <p class="text-xs text-gray-300" data-i18n="rule4Text">Se ti avanzano VHS, puoi
+                                    scartarne nel Box Riconsegna
+                                    (Max 2).</p>
+                                <p class="text-[10px] text-red-400 mt-1 font-bold" data-i18n="rule4Note">Box Pieno? 1.
+                                    Aggiungi 1 Segnalino
+                                    Fallimento. 2. Svuota il Box.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 shadow-2xl">
+                <div
+                    class="bg-[#444] border-l-4 border-[var(--bb-yellow)] p-4 mb-4 flex justify-between items-center shadow-md">
+                    <div id="controls" class="flex gap-2"></div>
+                    <div
+                        class="bg-black text-white px-3 py-1 text-xs font-mono border border-gray-600 shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                        <span data-i18n="stateLabel" class="text-white">STATE</span>: <span id="sts"
+                            class="animate-pulse text-white">READY</span>
+                    </div>
+                </div>
+
+                <div
+                    class="vhs-cassette-ui bg-[#333] relative min-h-[650px] flex flex-col items-center justify-center overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 bg-[url('bg-1.png')] bg-cover pointer-events-none">
+                    </div>
+
+                    <!-- DESK & PILES CONTAINER -->
+                    <div class="relative z-10 mb-12 flex flex-col md:flex-row items-center justify-center gap-6">
+                        <!-- GOAL LEFT: COMMON -->
+                        <!-- GOAL LEFT: COMMON -->
+                        <div id="common-goal-container"></div>
+
+                        <!-- DESK -->
+                        <div class="relative w-80 h-80 flex-shrink-0">
+                            <div
+                                class="absolute inset-0 rounded-full border-[20px] border-[#555] bg-[#333] flex items-center justify-center shadow-2xl">
+                                <span class="text-5xl font-bangers opacity-10 text-white select-none">DESK</span>
+                            </div>
+                            <div id="piles-root" class="absolute inset-0 pointer-events-none"></div>
+
+                            <!-- MEEPLE (Reduced Radius 170->145 to fit inside desk area) -->
+                            <div id="meeple"
+                                class="absolute z-[50] transition-all duration-500 w-12 h-12 transform -translate-x-1/2 -translate-y-1/2 filter drop-shadow-[0_0_10px_rgba(255,0,204,1)]">
+                                <svg viewBox="0 0 512 512" fill="var(--neon-pink)" stroke="white" stroke-width="20">
+                                    <path
+                                        d="M256 0c35.3 0 64 28.7 64 64s-28.7 64-64 64-64-28.7-64-64 28.7-64 64-64zm0 160c-88.4 0-160 71.6-160 160v32c0 35.3 28.7 64 64 64h192c35.3 0 64-28.7 64-64v-32c0-88.4-71.6-160-160-160z" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- GOAL RIGHT: PERSONAL -->
+                        <!-- GOAL RIGHT: PERSONAL -->
+                        <div id="personal-goal-container"></div>
+                    </div>
+
+                    <!-- SHELVES -->
+                    <!-- SHELVES -->
+                    <div
+                        class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 px-4 z-10 transition-all items-start pb-10">
+                        <!-- Shared L (2x3 Grid) -->
+                        <div
+                            class="md:row-start-2 md:col-start-1 bg-gray-800/80 border border-gray-600 p-2 rounded flex flex-col items-center backdrop-blur-sm">
+                            <span class="text-[9px] text-gray-200 mb-1 uppercase tracking-widest"
+                                data-i18n="sharedSx">SHARED SX</span>
+                            <div id="s-L"
+                                class="grid grid-cols-2 gap-1 w-[90px] p-2 border border-white/5 rounded bg-black/20 min-h-[90px]">
+                            </div>
+                        </div>
+
+                        <div
+                            class="md:row-start-2 md:col-start-2 bg-[#404040] border-2 border-[var(--bb-blue)] p-3 rounded flex flex-col items-center shadow-2xl relative z-20">
+                            <div class="absolute -top-3 bg-[var(--bb-blue)] text-white text-sm font-bold px-3 py-1 rounded border border-[var(--bb-yellow)] uppercase shadow-lg"
+                                data-i18n="yourShelf">
+                                IL TUO SCAFFALE</div>
+                            <div id="s-me"
+                                class="grid grid-cols-5 gap-2 w-full bg-[#2a2a2a] p-2 border border-[#555] min-h-[80px] mt-2 rounded">
+                            </div>
+                            <div class="w-full mt-3 pt-2 border-t border-gray-700 bg-white/5 p-2 rounded">
+                                <div class="text-[9px] text-gray-200 text-center mb-1 uppercase"
+                                    data-i18n="currentHand">MANO ATTUALE</div>
+                                <div id="hand" class="flex justify-center flex-wrap gap-2 min-h-[45px]"></div>
+                            </div>
+                        </div>
+
+                        <!-- SNACK LEGEND (Row 1 Col 3) -->
+                        <div
+                            class="md:row-start-1 md:col-start-3 bg-gray-700 border border-gray-500 p-2 rounded shadow-lg self-end mb-4 text-white">
+                            <div class="text-[9px] text-gray-200 mb-1 border-b border-gray-700 pb-1"
+                                data-i18n="legendTitle">LEGENDA SNACK</div>
+                            <div class="flex flex-col gap-2">
+                                <div class="flex items-start gap-2">
+                                    <div
+                                        class="snack-item bg-yellow-400 text-black border-white scale-75 flex-shrink-0">
+                                        🍿</div>
+                                    <div>
+                                        <span class="text-[10px] font-bold text-white block">POP (Popcorn)</span>
+                                        <span class="text-[9px] text-gray-200 leading-tight block">Prendi 1 VHS dal
+                                            Box Riconsegna e giocala subito.</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <div class="snack-item bg-cyan-400 text-black border-white scale-75 flex-shrink-0">
+                                        🍦</div>
+                                    <div>
+                                        <span class="text-[10px] font-bold text-white block">ICE (Gelato)</span>
+                                        <span class="text-[9px] text-gray-200 leading-tight block">Sposta 1 VHS del
+                                            tuo Scaffale Personale in uno slot vuoto adiacente.</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <div
+                                        class="snack-item bg-fuchsia-500 text-white border-white scale-75 flex-shrink-0">
+                                        🍬</div>
+                                    <div>
+                                        <span class="text-[10px] font-bold text-white block">CND
+                                            (Caramelle)</span>
+                                        <span class="text-[9px] text-gray-200 leading-tight block">+1 al movimento
+                                            del Manager.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shared R (Row 2 Col 3) -->
+                        <div
+                            class="md:row-start-2 md:col-start-3 bg-gray-800/80 border border-gray-600 p-2 rounded flex flex-col items-center backdrop-blur-sm">
+                            <span class="text-[9px] text-gray-200 mb-1 uppercase tracking-widest"
+                                data-i18n="sharedDx">SHARED DX</span>
+                            <div id="s-R"
+                                class="grid grid-cols-2 gap-1 w-[90px] p-2 border border-white/5 rounded bg-black/20 min-h-[90px]">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DISCARD -->
+                    <div id="disc-zone"
+                        class="absolute bottom-4 right-4 w-20 h-24 border-2 border-dashed border-gray-600 flex flex-col items-center justify-center cursor-pointer hover:border-red-500 bg-black/80 transition-all z-10 group">
+                        <span class="text-[9px] text-gray-200 group-hover:text-red-400"
+                            data-i18n="returns">RESI</span><span id="disc-cnt"
+                            class="text-3xl font-bold text-white group-hover:text-red-500">0</span>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const G = [{ id: 'act', l: 'ACT', c: 'tape-red' }, { id: 'sci', l: 'SCI', c: 'tape-blue' }, { id: 'com', l: 'COM', c: 'tape-yellow' }, { id: 'hor', l: 'HOR', c: 'tape-black' }];
+        const N = 7;
+
+        // GOAL DICTIONARY
+        const GOALS_DATA = {
+            it: {
+                common: [
+                    { t: '"HORROR WEEK"', d: 'Almeno 1 VHS <span class="bg-black text-white px-1">NERA</span> su tutti gli scaffali.', c: 'bg-black' },
+                    { t: '"ACTION HERO"', d: 'Almeno 1 VHS <span class="bg-red-700 text-white px-1">ROSSA</span> su tutti gli scaffali.', c: 'bg-red-700' },
+                    { t: '"COMEDY CLUB"', d: 'Almeno 1 VHS <span class="bg-yellow-500 text-black px-1">GIALLA</span> su tutti gli scaffali.', c: 'bg-yellow-500' }
+                ],
+                personal: [
+                    { n: 'TRIS ROSSO' }, { n: 'COPPIA BLU' }, { n: 'MIX MASTER' }
+                ],
+                commonTitle: 'OBIETTIVO COMUNE',
+                personalTitle: 'OBIETTIVO PERSONALE'
+            },
+            en: {
+                common: [
+                    { t: '"HORROR WEEK"', d: 'At least 1 <span class="bg-black text-white px-1">BLACK</span> VHS on all shelves.', c: 'bg-black' },
+                    { t: '"ACTION HERO"', d: 'At least 1 <span class="bg-red-700 text-white px-1">RED</span> VHS on all shelves.', c: 'bg-red-700' },
+                    { t: '"COMEDY CLUB"', d: 'At least 1 <span class="bg-yellow-500 text-black px-1">YELLOW</span> VHS on all shelves.', c: 'bg-yellow-500' }
+                ],
+                personal: [
+                    { n: 'RED TRIS' }, { n: 'BLUE PAIR' }, { n: 'MIX MASTER' }
+                ],
+                commonTitle: 'COMMON GOAL',
+                personalTitle: 'PERSONAL GOAL'
+            },
+            fr: {
+                common: [
+                    { t: '"SEMAINE HORREUR"', d: 'Au moins 1 VHS <span class="bg-black text-white px-1">NOIRE</span> sur toutes les étagères.', c: 'bg-black' },
+                    { t: '"HÉROS D\'ACTION"', d: 'Au moins 1 VHS <span class="bg-red-700 text-white px-1">ROUGE</span> sur toutes les étagères.', c: 'bg-red-700' },
+                    { t: '"COMEDY CLUB"', d: 'Au moins 1 VHS <span class="bg-yellow-500 text-black px-1">JAUNE</span> sur toutes les étagères.', c: 'bg-yellow-500' }
+                ],
+                personal: [
+                    { n: 'TRIO ROUGE' }, { n: 'PAIRE BLEUE' }, { n: 'MAÎTRE MIX' }
+                ],
+                commonTitle: 'OBJECTIF COMMUN',
+                personalTitle: 'OBJECTIF PERSONNEL'
+            }
+        };
+
+        const PERSONAL_TAPES = [
+            ['bg-red-700', 'bg-red-700', 'bg-red-700'],
+            ['bg-blue-700', 'bg-blue-700'],
+            ['bg-red-700', 'bg-blue-700', 'bg-yellow-500']
+        ];
+
+        let currentLang = 'it';
+        let currentGoalsIndices = { c: 0, p: 0 }; // Store indices to persist goals across lang switch
+
+        const TRANSLATIONS = {
+            it: {
+                managerMode: "MANAGER MODE", active: "ATTIVO",
+                actionMenu: "MENU AZIONI", btnIntro: "INTRO", btnRules: "REGOLE",
+                interactiveRules: "APRI REGOLAMENTO INTERATTIVO", downloadPdf: "SCARICA PDF MANUAL",
+                welcomeTitle: "BENVENUTI COMMESSI",
+                welcomeText: "Siete i commessi dell’ultimo VideoClub della catena.<br><br>I tempi sono duri, lo streaming incombe e le sorti dello store sono nelle vostre mani.<br>Ad ogni round le VHS arrivano sul desk centrale e il vostro compito è allestire gli scaffali (personali e condivisi) per soddisfare le richieste dello store manager e dei clienti.",
+                gameSpirit: "Spirito del Gioco: SEMI-COOPERATIVO",
+                turnSequence: "SEQUENZA TURNO",
+                rule1Title: "1. MUOVI (MOVE)", rule1Text: "Muovi il Manager di 1 o 2 spazi in senso orario (o 3 se usi le CND Caramelle).",
+                rule1Note: "Importante: Si contano solo le pile piene. Salta i vuoti! Preleva tutte le VHS e gli Snack dalla pila di destinazione.",
+                rule2Title: "2. PIAZZA (PLACE)",
+                rule2Li1: "<strong class=\"text-white\">Quantità:</strong> Almeno 2 VHS totali.",
+                rule2Li2: "<strong class=\"text-white\">Adiacenza:</strong> Vicino a una VHS già piazzata o ai bordi.",
+                rule2Li3: "<strong class=\"text-white\">Limite Shared:</strong> Max 1 VHS per ogni scaffale condiviso (DX/SX).",
+                rule2Note: "Non puoi spostare VHS già piazzate (salvo effetti snack).",
+                rule3Title: "3. UTILIZZA SNACK", rule3Text: "Conservane max 3. Scarta l’eccesso.",
+                rule3Li1: "🍿 <strong>POP (Popcorn):</strong> Prendi 1 VHS dal Box Riconsegna e giocala subito.",
+                rule3Li2: "🍦 <strong>ICE (Gelato):</strong> Sposta 1 VHS del tuo Scaffale Personale in uno slot vuoto adiacente.",
+                rule3Li3: "🍬 <strong>CND (Caramelle):</strong> +1 al movimento del Manager.",
+                rule4Title: "4. SCARTA VHS", rule4Text: "Se ti avanzano VHS, puoi scartarne nel Box Riconsegna (Max 2).",
+                rule4Note: "Box Pieno? 1. Aggiungi 1 Segnalino Fallimento. 2. Svuota il Box.",
+                stateLabel: "STATO", sharedSx: "SHARED SX", sharedDx: "SHARED DX", yourShelf: "IL TUO SCAFFALE", currentHand: "MANO ATTUALE", returns: "RESI",
+                audioOn: "🎵 SOUNDTRACK: ON (Vibe attiva!)", audioOff: "🎵 SOUNDTRACK: OFF (Tap for 90s vibes!)",
+                btnMove: "MUOVI", btnTake: "PRENDI PILA", btnPlace: "PIAZZA", btnReset: "RESET TURNO",
+                audioOn: "🎵 SOUNDTRACK: ON (Vibe attiva!)", audioOff: "🎵 SOUNDTRACK: OFF (Tap for 90s vibes!)",
+                btnMove: "MUOVI", btnTake: "PRENDI PILA", btnPlace: "PIAZZA", btnReset: "RESET TURNO",
+                stMove: "MUOVI MGR", stTake: "PRENDI", stPlace: "PIAZZA",
+                legendTitle: "LEGENDA SNACK"
+            },
+            en: {
+                managerMode: "MANAGER MODE", active: "ACTIVE",
+                actionMenu: "ACTION MENU", btnIntro: "INTRO", btnRules: "RULES",
+                interactiveRules: "OPEN INTERACTIVE RULES", downloadPdf: "DOWNLOAD PDF MANUAL",
+                welcomeTitle: "WELCOME CLERKS",
+                welcomeText: "You are the clerks of the last VideoClub in the chain.<br><br>Times are tough, streaming is looming, and the store's fate is in your hands.<br>Each round, VHS tapes arrive at the central desk, and your task is to stock the shelves (personal and shared) to satisfy the Store Manager and customers.",
+                gameSpirit: "Game Spirit: SEMI-COOPERATIVE",
+                turnSequence: "TURN SEQUENCE",
+                rule1Title: "1. MOVE", rule1Text: "Move the Manager 1 or 2 spaces clockwise (or 3 if you use CND Candy).",
+                rule1Note: "Important: Count only full piles. Skip empty ones! Take all VHS and Snacks from the destination pile.",
+                rule2Title: "2. PLACE",
+                rule2Li1: "<strong class=\"text-white\">Quantity:</strong> At least 2 VHS total.",
+                rule2Li2: "<strong class=\"text-white\">Adjacency:</strong> Next to an existing VHS or at the edges.",
+                rule2Li3: "<strong class=\"text-white\">Shared Limit:</strong> Max 1 VHS per shared shelf (L/R).",
+                rule2Note: "You cannot move placed VHS (except with snack effects).",
+                rule3Title: "3. USE SNACK", rule3Text: "Keep max 3. Discard excess.",
+                rule3Li1: "🍿 <strong>POP (Popcorn):</strong> Take 1 VHS from Return Box and play it immediately.",
+                rule3Li2: "🍦 <strong>ICE (Ice Cream):</strong> Move 1 VHS from your Shelf to an empty adjacent slot.",
+                rule3Li3: "🍬 <strong>CND (Candy):</strong> +1 to Manager movement.",
+                rule4Title: "4. DISCARD VHS", rule4Text: "If you have leftover VHS, discard to Return Box (Max 2).",
+                rule4Note: "Box Full? 1. Add 1 Failure Token. 2. Empty the Box.",
+                stateLabel: "STATE", sharedSx: "SHARED L", sharedDx: "SHARED R", yourShelf: "YOUR SHELF", currentHand: "CURRENT HAND", returns: "RETURNS",
+                audioOn: "🎵 SOUNDTRACK: ON (Vibe is ON!)", audioOff: "🎵 SOUNDTRACK: OFF (Tap for 90s vibes!)",
+                btnMove: "MOVE", btnTake: "TAKE PILE", btnPlace: "PLACE", btnReset: "RESET TURN",
+                btnMove: "MOVE", btnTake: "TAKE PILE", btnPlace: "PLACE", btnReset: "RESET TURN",
+                stMove: "MOVE MGR", stTake: "TAKE", stPlace: "PLACE",
+                legendTitle: "SNACK LEGEND"
+            },
+            fr: {
+                managerMode: "MODE GÉRANT", active: "ACTIF",
+                actionMenu: "MENU ACTION", btnIntro: "INTRO", btnRules: "RÈGLES",
+                interactiveRules: "OUVRIR RÈGLES INTERACTIVES", downloadPdf: "TÉLÉCHARGER MANUEL PDF",
+                welcomeTitle: "BIENVENUE VENDEURS",
+                welcomeText: "Vous êtes les vendeurs du dernier VideoClub de la chaîne.<br><br>Les temps sont durs, le streaming menace et le sort du magasin est entre vos mains.<br>À chaque tour, des VHS arrivent sur le bureau central, et votre tâche est de remplir les rayons (personnels et partagés) pour satisfaire le gérant et les clients.",
+                gameSpirit: "Esprit du Jeu : SEMI-COOPÉRATIF",
+                turnSequence: "SÉQUENCE DU TOUR",
+                rule1Title: "1. DÉPLACER (MOVE)", rule1Text: "Déplacez le Gérant de 1 ou 2 cases dans le sens horaire (ou 3 avec un Bonbon CND).",
+                rule1Note: "Important : Comptez seulement les piles pleines. Sautez les vides ! Prenez toutes les VHS et Snacks de la pile destination.",
+                rule2Title: "2. PLACER (PLACE)",
+                rule2Li1: "<strong class=\"text-white\">Quantité :</strong> Au moins 2 VHS au total.",
+                rule2Li2: "<strong class=\"text-white\">Adjacence :</strong> À côté d'une VHS existante ou sur les bords.",
+                rule2Li3: "<strong class=\"text-white\">Limite Partagé :</strong> Max 1 VHS par rayon partagé (G/D).",
+                rule2Note: "Vous ne pouvez pas déplacer des VHS placées (sauf effet snack).",
+                rule3Title: "3. UTILISER SNACK", rule3Text: "Gardez max 3. Défaussez l'excès.",
+                rule3Li1: "🍿 <strong>POP (Pop-corn) :</strong> Prenez 1 VHS de la Boîte de Retour et jouez-la immédiatement.",
+                rule3Li2: "🍦 <strong>ICE (Glace) :</strong> Déplacez 1 VHS de votre Rayon vers un emplacement vide adjacent.",
+                rule3Li3: "🍬 <strong>CND (Bonbon) :</strong> +1 au mouvement du Gérant.",
+                rule4Title: "4. DÉFAUSSER VHS", rule4Text: "S'il vous reste des VHS, défaussez dans la Boîte de Retour (Max 2).",
+                rule4Note: "Boîte Pleine ? 1. Ajoutez 1 Jeton Échec. 2. Videz la Boîte.",
+                stateLabel: "ÉTAT", sharedSx: "PARTAGÉ G", sharedDx: "PARTAGÉ D", yourShelf: "VOTRE RAYON", currentHand: "MAIN ACTUELLE", returns: "RETOURS",
+                audioOn: "🎵 SOUNDTRACK: ON (Ambiance active!)", audioOff: "🎵 SOUNDTRACK: OFF (Tap for 90s vibes!)",
+                btnMove: "DÉPLACER", btnTake: "PRENDRE", btnPlace: "PLACER", btnReset: "RÉINIT. TOUR",
+                audioOn: "🎵 SOUNDTRACK: ON (Ambiance active!)", audioOff: "🎵 SOUNDTRACK: OFF (Tap for 90s vibes!)",
+                btnMove: "DÉPLACER", btnTake: "PRENDRE", btnPlace: "PLACER", btnReset: "RÉINIT. TOUR",
+                stMove: "BOUGER MGR", stTake: "PRENDRE", stPlace: "PLACER",
+                legendTitle: "LÉGENDE SNACK"
+            }
+        };
+
+        // SNACK DEFINITIONS
+        const SNACKS = {
+
+            POP: { id: 'pop', l: '🍿', c: 'bg-yellow-400 text-black border-white', n: 'POPCORN', d: 'Play from Discard' },
+            ICE: { id: 'ice', l: '🍦', c: 'bg-cyan-400 text-black border-white', n: 'GELATO', d: 'Move Shelf Item' },
+            CND: { id: 'cnd', l: '🍬', c: 'bg-fuchsia-500 text-white border-white', n: 'CARAMELLE', d: 'Move +1' }
+        };
+        const SNK_KEYS = ['POP', 'ICE', 'CND'];
+
+        // Shared shelves now Array(6) for 2x3 grid
+        // s.d is now Array of VHS objects (discard pile)
+        // s.mode: 'normal', 'ice_pick' (pick item to move), 'ice_place' (pick dest), 'pop_pick' (pick from discard)
+        let s = { step: 0, mPos: 0, piles: [], snk: [], hand: [], me: Array(15).fill(null), L: Array(6).fill(null), R: Array(6).fill(null), d: [], sel: null, mode: 'normal', iceIdx: null };
+
+        function startGame() {
+            const aw = document.getElementById('audio-hidden-wrapper');
+            // Autoplay OFF by default
+            // aw.innerHTML = ... 
+            // We do nothing for audio on start.
+            document.getElementById('splash-screen').style.display = 'none'; document.getElementById('vcr').style.display = 'flex'; initGame();
+            setTimeout(() => { document.getElementById('vcr').style.display = 'none'; document.getElementById('app').classList.remove('hidden'); }, 2100);
+        }
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active-lang'));
+            document.getElementById('lang-' + lang).classList.add('active-lang');
+
+            // Update static Strings
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (TRANSLATIONS[lang][key]) el.innerHTML = TRANSLATIONS[lang][key];
+            });
+
+            // Update Audio Button if active logic
+            const btnAudio = document.getElementById('btn-audio-toggle');
+            const isAudioOn = btnAudio.classList.contains('text-green-500');
+            btnAudio.innerText = isAudioOn ? TRANSLATIONS[lang].audioOn : TRANSLATIONS[lang].audioOff;
+
+            renderGoals(); // Re-render goals with new lang
+            render(); // Re-render controls/status
+        }
+
+        function toggleAudio() {
+            const aw = document.getElementById('audio-hidden-wrapper'); const btn = document.getElementById('btn-audio-toggle');
+            if (aw.innerHTML === '') {
+                aw.innerHTML = `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A1094585170&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>`;
+                btn.innerText = TRANSLATIONS[currentLang].audioOn;
+                btn.classList.add('text-green-500', 'border-green-500');
+            } else {
+                aw.innerHTML = '';
+                btn.innerText = TRANSLATIONS[currentLang].audioOff;
+                btn.classList.remove('text-green-500', 'border-green-500');
+            }
+        }
+        function tab(t) { ['intro', 'rules'].forEach(x => document.getElementById('tab-' + x).classList.add('hidden')); document.getElementById('tab-' + t).classList.remove('hidden'); document.getElementById('btn-intro').classList.remove('active-tab'); document.getElementById('btn-rules').classList.remove('active-tab'); document.getElementById('btn-' + t).classList.add('active-tab'); }
+
+        function initGame() {
+            s.piles = []; s.snk = [];
+            for (let i = 0; i < N; i++) {
+                let p = []; for (let k = 0; k < 4; k++) p.push(G[Math.floor(Math.random() * G.length)]);
+                s.piles.push(p);
+                // Randomly assign a SNACK type if 20% chance, or adhere to original 50% distribution but with types?
+                // Original was `i % 2 === 0` (every other pile). Let's keep frequency but randomize type.
+                if (i % 2 === 0) {
+                    const rKey = SNK_KEYS[Math.floor(Math.random() * SNK_KEYS.length)];
+                    s.snk.push(SNACKS[rKey]);
+                } else {
+                    s.snk.push(null);
+                }
+            }
+            s.mPos = 0; s.hand = []; s.me = Array(15).fill(null);
+            // RANDOMIZE SHARED SHELVES PRE-FILL (Simulation Logic)
+            s.L = Array(6).fill(null); s.R = Array(6).fill(null);
+            // Pre-fill a few shared slots for realism
+            s.L[0] = G[0]; s.R[3] = G[1];
+            s.d = []; s.step = 0; s.mode = 'normal'; s.iceIdx = null;
+
+            // Randomize Goals Indices
+            currentGoalsIndices.c = Math.floor(Math.random() * 3);
+            currentGoalsIndices.p = Math.floor(Math.random() * 3);
+
+            setLang('it'); // Standard init, will render goals and ui
+        }
+
+        function renderGoals() {
+            const g = GOALS_DATA[currentLang];
+            const cg = g.common[currentGoalsIndices.c];
+            const cgEl = document.getElementById('common-goal-container');
+            cgEl.innerHTML = `
+                <div class="post-it relative">
+                    <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-red-500 rounded-full opacity-80 shadow-sm"></div>
+                    <div class="font-bold border-b border-black/20 mb-1">${g.commonTitle}</div>
+                    <p>${cg.t}</p>
+                    <p class="text-[10px] mt-1">${cg.d}</p>
+                </div>`;
+
+            // Random Personal Goal
+            const pgName = g.personal[currentGoalsIndices.p].n;
+            const pgTapes = PERSONAL_TAPES[currentGoalsIndices.p];
+            const pgEl = document.getElementById('personal-goal-container');
+            let tapesHtml = '';
+            pgTapes.forEach(c => {
+                tapesHtml += `<div class="w-4 h-6 ${c} border border-black"></div>`;
+            });
+            pgEl.innerHTML = `
+                <div class="personal-goal-card">
+                    <div class="text-[9px] font-bold text-gray-500 mb-1">${g.personalTitle}</div>
+                    <div class="flex gap-1">${tapesHtml}</div>
+                    <div class="text-[8px] text-center mt-1 text-gray-400">${pgName}</div>
+                </div>`;
+        }
+        function move(n) {
+            // CND Handling: If n=3, it means we used a CND. We must remove one CND from hand.
+            if (n === 3) {
+                const cndIdx = s.hand.findIndex(x => x && x.id === 'cnd');
+                if (cndIdx !== -1) s.hand.splice(cndIdx, 1);
+            }
+            s.mPos = (s.mPos + n) % N; s.step = 1; render();
+        }
+
+        function take() {
+            if (s.piles[s.mPos].length === 0 && !s.snk[s.mPos]) return;
+            s.hand = [...s.hand, ...s.piles[s.mPos]];
+            if (s.snk[s.mPos]) {
+                // Push the specific snack object
+                s.hand.push({ ...s.snk[s.mPos], type: 'snack' });
+                s.snk[s.mPos] = null;
+            }
+            s.piles[s.mPos] = []; s.step = 2; render();
+        }
+
+        function sel(i) {
+            if (s.step === 2 && s.mode === 'normal') {
+                s.sel = (s.sel === i) ? null : i;
+            } else if (s.mode === 'ice_pick') {
+                // ICE Logic: Select item on shelf to move
+                // Wait, sel() is typically for HAND selection. 
+                // We need click handlers for grid items to handle ICE picking.
+                // Revert to standard hand selection for Normal mode.
+            }
+            render();
+        }
+
+        function place(z, i = null) {
+            if (s.mode === 'ice_place') {
+                // ICE CREAM PLACE LOGIC
+                if (z === 'me' && i !== null && !s.me[i]) {
+                    // Move s.me[s.iceIdx] to s.me[i]
+                    // Check adjacency? Rule: "into an empty adjacent slot".
+                    // We can reuse validation logic or strictly enforce it.
+                    // For now, let's trust the UI highlighting (which we will build).
+                    s.me[i] = s.me[s.iceIdx];
+                    s.me[s.iceIdx] = null;
+                    s.mode = 'normal'; s.iceIdx = null;
+                    render();
+                }
+                return;
+            }
+
+            if (s.sel === null) return;
+            let it = s.hand[s.sel];
+
+            // DISCARD LOGIC
+            if (z === 'd') {
+                // Add to discard array (Max 2 logic is usually "allow discard", penalty comes if full?)
+                // Current rule: "Scarta nel Box. Max 2."
+                // Only VHS can be discarded usually? Rule says "Scarta VHS". But snacks? "Max 3 snacks".
+                // If simple discard:
+                s.d.push(it);
+                s.hand.splice(s.sel, 1); s.sel = null;
+                // Check end turn condition
+                if (s.hand.length === 0) s.step = 0;
+                render();
+                return;
+            }
+
+            if (it.type === 'snack') { return; } // Prevent snack placement on shelves
+
+            if (z === 'me') { if (!s.me[i]) s.me[i] = it; }
+            else if (z === 'L') { if (!s.L[i]) s.L[i] = it; }
+            else if (z === 'R') { if (!s.R[i]) s.R[i] = it; }
+            else { return; } // Invalid zone
+
+            s.hand.splice(s.sel, 1); s.sel = null; if (s.hand.length === 0) s.step = 0; render();
+        }
+
+        function useSnack() {
+            if (s.sel === null) return;
+            const item = s.hand[s.sel];
+            if (item.type !== 'snack') return;
+
+            if (item.id === 'pop') {
+                // POPCORN: Pick from discard
+                if (s.d.length === 0) { alert('Discard is empty!'); return; }
+                s.mode = 'pop_pick';
+            } else if (item.id === 'ice') {
+                // ICE: Move shelf item
+                s.mode = 'ice_pick';
+            } else if (item.id === 'cnd') {
+                // CND: +1 Move. Usually used in Move Phase.
+                // If we are here (Step 2 - Place), maybe it's too late?
+                // Rule: "Move ... or 3 if using CND".
+                // This implies CND is used INSTEAD of normal move, or augments it.
+                // Since we are in Place phase, maybe we can't use it now?
+                // Or maybe we use it to 'bank' a move? 
+                // Let's assume CND is consumed during the MOVE phase automatically if selected?
+                // Or we add a specific button in Step 0.
+                alert('Use CND during Move phase (Step 1)!');
+                return;
+            }
+
+            // Remove snack used (except for CND which is special, or POP/ICE which wait for completion?)
+            // If we remove it now, we lose the reference if cancelled. 
+            // Let's remove ONLY when action completed.
+            render();
+        }
+
+        function resolvePop(dIdx) {
+            // Player picked item at dIdx from Discard
+            const item = s.d[dIdx];
+            s.d.splice(dIdx, 1); // Remove from discard
+            // "Giocala subito" -> Add to cursor (sel) and go to place mode?
+            // Or add to hand? "Giocala subito" implies immediate placement.
+            // Let's add to hand, select it, and remove the POP snack.
+
+            // Remove POP
+            s.hand.splice(s.sel, 1);
+
+            s.hand.push(item);
+            s.sel = s.hand.length - 1; // Select the retrieved VHS
+            s.mode = 'normal';
+            render();
+        }
+
+        function resolveIcePick(shelfIdx) {
+            if (s.me[shelfIdx]) {
+                s.iceIdx = shelfIdx;
+                s.mode = 'ice_place';
+                render();
+            }
+        }
+
+        function render() {
+            const c = document.getElementById('controls'), st = document.getElementById('sts');
+            const tr = TRANSLATIONS[currentLang];
+
+            // CONTROLS Logic
+            let ctrls = '';
+
+            // Special Overlay for Popcorn Pick
+            if (s.mode === 'pop_pick') {
+                ctrls = `<div class="text-yellow-400 font-bangers text-xl animate-pulse">PICK FROM DISCARD (POPCORN)</div>
+                         <button onclick="s.mode='normal';render()" class="ml-2 text-xs border border-gray-500 px-2 py-1">CANCEL</button>`;
+                st.innerText = "POPCORN";
+            } else if (s.mode === 'ice_pick') {
+                ctrls = `<div class="text-pink-400 font-bangers text-xl animate-pulse">PICK ITEM TO MOVE (ICE)</div>
+                         <button onclick="s.mode='normal';render()" class="ml-2 text-xs border border-gray-500 px-2 py-1">CANCEL</button>`;
+                st.innerText = "ICE PICK";
+            } else if (s.mode === 'ice_place') {
+                ctrls = `<div class="text-pink-400 font-bangers text-xl animate-pulse">PICK EMPTY SLOT (ICE)</div>
+                         <button onclick="s.mode='normal';s.iceIdx=null;render()" class="ml-2 text-xs border border-gray-500 px-2 py-1">CANCEL</button>`;
+                st.innerText = "ICE PLACE";
+            } else {
+                if (s.step === 0) {
+                    ctrls = `<button onclick="move(1)" class="bg-blue-800 text-white px-4 py-2 text-sm font-bold border-2 border-white hover:bg-yellow-400 hover:text-black transition-colors rounded">${tr.btnMove} 1</button>
+                             <button onclick="move(2)" class="bg-blue-800 text-white px-4 py-2 text-sm font-bold border-2 border-white hover:bg-yellow-400 hover:text-black transition-colors rounded">${tr.btnMove} 2</button>`;
+
+                    // CND LOGIC: Show Move 3 if CND in hand
+                    const hasCnd = s.hand.some(x => x && x.id === 'cnd');
+                    if (hasCnd) {
+                        ctrls += `<button onclick="move(3)" class="ml-2 bg-[#ea80fc] text-white px-4 py-2 text-sm font-bold border-2 border-white hover:bg-white hover:text-[#ea80fc] transition-colors rounded shadow-[0_0_10px_#ea80fc]">MOVI 3 (🍬)</button>`;
+                    }
+
+                    st.innerText = tr.stMove;
+                }
+                else if (s.step === 1) {
+                    ctrls = `<button onclick="take()" class="bg-yellow-500 text-black px-6 py-2 font-bold animate-pulse border-2 border-white shadow-lg rounded hover:scale-105 transition-transform">${tr.btnTake}</button>`;
+                    st.innerText = tr.stTake;
+                }
+                else {
+                    // STEP 2: PLACE or USE
+                    ctrls = ``;
+                    // If snack selected, show USE
+                    if (s.sel !== null && s.hand[s.sel].type === 'snack') {
+                        ctrls += `<button onclick="useSnack()" class="bg-green-600 text-white px-6 py-2 font-bold animate-pulse border-2 border-white shadow-lg rounded hover:bg-green-500 mr-2">EAT SNACK</button>`;
+                    }
+                    ctrls += `<button onclick="initGame()" class="bg-white text-black text-xs border border-gray-400 px-3 py-1 font-bold hover:bg-gray-200 transition-colors shadow-sm">${tr.btnReset}</button>`;
+                    st.innerText = tr.stPlace;
+                }
+            }
+            c.innerHTML = ctrls;
+
+            const r = document.getElementById('piles-root'); r.innerHTML = ''; const rad = 120; // Reduced from 125 for better fit
+            for (let i = 0; i < N; i++) {
+                const ang = (i * (360 / N)) - 90, rd = ang * (Math.PI / 180);
+                const ox = rad * Math.cos(rd) - 10; // -10 to center 20px wide tape
+                const oy = rad * Math.sin(rd) - 14; // -14 to center 28px tall tape
+
+                const d = document.createElement('div');
+                d.className = 'absolute';
+                d.style.left = '50%'; d.style.top = '50%';
+                d.style.transform = `translate(${ox}px, ${oy}px)`;
+
+                s.piles[i].forEach((t, ix) => { const el = document.createElement('div'); el.className = `w-5 h-7 border border-black rounded absolute ${t.c} shadow-sm`; el.style.top = (-ix * 3) + 'px'; el.style.left = (ix * 1) + 'px'; d.appendChild(el); });
+                if (s.snk[i]) {
+                    // Render specific snack icon OUTSIDE
+                    // Offset from the centered tape position
+                    const delta = 40;
+                    // d's origin is shifted by -10, -14 relative to the exact radius point.
+                    // We want snack at Radius + Delta.
+                    // SnackPos = (10 + 40*cos, 14 + 40*sin) relative to d's top-left.
+                    const sx = 10 + delta * Math.cos(rd);
+                    const sy = 14 + delta * Math.sin(rd);
+
+                    const sk = document.createElement('div');
+                    sk.className = `snack-item transform scale-75 absolute shadow-lg ${s.snk[i].c}`;
+                    sk.style.left = sx + 'px';
+                    sk.style.top = sy + 'px';
+                    sk.style.transform = 'translate(-50%, -50%) scale(0.75)'; // Center snack on its point
+                    sk.innerText = s.snk[i].l;
+                    d.appendChild(sk);
+                }
+                r.appendChild(d);
+            }
+            // Manager INSIDE (Radius 90)
+            const m = document.getElementById('meeple'); const ma = ((s.mPos * (360 / N)) - 90) * (Math.PI / 180);
+            m.style.left = '50%'; m.style.top = '50%';
+            // Use translate for position + centering meeple itself (-50%)
+            // 90px radius
+            m.style.transform = `translate(-50%, -50%) translate(${90 * Math.cos(ma)}px, ${90 * Math.sin(ma)}px)`;
+
+            // Popcorn Picker Overlay
+            if (s.mode === 'pop_pick') {
+                // Render discard pile selection in center
+                const popDiv = document.createElement('div');
+                popDiv.className = 'absolute inset-0 z-50 bg-black/80 flex flex-wrap justify-center items-center gap-2 p-10 overflow-y-auto';
+                if (s.d.length === 0) popDiv.innerHTML = '<div class="text-white">Empty Discard</div>';
+                else {
+                    s.d.forEach((it, ix) => {
+                        const d = document.createElement('div');
+                        d.className = `vhs-tape ${it.c} scale-125 cursor-pointer hover:border-yellow-400 border-2 border-transparent`;
+                        d.innerHTML = `<span>${it.l}</span>`;
+                        d.onclick = (e) => { e.stopPropagation(); resolvePop(ix); };
+                        popDiv.appendChild(d);
+                    });
+                }
+                document.getElementById('piles-root').appendChild(popDiv);
+            }
+
+            const h = document.getElementById('hand'); h.innerHTML = '';
+            s.hand.forEach((it, ix) => {
+                const d = document.createElement('div');
+                if (it.type === 'snack') {
+                    d.className = `snack-item cursor-pointer transform hover:scale-110 transition-transform ${it.c} ${s.sel === ix ? 'border-green-400 ring-2 ring-green-400 scale-125' : ''}`;
+                    d.innerText = it.l;
+                } else {
+                    d.className = `vhs-tape ${it.c} scale-90 cursor-pointer hover:scale-100 ${s.sel === ix ? 'border-2 border-green-400 ring-2 ring-green-400' : ''}`;
+                    d.innerHTML = `<span>${it.l}</span>`;
+                }
+                d.onclick = () => sel(ix); h.appendChild(d);
+            });
+
+            const renderGrid = (arr, id, z, cols) => {
+                const e = document.getElementById(id); e.innerHTML = '';
+                arr.forEach((it, ix) => {
+                    const d = document.createElement('div');
+                    d.className = 'w-full h-10 border border-[#333] relative bg-black/20 transition-colors flex items-center justify-center';
+
+                    // Click handler for ICE PICK
+                    if (s.mode === 'ice_pick') {
+                        if (it && it.type !== 'snack') { // Can only move VHS
+                            d.className += ' cursor-pointer border-pink-500 border-dashed animate-pulse bg-pink-900/20';
+                            d.onclick = () => resolveIcePick(ix);
+                        } else {
+                            d.className += ' opacity-30';
+                        }
+                    }
+                    // Click handler for ICE PLACE
+                    else if (s.mode === 'ice_place') {
+                        // Must be empty
+                        if (!it) {
+                            // Adjacency check to s.iceIdx? "Adjacent slot".
+                            // Simple 1D adjacency for now: -1 or +1 (wrapping?)
+                            // Or simplified: Any empty slot on YOUR shelf?
+                            // Rule: "in uno slot vuoto adiacente".
+                            let valid = false;
+                            if (Math.abs(ix - s.iceIdx) === 1) valid = true; // Left/Right
+                            if (Math.abs(ix - s.iceIdx) === 5) valid = true; // Up/Down (if grid 5 cols)
+                            // Handle Wrap around?
+                            // 2D Grid: ix % 5. 
+                            const c1 = s.iceIdx % 5; const r1 = Math.floor(s.iceIdx / 5);
+                            const c2 = ix % 5; const r2 = Math.floor(ix / 5);
+                            if (Math.abs(c1 - c2) + Math.abs(r1 - r2) === 1) valid = true; // Manhattan distance 1
+
+                            if (valid) {
+                                d.className += ' cursor-pointer border-pink-500 border-dashed animate-pulse bg-pink-900/20';
+                                d.onclick = () => place('me', ix);
+                            } else {
+                                d.className += ' opacity-30';
+                            }
+                        } else {
+                            d.className += ' opacity-30';
+                        }
+                    }
+                    else if (it) { // Filled
+                        if (it.type === 'snack') d.innerHTML = `<div class="snack-item scale-75 m-auto ${it.c}">${it.l}</div>`; // Should not happen on shelf usually
+                        else d.innerHTML = `<div class="vhs-tape ${it.c} scale-[0.6]"><span>${it.l}</span></div>`;
+                    } else if (s.sel !== null && s.mode === 'normal') {
+                        const item = s.hand[s.sel];
+                        if (item.type !== 'snack') { // VHS Only on shelves
+                            // Adjacency/Edge Logic
+                            let valid = false;
+                            const c = ix % cols;
+                            if (c === 0 || c === cols - 1) valid = true; // Edges
+                            if (ix - cols >= 0 && arr[ix - cols]) valid = true; // Up
+                            if (ix + cols < arr.length && arr[ix + cols]) valid = true; // Down
+                            if (c > 0 && arr[ix - 1]) valid = true; // Left
+                            if (c < cols - 1 && arr[ix + 1]) valid = true; // Right
+
+                            if (valid) {
+                                d.className += ' cursor-pointer bg-green-900/20 border-green-500 border-dashed animate-pulse hover:border-white';
+                                d.onclick = () => place(z, ix);
+                            } else {
+                                d.className += ' opacity-30 cursor-not-allowed bg-red-900/10';
+                            }
+                        } else {
+                            // Snack selected: Show blocked
+                            d.className += ' opacity-30 cursor-not-allowed';
+                        }
+                    }
+                    e.appendChild(d);
+                });
+            }
+            renderGrid(s.me, 's-me', 'me', 5);
+            renderGrid(s.L, 's-L', 'L', 2);
+            renderGrid(s.R, 's-R', 'R', 2);
+
+            document.getElementById('disc-cnt').innerText = s.d.length;
+            const dz = document.getElementById('disc-zone'); if (s.sel !== null && s.mode === 'normal') { dz.onclick = () => place('d'); dz.classList.add('border-green-400', 'bg-green-900/20'); } else { dz.onclick = null; dz.classList.remove('border-green-400', 'bg-green-900/20'); }
+        }
+
+        const bg = document.getElementById('splash-bg'); const imgs = ['vhs-blk.png', 'vhs-blu.png', 'vhs-gre.png', 'vhs-ora.png', 'vhs-pin.png', 'vhs-pur.png', 'vhs-red.png', 'vhs-whi.png', 'vhs-yel.png']; for (let i = 0; i < 12; i++) { const t = document.createElement('div'); t.className = 'bg-tape'; const rndImg = imgs[Math.floor(Math.random() * imgs.length)]; t.style.backgroundImage = `url('${rndImg}')`; t.style.left = Math.random() * 90 + '%'; t.style.top = '100vh'; t.style.animationDelay = -(Math.random() * 20) + 's'; bg.appendChild(t); }
+    </script>
+</body>
+
+</html>
