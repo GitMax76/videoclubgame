@@ -32,7 +32,7 @@
         }
 
         body {
-            font-family: 'Anton', 'Impact', 'Verdana', sans-serif !important;
+            font-family: 'Verdana', 'Arial', sans-serif !important;
             /* The 90s Web Font */
             background-color: var(--site-bg);
             /* Subtle 90s Memphis Pattern Overlay */
@@ -69,6 +69,12 @@
             border-right: 4px solid var(--bb-yellow);
         }
 
+        /* Custom Font */
+        @font-face {
+            font-family: 'Blockletter';
+            src: url('Blockletter-PMGg.ttf') format('truetype');
+        }
+
         /* Content Area */
         #right-column .vhs-cassette-ui {
             background: #FFFFFF !important;
@@ -77,6 +83,21 @@
             color: #000 !important;
             min-height: 650px;
             position: relative;
+        }
+
+        /* ... (styles omitted) ... */
+
+        .bb-title-text {
+            font-family: 'Blockletter', 'Anton', sans-serif;
+            font-size: 8rem;
+            /* Much larger */
+            line-height: 1;
+            text-transform: uppercase;
+            text-shadow: 6px 6px 0 #000;
+            /* transform: scaleY(1.3); Removed scaleY as true font usually handles it */
+            /* letter-spacing: -2px; Removed or adjusted based on font check */
+            margin-bottom: 10px;
+            display: inline-block;
         }
 
         /* Tab Content Containers */
@@ -142,7 +163,46 @@
             font-weight: 900;
         }
 
-        /* LOGO TICKET STYLE */
+        .bb-title-text {
+            font-family: 'Blockletter', 'Anton', sans-serif;
+            font-size: 8rem;
+            /* Much larger */
+            line-height: 1;
+            text-transform: uppercase;
+            text-shadow: 6px 6px 0 #000;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: bb-glow-pulse 3s infinite alternate ease-in-out;
+        }
+
+        /* ANIMATIONS */
+        @keyframes bb-glow-pulse {
+            0% {
+                text-shadow: 6px 6px 0 #000;
+                transform: scale(1);
+            }
+
+            100% {
+                text-shadow: 6px 6px 15px #FFC220;
+                /* Yellow glow */
+                transform: scale(1.02);
+                /* Subtle pop */
+            }
+        }
+
+        @keyframes bb-float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-2deg);
+            }
+
+            50% {
+                transform: translateY(-5px) rotate(-1deg);
+            }
+        }
+
+        /* LOGO TICKET STYLE - Apply float here too maybe? */
         .bb-ticket {
             position: relative;
             background: var(--bb-blue);
@@ -152,18 +212,13 @@
             clip-path: polygon(10px 0, 100% 0, 100% 100%, 0% 100%, 0% 65%, 10px 60%, 0% 55%);
             display: inline-block;
             margin-bottom: 20px;
+            animation: bb-float 4s infinite ease-in-out;
+            transition: transform 0.3s;
         }
-@font-face {
-    font-family: 'Blockletter';
-    src: url('Blockletter-PMGg.ttf') format('truetype');
-}
-        .bb-title-text {
-    font-family: 'Blockletter', 'Anton', sans-serif !important; 
-            font-size: 8rem;
-            /* Much larger */
-            line-height: 1;
-            text-transform: uppercase;
-            text-shadow: 6px 6px 0 #000;
+
+        .bb-ticket:hover {
+            animation-play-state: paused;
+            transform: rotate(0deg) scale(1.05);
         }
 
         @media (max-width: 768px) {
@@ -1148,5 +1203,3 @@
 </body>
 
 </html>
-
-
