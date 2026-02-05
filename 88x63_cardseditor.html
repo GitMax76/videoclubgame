@@ -929,20 +929,86 @@
     </div>
   </div>
 
-  <footer id="contacts-footer"
-    style="width: 100%; text-align: center; margin-top: 3rem; margin-bottom: 2rem; padding: 1.5rem; background: #222; border-top: 3px solid #555; color: #fff;">
-    <h3 style="margin-bottom: 1rem; font-size: 1.5rem; color: #ffd400;">👋 Info? Suggerimenti? Collaborazioni? Demo?
-      Parliamo!</h3>
-    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; font-size: 1.5rem;">
-      <a href="mailto:massi.sabato@gmail.com"
-        style="color: #ccc; text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid #444; border-radius: 5px; transition: all 0.2s;">📧
-        massi.sabato@gmail.com</a>
-      <a href="https://wa.me/393295644852" target="_blank"
-        style="color: #4caf50; text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid #444; border-radius: 5px; transition: all 0.2s;">💬
-        WhatsApp</a>
-      <a href="https://linktr.ee/JustMax76" target="_blank"
-        style="color: #e040fb; text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid #444; border-radius: 5px; transition: all 0.2s;">🌲
-        Linktree</a>
+  <!-- RETRO FOOTER STYLE -->
+  <style>
+    .retro-banner {
+      background-color: #000080;
+      /* Windows 95 Title Bar Blue */
+      border: 4px ridge #c0c0c0;
+      box-shadow: 10px 10px 0 #000;
+    }
+
+    .retro-marquee-container {
+      background: #000;
+      border: 2px inset #fff;
+      color: #0f0;
+      /* Hacker Green */
+      font-family: 'Courier New', monospace;
+      padding: 5px;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-bottom: 15px;
+    }
+
+    .retro-marquee-text {
+      display: inline-block;
+      animation: marquee 10s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translateX(100%);
+      }
+
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    .retro-btn {
+      background: #c0c0c0;
+      border: 2px outset #fff;
+      color: #000;
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+      padding: 5px 10px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .retro-btn:active {
+      border-style: inset;
+      transform: translate(1px, 1px);
+    }
+  </style>
+
+  <footer id="contacts-footer" class="max-w-4xl mx-auto mt-12 mb-12 retro-banner p-6 text-center relative z-20"
+    style="margin-top: 3rem; margin-bottom: 2rem;">
+    <div class="retro-marquee-container">
+      <span class="retro-marquee-text">*** RIMANIAMO IN CONTATTO *** VISITA I MIEI SOCIAL *** SCRIVIMI UNA MAIL
+        ***</span>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="mailto:massi.sabato@gmail.com" class="retro-btn">
+        <span>📧</span> EMAIL ME!
+      </a>
+      <a href="https://wa.me/393295644852" target="_blank" class="retro-btn">
+        <span>💬</span> WHATSAPP
+      </a>
+      <a href="https://linktr.ee/JustMax76" target="_blank" class="retro-btn">
+        <span>🌲</span> LINKTREE
+      </a>
+    </div>
+
+    <div class="mt-4 text-white font-mono text-xs">
+      (c) 1999 - 2026 VideoClub Inc. <br> Best viewed with Netscape Navigator 4.0
+      <br>
+      <img src="netscape_icon.png" alt="Netscape Logo"
+        style="display:inline; width:20px; vertical-align:middle; margin-right:5px;">
+
     </div>
   </footer>
 
