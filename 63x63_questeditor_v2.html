@@ -1062,6 +1062,41 @@
         </div>
     </div>
     <!-- RETRO FOOTER STYLE -->
+
+    .retro-banner {
+    background-color: #000080;
+    /* Windows 95 Title Bar Blue */
+    border: 4px ridge #c0c0c0;
+    box-shadow: 10px 10px 0 #000;
+    }
+
+    .retro-marquee-container {
+    background: #000;
+    border: 2px inset #fff;
+    color: #0f0;
+    /* Hacker Green */
+    font-family: 'Courier New', monospace;
+    padding: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-bottom: 15px;
+    }
+
+    .retro-marquee-text {
+    display: inline-block;
+    animation: marquee 10s linear infinite;
+    }
+
+    @keyframes marquee {
+    0% {
+    transform: translateX(100%);
+    }
+
+    100% {
+    transform: translateX(-100%);
+    }
+    }
+
     <style>
         .retro-banner {
             background-color: #000080;
@@ -1115,24 +1150,19 @@
             transform: translate(1px, 1px);
         }
     </style>
-
     <footer id="contacts-footer" class="max-w-4xl mx-auto mt-12 mb-12 retro-banner p-6 text-center relative z-20">
-        <div class="retro-marquee-container">
-            <span class="retro-marquee-text">*** RIMANIAMO IN CONTATTO *** VISITA I MIEI SOCIAL *** SCRIVIMI UNA MAIL
-                ***</span>
-        </div>
-        <div class="flex flex-wrap justify-center gap-4">
-            <a href="mailto:massi.sabato@gmail.com" class="retro-btn"><span>📧</span> EMAIL ME!</a>
-            <a href="https://wa.me/393295644852" target="_blank" class="retro-btn"><span>💬</span> WHATSAPP</a>
-            <a href="https://linktr.ee/JustMax76" target="_blank" class="retro-btn"><span>🌲</span> LINKTREE</a>
-        </div>
-        <div class="mt-4 text-white font-mono text-xs">
-            (c) 1999 - 2026 VideoClub Inc. <br> Best viewed with Netscape Navigator 4.0
-            <br>
-            <img src="https://web.archive.org/web/20090830080447/http://geocities.com/Heartland/Plains/6268/ie_logo.gif"
+        <div class="retro-marquee-container"><span class="retro-marquee-text">*** RIMANIAMO IN CONTATTO *** VISITA I
+                MIEI SOCIAL *** SCRIVIMI UNA MAIL ***</span></div>
+        <div class="flex flex-wrap justify-center gap-4"><a href="mailto:massi.sabato@gmail.com"
+                class="retro-btn"><span>📧</span>EMAIL ME ! </a><a href="https://wa.me/393295644852" target="_blank"
+                class="retro-btn"><span>💬</span>WHATSAPP </a><a href="https://linktr.ee/JustMax76" target="_blank"
+                class="retro-btn"><span>🌲</span>LINKTREE </a></div>
+        <div class="mt-4 text-white font-mono text-xs">(c) 1999 - 2026 VideoClub Inc. <br>Best viewed with Netscape
+            Navigator 4.0 <br><img src="netscape_icon.png" alt="Netscape Logo"
+                style="display:inline; width:20px; vertical-align:middle; margin-right:5px;"><img
+                src="https://web.archive.org/web/20090830080447/http://geocities.com/Heartland/Plains/6268/ie_logo.gif"
                 alt="IE Logo"
-                style="display:inline; width:20px; vertical-align:middle; filter: grayscale(100%); opacity: 0.5;">
-        </div>
+                style="display:inline; width:20px; vertical-align:middle; filter: grayscale(100%); opacity: 0.5;"></div>
     </footer>
 </body>
 
