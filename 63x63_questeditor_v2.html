@@ -93,13 +93,15 @@
         }
 
         .controls {
-            background: #444;
+            background: var(--bb-blue);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 0;
+            border: 2px solid var(--bb-yellow);
             width: 350px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
             max-height: 90vh;
             overflow-y: auto;
+            color: #fff;
         }
 
         .control-group {
@@ -122,6 +124,7 @@
         button {
             width: 100%;
             padding: 12px 15px;
+            margin-top: 5px;
             margin-bottom: 10px;
             background: #003399;
             color: white;
@@ -132,7 +135,8 @@
             transition: all 0.1s;
             font-size: 0.9rem;
             border-radius: 0;
-            margin-top: 5px;
+            text-align: left;
+            /* Match nav-btn */
         }
 
         button:hover {
@@ -143,20 +147,24 @@
         button:active {
             border-style: inset;
             border-color: #cc9900;
+            transform: none;
         }
 
         .btn-print {
             background: #ffd400;
             color: #000;
+            border-color: #ffd400;
         }
 
         .btn-print:hover {
             background: #ffea00;
+            color: #000;
         }
 
         .btn-save {
             background: #4CAF50;
             color: white;
+            border-color: #4CAF50;
         }
 
         .btn-save:hover {
@@ -166,23 +174,11 @@
         .btn-danger {
             background: #f44336;
             color: white;
-        }
-
-        .btn-danger {
-            background: #f44336;
-            color: white;
+            border-color: #f44336;
             margin-top: 10px;
         }
 
-        /* Bottoni Navigazione */
-        .btn-nav {
-            background: #6c757d;
-            color: white;
-        }
 
-        .btn-nav:hover {
-            background: #5a6268;
-        }
 
         /* Bottone Layout */
         .btn-layout {
