@@ -14,6 +14,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
+        @font-face {
+            font-family: 'Blockletter';
+            src: url('Blockletter-PMGg.ttf') format('truetype');
+        }
+
         :root {
             --card-size: 63mm;
             --bg-color: #fdfd96;
@@ -39,8 +44,14 @@
 
         h1 {
             margin-top: 20px;
-            font-weight: 300;
+            font-family: 'Blockletter', 'Anton', sans-serif;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 4px 4px 0 #000;
             color: #ffd400;
+            text-align: center;
+            line-height: 1.1;
         }
 
         /* --- LAYOUT EDITOR --- */
@@ -91,14 +102,16 @@
 
         button {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             margin-top: 5px;
             cursor: pointer;
-            border: none;
+            border: 2px solid #000;
             border-radius: 4px;
-            font-weight: bold;
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
             font-size: 0.9rem;
-            transition: background 0.2s, transform 0.1s;
+            transition: all 0.1s;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
         }
 
         button:active {
