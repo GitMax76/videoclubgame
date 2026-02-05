@@ -9,8 +9,7 @@
         rel="stylesheet">
     <!-- INJECTED DEPENDENCIES FOR LAYOUT -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Courier+New&family=Anton&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Anton&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
@@ -58,497 +57,496 @@
         }
 
         h1 {
-            margin-top: 20px;
-            font-family: 'Blockletter', 'Anton', sans-serif;
-            font-size: 6rem;
-            /* Increased size to match index more closely */
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 6px 6px 0 #000;
-            /* Increased shadow */
-            color: var(--bb-yellow);
-            /* Used var */
-            text-align: center;
-            line-height: 1;
-            margin-bottom: 20px;
-        }
-
-        /* --- LAYOUT EDITOR --- */
-        .workspace {
-            display: flex;
-            gap: 40px;
-            padding: 40px;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            justify-content: center;
-            flex-grow: 1;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-
-        /* Classe per layout verticale forzato */
-        .workspace.layout-column {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .controls {
-            background: var(--bb-blue);
-            padding: 20px;
-            border-radius: 0;
-            border: 2px solid var(--bb-yellow);
-            width: 350px;
-            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
-            max-height: 90vh;
-            overflow-y: auto;
-            color: #fff;
-        }
-
-        .control-group {
-            margin-bottom: 15px;
-            border-bottom: 1px solid #555;
-            padding-bottom: 15px;
-        }
-
-        .control-group:last-child {
-            border-bottom: none;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px 15px;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            background: #003399;
-            color: white;
-            border: 2px outset #5577cc;
-            font-family: 'Arial Black', sans-serif;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.1s;
-            font-size: 0.9rem;
-            border-radius: 0;
-            text-align: left;
-            /* Match nav-btn */
-        }
-
-        button:hover {
-            background: #0044cc;
-            color: var(--bb-yellow);
-        }
-
-        button:active {
-            border-style: inset;
-            border-color: #cc9900;
-            transform: none;
-        }
-
-        .btn-print {
-            background: #ffd400;
-            color: #000;
-            border-color: #ffd400;
-        }
-
-        .btn-print:hover {
-            background: #ffea00;
-            color: #000;
-        }
-
-        .btn-save {
-            background: #4CAF50;
-            color: white;
-            border-color: #4CAF50;
-        }
-
-        .btn-save:hover {
-            background: #45a049;
-        }
-
-        .btn-danger {
-            background: #f44336;
-            color: white;
-            border-color: #f44336;
-            margin-top: 10px;
-        }
-
-
-
-        /* Bottone Layout */
-        .btn-layout {
-            background: #17a2b8;
-            color: white;
-        }
-
-        .btn-layout:hover {
-            background: #138496;
-        }
-
-        .btn-audio {
-            background: #334155;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-audio.playing {
-            background: #28a745;
-        }
-
-        .btn-color {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            margin-right: 5px;
-            border-radius: 50%;
-            border: 2px solid #555;
-        }
-
-        .btn-color:hover {
-            transform: scale(1.1);
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #666;
-            background: #222;
-            color: white;
-            margin-bottom: 5px;
-        }
-
-        /* --- LIBRERIA --- */
-        .library-list {
-            max-height: 200px;
-            overflow-y: auto;
-            background: #222;
-            border: 1px solid #555;
-            border-radius: 4px;
-            margin-top: 10px;
-        }
-
-        .lib-item {
-            display: flex;
-            align-items: center;
-            padding: 8px;
-            border-bottom: 1px solid #333;
-            font-size: 0.9rem;
-        }
-
-        .lib-item:hover {
-            background: #333;
-        }
-
-        .lib-item input[type="checkbox"] {
-            margin-right: 10px;
-            transform: scale(1.2);
-            cursor: pointer;
-        }
-
-        .lib-name {
-            flex-grow: 1;
-            cursor: pointer;
-        }
-
-        .lib-del {
-            background: none;
-            border: none;
-            color: #f44336;
-            cursor: pointer;
-            width: auto;
-            padding: 0 5px;
-            margin: 0;
-        }
-
-        .lib-del:hover {
-            color: #d32f2f;
-        }
-
-
-        /* --- LA CARTA (POST-IT) --- */
-        .card-wrapper {
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
-            transform-origin: top center;
-        }
-
-        .card {
-            width: var(--card-size);
-            height: var(--card-size);
-            background-color: var(--bg-color);
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=');
-            /* Reduced padding to fit content better */
-            padding: 3mm;
-            position: relative;
-            overflow: hidden;
-            color: var(--ink-color);
-            font-family: 'Kalam', cursive;
-            display: flex;
-            flex-direction: row;
-            /* Horizontal Layout */
-            gap: 2mm;
-            transition: background-color 0.3s, border-color 0.3s;
-
-            /* Dynamic Border matching background */
-            border: 2mm solid var(--bg-color);
-            box-sizing: border-box;
-            border-radius: 0;
-        }
-
-        /* Columns */
-        .card-col-left {
-            flex: 0.8;
-            /* Reduced width */
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: hidden;
-            padding-right: 2mm;
-        }
-
-        .card-col-right {
-            flex: 1.2;
-            /* Increased width */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
-        }
-
-        .card::before {
-            display: none;
-            /* Remove global header background */
-        }
-
-        .card-title {
-            font-family: 'Permanent Marker', cursive;
-            font-size: 13pt;
-            /* Increased size */
-            line-height: 1.1;
-            border-bottom: 2px dashed rgba(0, 0, 0, 0.2);
-            padding-bottom: 2mm;
-            margin-bottom: 2mm;
-            outline: none;
-            background: rgba(0, 0, 0, 0.05);
-            /* Local background for title */
-            padding: 5px;
-            border-radius: 4px;
-            transform: rotate(-2deg);
-            /* Hastily written look */
-        }
-
-        .card-desc {
-            font-size: 9pt;
-            /* Slightly reduced */
-            line-height: 1.2;
-            flex-grow: 1;
-            outline: none;
-            padding-top: 1.5em;
-            /* Shift text down */
-        }
-
-        /* --- LO SKETCH DELLO SCAFFALE --- */
-        .sketch-area {
-            margin-top: 0;
-            /* Remove auto margin */
-            border: 2px solid rgba(0, 0, 0, 0.3);
-            border-radius: 4px;
-            padding: 1px;
-            position: relative;
-            background: rgba(255, 255, 255, 0.3);
-            height: 100%;
-            /* Full height */
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sketch-label {
-            font-size: 7pt;
-            text-transform: uppercase;
-            font-weight: bold;
-            opacity: 0.6;
-            text-align: center;
-            margin-bottom: 1px;
-            letter-spacing: 1px;
-        }
-
-        .shelf-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            /* 2 Cols */
-            grid-template-rows: repeat(3, 1fr);
-            /* 3 Rows */
-            gap: 2px;
-            padding: 2px;
-            /* Small padding */
-            width: 100%;
-            height: auto;
-            /* Allow grow */
-            flex-grow: 1;
-            /* Fill remaining space */
-        }
-
-        .shelf-slot {
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            transition: all 0.2s;
-            overflow: hidden;
-        }
-
-        .shelf-slot:hover {
-            border-color: rgba(0, 0, 0, 0.5);
-            background: rgba(255, 255, 255, 0.4);
-        }
-
-        .vhs-icon {
-            width: 90%;
-            height: auto;
-            max-height: 90%;
-            object-fit: contain;
-            display: none;
-            pointer-events: none;
-            filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
-            transform: rotate(-90deg) scale(1.1);
-            /* Rotate and slightly huge */
-        }
-
-        .shelf-slot.has-item .vhs-icon {
-            display: block;
-        }
-
-        .shelf-slot.is-empty::after {
-            content: "";
-            width: 60%;
-            /* Taller/Narrower look via rotation implication */
-            height: 80%;
-            border: 1px dashed #999;
-            border-radius: 2px;
-            opacity: 0.3;
-        }
-
-        /* --- FOOTER CONTATTI --- */
-        footer {
-            width: 100%;
-            text-align: center;
-            padding: 2rem;
-            background: #222;
-            border-top: 3px solid #555;
-            color: #fff;
-            margin-top: 2rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-        }
-
-        .footer-link {
-            color: #ccc;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border: 1px solid #444;
-            border-radius: 5px;
-            transition: all 0.2s;
-        }
-
-        .footer-link:hover {
-            background: #333;
-            color: white;
-        }
-
-        /* Area Stampa Multipla (nascosta a schermo) */
-        #print-grid-area {
-            display: none;
-        }
-
-        /* --- STAMPA --- */
-        @media print {
-            body {
-                background: white;
-                margin: 0;
-                padding: 0;
-                display: block;
+            h1 {
+                margin-top: 20px;
+                font-family: 'Anton', sans-serif;
+                font-size: 8rem;
+                text-transform: uppercase;
+                line-height: 1;
+                text-shadow: 6px 6px 0 #000;
+                color: var(--bb-yellow);
+                text-align: center;
+                margin-bottom: 20px;
+                font-weight: 400;
+                letter-spacing: 2px;
             }
 
-            .controls,
-            h1,
-            footer {
-                display: none !important;
-            }
-
-            body.printing-grid .workspace {
-                display: none !important;
-            }
-
-            body.printing-grid #print-grid-area {
-                display: block !important;
-            }
-
-            .print-page {
-                width: 210mm;
-                height: 297mm;
-                page-break-after: always;
-                break-after: page;
-                display: grid;
-                grid-template-columns: repeat(3, 66mm);
-                grid-template-rows: repeat(4, 66mm);
-                gap: 4mm;
+            /* --- LAYOUT EDITOR --- */
+            .workspace {
+                display: flex;
+                gap: 40px;
+                padding: 40px;
+                align-items: flex-start;
+                flex-wrap: wrap;
                 justify-content: center;
-                padding-top: 10mm;
+                flex-grow: 1;
+                width: 100%;
+                transition: all 0.3s ease;
+            }
+
+            /* Classe per layout verticale forzato */
+            .workspace.layout-column {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .controls {
+                background: var(--bb-blue);
+                padding: 20px;
+                border-radius: 0;
+                border: 2px solid var(--bb-yellow);
+                width: 350px;
+                box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+                max-height: 90vh;
+                overflow-y: auto;
+                color: #fff;
+            }
+
+            .control-group {
+                margin-bottom: 15px;
+                border-bottom: 1px solid #555;
+                padding-bottom: 15px;
+            }
+
+            .control-group:last-child {
+                border-bottom: none;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-size: 0.9rem;
+                color: #aaa;
+            }
+
+            button {
+                width: 100%;
+                padding: 12px 15px;
+                margin-top: 5px;
+                margin-bottom: 10px;
+                background: #003399;
+                color: white;
+                border: 2px outset #5577cc;
+                font-family: 'Arial Black', sans-serif;
+                text-transform: uppercase;
+                cursor: pointer;
+                transition: all 0.1s;
+                font-size: 0.9rem;
+                border-radius: 0;
+                text-align: left;
+                /* Match nav-btn */
+            }
+
+            button:hover {
+                background: #0044cc;
+                color: var(--bb-yellow);
+            }
+
+            button:active {
+                border-style: inset;
+                border-color: #cc9900;
+                transform: none;
+            }
+
+            .btn-print {
+                background: #ffd400;
+                color: #000;
+                border-color: #ffd400;
+            }
+
+            .btn-print:hover {
+                background: #ffea00;
+                color: #000;
+            }
+
+            .btn-save {
+                background: #4CAF50;
+                color: white;
+                border-color: #4CAF50;
+            }
+
+            .btn-save:hover {
+                background: #45a049;
+            }
+
+            .btn-danger {
+                background: #f44336;
+                color: white;
+                border-color: #f44336;
+                margin-top: 10px;
+            }
+
+
+
+            /* Bottone Layout */
+            .btn-layout {
+                background: #17a2b8;
+                color: white;
+            }
+
+            .btn-layout:hover {
+                background: #138496;
+            }
+
+            .btn-audio {
+                background: #334155;
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .btn-audio.playing {
+                background: #28a745;
+            }
+
+            .btn-color {
+                display: inline-block;
+                width: 30px;
+                height: 30px;
+                margin-right: 5px;
+                border-radius: 50%;
+                border: 2px solid #555;
+            }
+
+            .btn-color:hover {
+                transform: scale(1.1);
+            }
+
+            input[type="text"] {
+                width: 100%;
+                padding: 8px;
+                border-radius: 4px;
+                border: 1px solid #666;
+                background: #222;
+                color: white;
+                margin-bottom: 5px;
+            }
+
+            /* --- LIBRERIA --- */
+            .library-list {
+                max-height: 200px;
+                overflow-y: auto;
+                background: #222;
+                border: 1px solid #555;
+                border-radius: 4px;
+                margin-top: 10px;
+            }
+
+            .lib-item {
+                display: flex;
+                align-items: center;
+                padding: 8px;
+                border-bottom: 1px solid #333;
+                font-size: 0.9rem;
+            }
+
+            .lib-item:hover {
+                background: #333;
+            }
+
+            .lib-item input[type="checkbox"] {
+                margin-right: 10px;
+                transform: scale(1.2);
+                cursor: pointer;
+            }
+
+            .lib-name {
+                flex-grow: 1;
+                cursor: pointer;
+            }
+
+            .lib-del {
+                background: none;
+                border: none;
+                color: #f44336;
+                cursor: pointer;
+                width: auto;
+                padding: 0 5px;
+                margin: 0;
+            }
+
+            .lib-del:hover {
+                color: #d32f2f;
+            }
+
+
+            /* --- LA CARTA (POST-IT) --- */
+            .card-wrapper {
+                box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+                transform-origin: top center;
             }
 
             .card {
-                /* Print Size with Bleed: 66mm (63mm + 1.5mm each side) */
-                width: 66mm !important;
-                height: 66mm !important;
+                width: var(--card-size);
+                height: var(--card-size);
+                background-color: var(--bg-color);
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=');
+                /* Reduced padding to fit content better */
+                padding: 3mm;
+                position: relative;
+                overflow: hidden;
+                color: var(--ink-color);
+                font-family: 'Kalam', cursive;
+                display: flex;
+                flex-direction: row;
+                /* Horizontal Layout */
+                gap: 2mm;
+                transition: background-color 0.3s, border-color 0.3s;
 
-                /* Border color is handled by inline style from setBg */
-                border-width: 2mm !important;
-                border-style: solid !important;
-                /* box-shadow: none; */
-                margin: 0;
-                overflow: visible !important;
-                /* Allow crop marks */
-                page-break-inside: avoid;
-                outline: none;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+                /* Dynamic Border matching background */
+                border: 2mm solid var(--bg-color);
+                box-sizing: border-box;
+                border-radius: 0;
             }
 
-            /* Robust SVG Crop Marks as ::after */
-            .card::after {
-                content: "";
-                position: absolute;
-                /* Increase area to hold crop marks */
-                top: -5mm;
-                left: -5mm;
-                right: -5mm;
-                bottom: -5mm;
-                width: calc(100% + 10mm);
-                height: calc(100% + 10mm);
-                z-index: 9999;
-                pointer-events: none;
+            /* Columns */
+            .card-col-left {
+                flex: 0.8;
+                /* Reduced width */
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                overflow: hidden;
+                padding-right: 2mm;
+            }
 
-                /* 
+            .card-col-right {
+                flex: 1.2;
+                /* Increased width */
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                height: 100%;
+            }
+
+            .card::before {
+                display: none;
+                /* Remove global header background */
+            }
+
+            .card-title {
+                font-family: 'Permanent Marker', cursive;
+                font-size: 13pt;
+                /* Increased size */
+                line-height: 1.1;
+                border-bottom: 2px dashed rgba(0, 0, 0, 0.2);
+                padding-bottom: 2mm;
+                margin-bottom: 2mm;
+                outline: none;
+                background: rgba(0, 0, 0, 0.05);
+                /* Local background for title */
+                padding: 5px;
+                border-radius: 4px;
+                transform: rotate(-2deg);
+                /* Hastily written look */
+            }
+
+            .card-desc {
+                font-size: 9pt;
+                /* Slightly reduced */
+                line-height: 1.2;
+                flex-grow: 1;
+                outline: none;
+                padding-top: 1.5em;
+                /* Shift text down */
+            }
+
+            /* --- LO SKETCH DELLO SCAFFALE --- */
+            .sketch-area {
+                margin-top: 0;
+                /* Remove auto margin */
+                border: 2px solid rgba(0, 0, 0, 0.3);
+                border-radius: 4px;
+                padding: 1px;
+                position: relative;
+                background: rgba(255, 255, 255, 0.3);
+                height: 100%;
+                /* Full height */
+                display: flex;
+                flex-direction: column;
+            }
+
+            .sketch-label {
+                font-size: 7pt;
+                text-transform: uppercase;
+                font-weight: bold;
+                opacity: 0.6;
+                text-align: center;
+                margin-bottom: 1px;
+                letter-spacing: 1px;
+            }
+
+            .shelf-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 Cols */
+                grid-template-rows: repeat(3, 1fr);
+                /* 3 Rows */
+                gap: 2px;
+                padding: 2px;
+                /* Small padding */
+                width: 100%;
+                height: auto;
+                /* Allow grow */
+                flex-grow: 1;
+                /* Fill remaining space */
+            }
+
+            .shelf-slot {
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                background: rgba(255, 255, 255, 0.2);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                transition: all 0.2s;
+                overflow: hidden;
+            }
+
+            .shelf-slot:hover {
+                border-color: rgba(0, 0, 0, 0.5);
+                background: rgba(255, 255, 255, 0.4);
+            }
+
+            .vhs-icon {
+                width: 90%;
+                height: auto;
+                max-height: 90%;
+                object-fit: contain;
+                display: none;
+                pointer-events: none;
+                filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+                transform: rotate(-90deg) scale(1.1);
+                /* Rotate and slightly huge */
+            }
+
+            .shelf-slot.has-item .vhs-icon {
+                display: block;
+            }
+
+            .shelf-slot.is-empty::after {
+                content: "";
+                width: 60%;
+                /* Taller/Narrower look via rotation implication */
+                height: 80%;
+                border: 1px dashed #999;
+                border-radius: 2px;
+                opacity: 0.3;
+            }
+
+            /* --- FOOTER CONTATTI --- */
+            footer {
+                width: 100%;
+                text-align: center;
+                padding: 2rem;
+                background: #222;
+                border-top: 3px solid #555;
+                color: #fff;
+                margin-top: 2rem;
+            }
+
+            .footer-links {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                flex-wrap: wrap;
+                margin-top: 1rem;
+            }
+
+            .footer-link {
+                color: #ccc;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 16px;
+                border: 1px solid #444;
+                border-radius: 5px;
+                transition: all 0.2s;
+            }
+
+            .footer-link:hover {
+                background: #333;
+                color: white;
+            }
+
+            /* Area Stampa Multipla (nascosta a schermo) */
+            #print-grid-area {
+                display: none;
+            }
+
+            /* --- STAMPA --- */
+            @media print {
+                body {
+                    background: white;
+                    margin: 0;
+                    padding: 0;
+                    display: block;
+                }
+
+                .controls,
+                h1,
+                footer {
+                    display: none !important;
+                }
+
+                body.printing-grid .workspace {
+                    display: none !important;
+                }
+
+                body.printing-grid #print-grid-area {
+                    display: block !important;
+                }
+
+                .print-page {
+                    width: 210mm;
+                    height: 297mm;
+                    page-break-after: always;
+                    break-after: page;
+                    display: grid;
+                    grid-template-columns: repeat(3, 66mm);
+                    grid-template-rows: repeat(4, 66mm);
+                    gap: 4mm;
+                    justify-content: center;
+                    padding-top: 10mm;
+                }
+
+                .card {
+                    /* Print Size with Bleed: 66mm (63mm + 1.5mm each side) */
+                    width: 66mm !important;
+                    height: 66mm !important;
+
+                    /* Border color is handled by inline style from setBg */
+                    border-width: 2mm !important;
+                    border-style: solid !important;
+                    /* box-shadow: none; */
+                    margin: 0;
+                    overflow: visible !important;
+                    /* Allow crop marks */
+                    page-break-inside: avoid;
+                    outline: none;
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
+                /* Robust SVG Crop Marks as ::after */
+                .card::after {
+                    content: "";
+                    position: absolute;
+                    /* Increase area to hold crop marks */
+                    top: -5mm;
+                    left: -5mm;
+                    right: -5mm;
+                    bottom: -5mm;
+                    width: calc(100% + 10mm);
+                    height: calc(100% + 10mm);
+                    z-index: 9999;
+                    pointer-events: none;
+
+                    /* 
            SVG Logic:
            - Total SVG Size: 66mm (card) + 10mm (margins) = 76mm x 76mm.
            - Card starts at 5mm from top/left.
@@ -569,22 +567,22 @@
            - BR Vert: x=69.5, y=71 to 76.
            - BR Horiz: y=69.5, x=71 to 76.
         */
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 76 76'%3E%3Cstyle%3Eline%7Bstroke:black;stroke-width:0.25;%7D%3C/style%3E%3C!-- TL --%3E%3Cline x1='0' y1='6.5' x2='5' y2='6.5' /%3E%3Cline x1='6.5' y1='0' x2='6.5' y2='5' /%3E%3C!-- TR --%3E%3Cline x1='71' y1='6.5' x2='76' y2='6.5' /%3E%3Cline x1='69.5' y1='0' x2='69.5' y2='5' /%3E%3C!-- BL --%3E%3Cline x1='0' y1='69.5' x2='5' y2='69.5' /%3E%3Cline x1='6.5' y1='71' x2='6.5' y2='76' /%3E%3C!-- BR --%3E%3Cline x1='71' y1='69.5' x2='76' y2='69.5' /%3E%3Cline x1='69.5' y1='71' x2='69.5' y2='76' /%3E%3C/svg%3E");
-                background-repeat: no-repeat;
-                background-size: 100% 100%;
-            }
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 76 76'%3E%3Cstyle%3Eline%7Bstroke:black;stroke-width:0.25;%7D%3C/style%3E%3C!-- TL --%3E%3Cline x1='0' y1='6.5' x2='5' y2='6.5' /%3E%3Cline x1='6.5' y1='0' x2='6.5' y2='5' /%3E%3C!-- TR --%3E%3Cline x1='71' y1='6.5' x2='76' y2='6.5' /%3E%3Cline x1='69.5' y1='0' x2='69.5' y2='5' /%3E%3C!-- BL --%3E%3Cline x1='0' y1='69.5' x2='5' y2='69.5' /%3E%3Cline x1='6.5' y1='71' x2='6.5' y2='76' /%3E%3C!-- BR --%3E%3Cline x1='71' y1='69.5' x2='76' y2='69.5' /%3E%3Cline x1='69.5' y1='71' x2='69.5' y2='76' /%3E%3C/svg%3E");
+                    background-repeat: no-repeat;
+                    background-size: 100% 100%;
+                }
 
-            body:not(.printing-grid) .workspace {
-                padding: 0;
-                margin: 0;
-                display: block;
-            }
+                body:not(.printing-grid) .workspace {
+                    padding: 0;
+                    margin: 0;
+                    display: block;
+                }
 
-            body:not(.printing-grid) .card-wrapper {
-                box-shadow: none;
-                transform: none !important;
+                body:not(.printing-grid) .card-wrapper {
+                    box-shadow: none;
+                    transform: none !important;
+                }
             }
-        }
     </style>
 </head>
 
@@ -630,7 +628,9 @@
                 <!-- ORIGINAL CONTENT START -->
                 <div style="color:black;"> <!-- Reset text color for editor -->
 
-                    <h1>VHS Quest Editor (63x63 V2) <small style="font-size:0.5em; opacity:0.7">v2.3</small></h1>
+                    <h2
+                        style="font-family: 'Arial Black', sans-serif; text-transform:uppercase; color: #000; margin-bottom: 1rem; text-align: center;">
+                        VHS Quest Editor (63x63 V2) <small style="font-size:0.5em; opacity:0.7">v2.3</small></h2>
 
                     <!-- SOUNDCLOUD WIDGET (HIDDEN) -->
                     <iframe id="sc-widget" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
