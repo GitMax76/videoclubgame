@@ -1,0 +1,594 @@
+[
+  {
+    "id": 1771860301228,
+    "name": "Horror UP",
+    "title": "Horror Week",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette <b>Horror</b> su tutte le file più alte degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771860424924,
+    "name": "Family UP",
+    "title": "FamilyWeek",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette <b>Family (BLU)&nbsp;</b>su tutte le file più alte degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771860450988,
+    "name": "ACtion UP",
+    "title": "ActionWeek",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette <b>Action (ROSSE)&nbsp;</b>su tutte le file più alte degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771860495740,
+    "name": "Thrill Week",
+    "title": "tHRILL<div>Week</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Thriller&nbsp;<b>(GIALLE)&nbsp;</b>su tutte le file più alte degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771860570261,
+    "name": "Comedy UP",
+    "title": "COMEDY<div>Week</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Comedy&nbsp;<b>(VERDI)&nbsp;</b>su tutte le file più alte degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771860599717,
+    "name": "Romantic UP",
+    "title": "Romantic<div>Week</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Romantic&nbsp;<b>(ROSA)&nbsp;</b>su tutte le file più alte degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771860749037,
+    "name": "Horror R COL",
+    "title": "Horror<div>R Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Horror&nbsp;<b>(NERE)&nbsp;</b>sulle colonne a Destra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>"
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771860783182,
+    "name": "Horror L Col",
+    "title": "Horror<div>L Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Horror&nbsp;<b>(NERE)&nbsp;</b>sulle colonne a Sinistra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771860814310,
+    "name": "Family L Col",
+    "title": "Family<div>L Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Family&nbsp;<b>(BLU)&nbsp;</b>sulle colonne a Sinistra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771860854494,
+    "name": "Action L Col",
+    "title": "Action<div>L Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Action&nbsp;<b>(ROSSE)&nbsp;</b>sulle colonne a Sinistra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771861032751,
+    "name": "Thrill L Col",
+    "title": "Thrill<div>L Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Thriller&nbsp;<b>(GIALLE)&nbsp;</b>sulle colonne a Sinistra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771861055439,
+    "name": "Comedy L Col",
+    "title": "Comedy<div>L Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Comedy&nbsp;<b>(VERDI)&nbsp;</b>sulle colonne a Sinistra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771861091863,
+    "name": "Romantic L Col",
+    "title": "ROmantic<div>L Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Romantic&nbsp;<b>(ROSA)&nbsp;</b>sulle colonne a Sinistra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771861137863,
+    "name": "Family R Col",
+    "title": "FAmily<div>R Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Family&nbsp;<b>(BLU)&nbsp;</b>sulle colonne a Destra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>"
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771862521622,
+    "name": "Action R Col",
+    "title": "Action<div>R Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Action&nbsp;<b>(ROSSE)&nbsp;</b>sulle colonne a Destra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>"
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771862545558,
+    "name": "Thriller R Col",
+    "title": "Thrill<div>R Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Thriller&nbsp;<b>(GIALLE)&nbsp;</b>sulle colonne a Destra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>"
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771862568350,
+    "name": "Comedy R Col",
+    "title": "Comedy<div>R Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Comedy&nbsp;<b>(VERDI)&nbsp;</b>sulle colonne a Destra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>"
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771862628166,
+    "name": "Romantic R Col",
+    "title": "ROmantic<div>R Col</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Posiziona cassette Romantic&nbsp;<b>(ROSA)</b>sullecolonne a Destra degli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>"
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771862738143,
+    "name": "No Horror",
+    "title": "No Horror",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Nessuna Cassetta Horror&nbsp;<b>(NERA )</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><text x='50' y='45' font-size='50' fill='%23d32f2f' font-family='sans-serif' font-weight='bold' text-anchor='middle'>â</text></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771862752727,
+    "name": "No Family",
+    "title": "No Family",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Nessuna Cassetta Family&nbsp;<b>(BLU)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><text x='50' y='45' font-size='50' fill='%23d32f2f' font-family='sans-serif' font-weight='bold' text-anchor='middle'>â</text></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771862773152,
+    "name": "No Action",
+    "title": "No Action",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Nessuna Cassetta Action&nbsp;<b>(ROSSA)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><text x='50' y='45' font-size='50' fill='%23d32f2f' font-family='sans-serif' font-weight='bold' text-anchor='middle'>â</text></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771862802175,
+    "name": "No Thriller",
+    "title": "No Thriller",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Nessuna Cassetta Thriller&nbsp;<b>(GIALLA)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><text x='50' y='45' font-size='50' fill='%23d32f2f' font-family='sans-serif' font-weight='bold' text-anchor='middle'>â</text></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771862824223,
+    "name": "No Comedy",
+    "title": "No Comedy",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Nessuna Cassetta Comedy&nbsp;<b>(VERDI)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><text x='50' y='45' font-size='50' fill='%23d32f2f' font-family='sans-serif' font-weight='bold' text-anchor='middle'>â</text></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771862850936,
+    "name": "No Romantic",
+    "title": "No Romantic",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Nessuna Cassetta Romantic&nbsp;<b>(ROSA)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><text x='50' y='45' font-size='50' fill='%23d32f2f' font-family='sans-serif' font-weight='bold' text-anchor='middle'>â</text></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863008928,
+    "name": "Thr Com Rom",
+    "title": "Thrill<div>Com</div><div>Rom</div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Thr/Com/Rom&nbsp;<b>(Gialle/Verdi/Rosa)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863063569,
+    "name": "Horr Fam",
+    "title": "Horr<div>Fam</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Horr/Fam&nbsp;<b>(Nere/Blu)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863083433,
+    "name": "Horr Act",
+    "title": "Horr<div>Act</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Horr/Act&nbsp;<b>(Nere/Rosse)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863103745,
+    "name": "Horr Thrill",
+    "title": "Horr<div>Thrill</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Horr/Thrill&nbsp;<b>(Nere/Gialle)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863120889,
+    "name": "Horr Comedy",
+    "title": "Horr<div>Comedy</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Horr/Comedy&nbsp;<b>(Nere/Verdi)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863142970,
+    "name": "Horr Rom",
+    "title": "Horr<div>Rom</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Horr/Romantic<b>(Nere/Rosa)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23222222' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863183009,
+    "name": "Family Action",
+    "title": "Family<div>Action</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Family/Action<b>(Blu/Rosse)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863206353,
+    "name": "Family Thrill",
+    "title": "Family<div>Thrill</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Family/Thriller<b>(Blu/Gialle)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863224089,
+    "name": "Family Comedy",
+    "title": "Family<div>Comedy</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Family/Comedy<b>(Blu/Verdi)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863248001,
+    "name": "Family Rom",
+    "title": "Family<div>Rom</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Family/Romantic<b>(Blu/Rosa)</b>sugli scaffali\n                                        comuni.\n                                    ",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%230047AB' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863298170,
+    "name": "Action Thrill",
+    "title": "Action<div>Thrill</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Act/Thrill<div><b>(Rosse/Gialle)</b>sugli scaffali\n                                        comuni.\n                                    </div>",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23FBC02D' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863314795,
+    "name": "Action Comedy",
+    "title": "Action<div>Comedy</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Act/Com<div><b>(Rosse/Verdi)</b>sugli scaffali\n                                        comuni.\n                                    </div>",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23388E3C' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  },
+  {
+    "id": 1771863333186,
+    "name": "Action Rom",
+    "title": "Action<div>Rom</div><div><br></div>",
+    "desc": "\n                                        Obiettivo:<br>\n                                        Solo Cassette Act/Rom<div><b>(Rosse/Rosa)</b>sugli scaffali\n                                        comuni.\n                                    </div>",
+    "bg": "#fdfd96",
+    "slots": [
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23D32F2F' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='%23E91E63' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "selected": true
+  }
+]
