@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Quest Card Editor - VHS Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Permanent+Marker&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Anton&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Blockletter';
+      src: url('Blockletter-PMGg.ttf') format('truetype');
+    }
+
+    :root {
+      --bb-blue: #091F92;
+      --bb-yellow: #FFC220;
+      --bb-link: #FFCC00;
+      --vhs-black: #000000;
+      --site-bg: #003399;
+
+      --card-size: 63mm;
+      --bg-color: #fdfd96;
+      --ink-color: #2c2c2c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Verdana', 'Arial', sans-serif !important;
+      background-color: var(--site-bg);
+      background-image:
+        radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02)),
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02));
+      background-size: 20px 20px, 20px 20px, 40px 40px, 40px 40px;
+      background-position: 0 0, 10px 10px, 0 0, 20px 20px;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    h1 {
+      margin-top: 20px;
+      font-family: 'Anton', sans-serif;
+      font-size: 8rem;
+      text-transform: uppercase;
+      line-height: 1;
+      text-shadow: 6px 6px 0 #000;
+      color: var(--bb-yellow);
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+
+    .workspace {
+      display: flex;
+      gap: 40px;
+      padding: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      justify-content: center;
+      flex-grow: 1;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .workspace.layout-column {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .controls {
+      background: var(--bb-blue);
+      padding: 20px;
+      border-radius: 0;
+      border: 2px solid var(--bb-yellow);
+      width: 350px;
+      box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+      max-height: 90vh;
+      overflow-y: auto;
+      color: #fff;
+    }
+
+    .control-group {
+      margin-bottom: 15px;
+      border-bottom: 1px solid #555;
+      padding-bottom: 15px;
+    }
+
+    .control-group:last-child {
+      border-bottom: none;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      background: #003399;
+      color: white;
+      border: 2px outset #5577cc;
+      font-family: 'Arial Black', sans-serif;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.1s;
+      font-size: 0.9rem;
+      border-radius: 0;
+      text-align: left;
+    }
+
+    button:hover {
+      background: #0044cc;
+      color: var(--bb-yellow);
+    }
+
+    button:active {
+      border-style: inset;
+      border-color: #cc9900;
+      transform: none;
+    }
+
+    .btn-print {
+      background: #ffd400;
+      color: #000;
+      border-color: #ffd400;
+    }
+
+    .btn-print:hover {
+      background: #ffea00;
+      color: #000;
+    }
+
+    .btn-save {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+
+    .btn-save:hover {
+      background: #45a049;
+    }
+
+    .btn-danger {
+      background: #f44336;
+      color: white;
+      border-color: #f44336;
+      margin-top: 10px;
+    }
+
+    .btn-layout {
+      background: #17a2b8;
+      color: white;
+    }
+
+    .btn-layout:hover {
+      background: #138496;
+    }
+
+    .btn-audio {
+      background: #334155;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-audio.playing {
+      background: #28a745;
+    }
+
+    .btn-color {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      margin-right: 5px;
+      border-radius: 50%;
+      border: 2px solid #555;
+    }
+
+    .btn-color:hover {
+      transform: scale(1.1);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #666;
+      background: #222;
+      color: white;
+      margin-bottom: 5px;
+    }
+
+    .library-list {
+      max-height: 200px;
+      overflow-y: auto;
+      background: #222;
+      border: 1px solid #555;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+
+    .lib-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid #333;
+      font-size: 0.9rem;
+    }
+
+    .lib-item:hover {
+      background: #333;
+    }
+
+    .lib-item input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+
+    .lib-name {
+      flex-grow: 1;
+      cursor: pointer;
+    }
+
+    .lib-del {
+      background: none;
+      border: none;
+      color: #f44336;
+      cursor: pointer;
+      width: auto;
+      padding: 0 5px;
+      margin: 0;
+    }
+
+    .lib-del:hover {
+      color: #d32f2f;
+    }
+
+    .card-wrapper {
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+      transform-origin: top center;
+    }
+
+    .card {
+      width: var(--card-size);
+      height: var(--card-size);
+      background-color: var(--bg-color);
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=');
+      padding: 3mm;
+      position: relative;
+      overflow: hidden;
+      color: var(--ink-color);
+      font-family: 'Kalam', cursive;
+      display: flex;
+      flex-direction: row;
+      gap: 2mm;
+      transition: background-color 0.3s, border-color 0.3s;
+      border: 2mm solid var(--bg-color);
+      box-sizing: border-box;
+      border-radius: 0;
+    }
+
+    .card-col-left {
+      flex: 0.8;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      padding-right: 2mm;
+    }
+
+    .card-col-right {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .card::before {
+      display: none;
+    }
+
+    .card-title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 13pt;
+      line-height: 1.1;
+      border-bottom: 2px dashed rgba(0, 0, 0, 0.2);
+      padding-bottom: 2mm;
+      margin-bottom: 2mm;
+      outline: none;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 5px;
+      border-radius: 4px;
+      transform: rotate(-2deg);
+    }
+
+    .card-desc {
+      font-size: 9pt;
+      line-height: 1.2;
+      flex-grow: 1;
+      outline: none;
+      padding-top: 1.5em;
+    }
+
+    .sketch-area {
+      margin-top: 0;
+      border: 2px solid rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      padding: 1px;
+      position: relative;
+      background: rgba(255, 255, 255, 0.3);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sketch-label {
+      font-size: 7pt;
+      text-transform: uppercase;
+      font-weight: bold;
+      opacity: 0.6;
+      text-align: center;
+      margin-bottom: 1px;
+      letter-spacing: 1px;
+    }
+
+    .shelf-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 2px;
+      padding: 2px;
+      width: 100%;
+      height: auto;
+      flex-grow: 1;
+    }
+
+    .shelf-slot {
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.2s;
+      overflow: hidden;
+    }
+
+    .shelf-slot:hover {
+      border-color: rgba(0, 0, 0, 0.5);
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .vhs-icon {
+      width: 90%;
+      height: auto;
+      max-height: 90%;
+      object-fit: contain;
+      display: none;
+      pointer-events: none;
+      filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+      transform: rotate(-90deg) scale(1.1);
+    }
+
+    .shelf-slot.has-item .vhs-icon {
+      display: block;
+    }
+
+    .shelf-slot.is-empty::after {
+      content: "";
+      width: 60%;
+      height: 80%;
+      border: 1px dashed #999;
+      border-radius: 2px;
+      opacity: 0.3;
+    }
+
+    /* ✅ IMPORTANTISSIMO: di default è nascosta */
+    #print-grid-area {
+      display: none;
+    }
+
+    /* ===========================
+       ✅ STAMPA: SOLO CARTE
+       - Se printing-grid: stampa SOLO #print-grid-area
+       - Se non printing-grid: stampa SOLO la singola card (#questCard)
+       =========================== */
+    @media print {
+
+      /* togli margini browser */
+      @page {
+        margin: 0;
+      }
+
+      body {
+        background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      /* ---------- CASO A: STAMPA SELEZIONATI (A4) ---------- */
+      body.printing-grid #app {
+        display: none !important;
+      }
+
+      body.printing-grid #print-grid-area {
+        display: block !important;
+      }
+
+      .print-page {
+        width: 210mm;
+        height: 297mm;
+        page-break-after: always;
+        break-after: page;
+        display: grid;
+        grid-template-columns: repeat(3, 66mm);
+        grid-template-rows: repeat(4, 66mm);
+        gap: 4mm;
+        justify-content: center;
+        padding-top: 10mm;
+      }
+
+      body.printing-grid .card {
+        width: 66mm !important;
+        height: 66mm !important;
+        border-width: 2mm !important;
+        border-style: solid !important;
+        margin: 0;
+        overflow: visible !important;
+        page-break-inside: avoid;
+        outline: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body.printing-grid .card::after {
+        content: "";
+        position: absolute;
+        top: -5mm; left: -5mm; right: -5mm; bottom: -5mm;
+        width: calc(100% + 10mm);
+        height: calc(100% + 10mm);
+        z-index: 9999;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 76 76'%3E%3Cstyle%3Eline%7Bstroke:black;stroke-width:0.25;%7D%3C/style%3E%3Cline x1='0' y1='6.5' x2='5' y2='6.5' /%3E%3Cline x1='6.5' y1='0' x2='6.5' y2='5' /%3E%3Cline x1='71' y1='6.5' x2='76' y2='6.5' /%3E%3Cline x1='69.5' y1='0' x2='69.5' y2='5' /%3E%3Cline x1='0' y1='69.5' x2='5' y2='69.5' /%3E%3Cline x1='6.5' y1='71' x2='6.5' y2='76' /%3E%3Cline x1='71' y1='69.5' x2='76' y2='69.5' /%3E%3Cline x1='69.5' y1='71' x2='69.5' y2='76' /%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+      }
+
+      /* icone inline (svg) in stampa multipla */
+      body.printing-grid .shelf-slot.has-item svg {
+        width: 90% !important;
+        height: auto !important;
+        max-height: 90% !important;
+        display: block !important;
+        filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+        transform: rotate(-90deg) scale(1.1);
+      }
+
+      /* ---------- CASO B: STAMPA SOLO QUESTA (singola carta) ---------- */
+      body:not(.printing-grid) * {
+        visibility: hidden !important;
+      }
+
+      body:not(.printing-grid) #questCard,
+      body:not(.printing-grid) #questCard * {
+        visibility: visible !important;
+      }
+
+      body:not(.printing-grid) #questCard {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        margin: 0 !important;
+        width: 63mm !important;
+        height: 63mm !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* in stampa singola: vogliamo anche le <img> */
+      body:not(.printing-grid) .shelf-slot.has-item .vhs-icon {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ AREA DI STAMPA A4: fuori da #app, così possiamo nascondere l'app e stampare SOLO le carte -->
+  <div id="print-grid-area"></div>
+
+  <!-- ✅ TUTTA L'APP WRAPPATA -->
+  <div id="app">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10 p-4 md:p-8">
+
+      <div class="lg:col-span-12 text-center mb-8 relative">
+        <div class="inline-block relative">
+          <div
+            class="bg-[#091F92] p-4 transform rotate-[-2deg] border-2 border-dashed border-[#FFC220] shadow-[5px_5px_0_#000]">
+            <h1 class="font-[Anton] text-6xl text-[#FFC220] uppercase tracking-tighter"
+              style="text-shadow: 3px 3px 0 #091F92, 5px 5px 0 #fff;">EDITOR QUEST</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-4">
+        <div
+          class="bg-[#00458b] border-2 border-[#ffcc00] p-4 text-white shadow-[4px_4px_0px_rgba(0,0,0,0.5)] h-full flex flex-col">
+          <div class="bg-black text-white p-2 text-center font-mono text-xs mb-4 border border-gray-600">MENU</div>
+          <a href="index_blockbuster_v2.html"
+            class="block w-full text-left bg-[#091F92] text-white font-[Bangers] text-xl px-4 py-2 border-2 border-white rounded mb-2 hover:bg-[#FFC220] hover:text-black uppercase shadow-md">🏠
+            HOME / SIMULATORE</a>
+          <a href="rules.html"
+            class="block w-full text-left bg-orange-600 text-white font-[Bangers] text-xl px-4 py-2 border-2 border-white rounded mb-2 hover:bg-orange-500 uppercase shadow-md">🌐
+            REGOLAMENTO</a>
+          <a href="88x63_cardseditor.html"
+            class="block w-full text-left bg-purple-700 text-white font-[Bangers] text-xl px-4 py-2 border-2 border-white rounded mb-2 hover:bg-purple-600 uppercase shadow-md">🎨
+            EDITOR CARTE</a>
+          <a href="63x63_questeditor_v2.html"
+            class="block w-full text-left bg-cyan-700 text-white font-[Bangers] text-xl px-4 py-2 border-2 border-white rounded mb-2 ring-4 ring-[#FFC220] uppercase shadow-md pointer-events-none">📼
+            EDITOR QUEST</a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-8">
+        <div class="bg-white border-2 border-black p-4 min-h-[600px] shadow-2xl relative">
+          <div style="color:black;">
+
+            <h2
+              style="font-family: 'Arial Black', sans-serif; text-transform:uppercase; color: #000; margin-bottom: 1rem; text-align: center;">
+              VHS Quest Editor (63x63 V2) <small style="font-size:0.5em; opacity:0.7">v2.3 SAFE</small>
+            </h2>
+
+            <iframe id="sc-widget" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+              src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/synthwave80s/sets/dreams&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"
+              style="display:none;">
+            </iframe>
+
+            <div class="workspace">
+
+              <div class="card-wrapper">
+                <div class="card" id="questCard">
+                  <div class="card-col-left">
+                    <div class="card-title" id="cardTitle" contenteditable="true">Horror Week</div>
+                    <div class="card-desc" id="cardDesc" contenteditable="true">
+                      Obiettivo:<br>
+                      Posiziona cassette <b>Horror</b> su tutte le file più alte degli scaffali comuni.
+                    </div>
+                  </div>
+                  <div class="card-col-right">
+                    <div class="sketch-area" style="height:100%">
+                      <div class="sketch-label">Sketch Configurazione</div>
+                      <div class="shelf-grid" id="mainShelfGrid">
+                        <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+                        <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+                        <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+                        <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+                        <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+                        <div class="shelf-slot is-empty" onclick="cycleSlot(this)"><img class="vhs-icon" src=""></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="controls">
+
+                <div class="control-group">
+                  <label>Navigazione</label>
+                  <div style="display:flex; gap:5px; margin-bottom: 5px;">
+                    <button class="btn-nav" onclick="goHome()">🏠 Home</button>
+                    <button class="btn-nav" onclick="scrollToContacts()">📞 Contatti</button>
+                  </div>
+                  <button id="layoutBtn" class="btn-layout" style="margin-bottom: 5px;"
+                    onclick="toggleLayout()">Layout: ↔ Orizzontale</button>
+                  <button id="btn-music" class="btn-audio" onclick="toggleMusic()">
+                    <span>🎵 AUDIO: OFF</span>
+                    <span style="font-size:0.7em; opacity:0.7">(Synthwave80s)</span>
+                  </button>
+                </div>
+
+                <div class="control-group">
+                  <label>Colore Carta</label>
+                  <button class="btn-color" style="background:#fdfd96" onclick="setBg('#fdfd96')"></button>
+                  <button class="btn-color" style="background:#ffccbc" onclick="setBg('#ffccbc')"></button>
+                  <button class="btn-color" style="background:#c5e1a5" onclick="setBg('#c5e1a5')"></button>
+                  <button class="btn-color" style="background:#b3e5fc" onclick="setBg('#b3e5fc')"></button>
+                  <button class="btn-color" style="background:#ffffff" onclick="setBg('#ffffff')"></button>
+                </div>
+
+                <div class="control-group">
+                  <label>Editor</label>
+                  <button onclick="resetGrid()">Pulisci Sketch</button>
+                  <button onclick="window.print()">🖨️ Stampa SOLO QUESTA</button>
+                </div>
+
+                <div class="control-group">
+                  <label>Libreria & Salvataggio</label>
+                  <input type="text" id="configName" placeholder="Nome Configurazione..." />
+                  <button class="btn-save" onclick="saveToLibrary()">💾 Salva in Libreria</button>
+
+                  <div class="library-list" id="libraryList"></div>
+
+                  <button class="btn-print" style="margin-top:15px;" onclick="printSelected()">🖨️ Stampa SELEZIONATI
+                    (A4)</button>
+                  <button class="btn-danger" onclick="clearLibrary()">🗑️ Svuota Tutto</button>
+
+                  <button onclick="exportLibrary()">⬇️ Esporta Libreria (JSON)</button>
+
+                  <input type="file" id="importFile" accept="application/json" style="display:none"
+                    onchange="importLibrary(event)">
+                  <button onclick="document.getElementById('importFile').click()">⬆️ Importa Libreria (JSON)</button>
+                </div>
+
+              </div>
+            </div>
+
+            <script>
+              /* --- CONFIGURAZIONE ICONE (SVG) --- */
+              const createVhsSvg = (color) => `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><rect x='2' y='2' width='96' height='56' rx='4' fill='${encodeURIComponent(color)}' stroke='%23222' stroke-width='2'/><rect x='10' y='10' width='80' height='30' rx='2' fill='%23333' /><circle cx='30' cy='25' r='10' fill='%23fff' opacity='0.8'/><circle cx='70' cy='25' r='10' fill='%23fff' opacity='0.8'/><rect x='15' y='46' width='70' height='8' fill='%23fff' opacity='0.8'/></svg>`;
+              const createXSvg = () => `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'><line x1='20' y1='10' x2='80' y2='50' stroke='%23d32f2f' stroke-width='10' stroke-linecap='round'/><line x1='80' y1='10' x2='20' y2='50' stroke='%23d32f2f' stroke-width='10' stroke-linecap='round'/></svg>`;
+
+              const items = [
+                { id: 'empty', src: '' },
+                { id: 'black', src: createVhsSvg('#222222') },
+                { id: 'blue', src: createVhsSvg('#0047AB') },
+                { id: 'red', src: createVhsSvg('#D32F2F') },
+                { id: 'yellow', src: createVhsSvg('#FBC02D') },
+                { id: 'green', src: createVhsSvg('#388E3C') },
+                { id: 'pink', src: createVhsSvg('#E91E63') },
+                { id: 'x', src: createXSvg() }
+              ];
+
+              /* --- LOGICA EDITOR --- */
+              function cycleSlot(element) {
+                if (element.getAttribute('onclick') === null) return;
+
+                const img = element.querySelector('.vhs-icon');
+                let currentIndex = 0;
+                if (!element.classList.contains('is-empty')) {
+                  const currentSrc = img.getAttribute('src');
+                  currentIndex = items.findIndex(i => i.src === currentSrc);
+                  if (currentIndex === -1) currentIndex = 0;
+                }
+                let nextIndex = (currentIndex + 1) % items.length;
+                let nextItem = items[nextIndex];
+                updateSlotVisuals(element, nextItem);
+              }
+
+              function updateSlotVisuals(element, item) {
+                const img = element.querySelector('.vhs-icon');
+                if (item.id === 'empty') {
+                  element.classList.add('is-empty');
+                  element.classList.remove('has-item');
+                  img.src = "";
+                } else {
+                  element.classList.remove('is-empty');
+                  element.classList.add('has-item');
+                  img.src = item.src;
+                }
+              }
+
+              function setBg(color) {
+                const card = document.getElementById('questCard');
+                card.style.backgroundColor = color;
+                card.style.borderColor = color;
+              }
+
+              function resetGrid() {
+                const slots = document.querySelectorAll('#mainShelfGrid .shelf-slot');
+                slots.forEach(slot => updateSlotVisuals(slot, items[0]));
+              }
+
+              /* --- NAVIGAZIONE & UTILITY --- */
+              function goHome() {
+                sessionStorage.setItem('skip_splash', 'true');
+                window.location.href = 'index.html';
+              }
+
+              function scrollToContacts() {
+                document.getElementById('contacts-footer').scrollIntoView({ behavior: 'smooth' });
+              }
+
+              function toggleLayout() {
+                const ws = document.querySelector('.workspace');
+                ws.classList.toggle('layout-column');
+                const isCol = ws.classList.contains('layout-column');
+                const btn = document.getElementById('layoutBtn');
+                btn.innerText = isCol ? "Layout: ↕ Verticale" : "Layout: ↔ Orizzontale";
+              }
+
+              /* --- AUDIO ENGINE --- */
+              let scWidget = null;
+              let isPlaying = false;
+              let currentPos = 0;
+
+              function initAudio() {
+                const script = document.createElement('script');
+                script.src = "https://w.soundcloud.com/player/api.js";
+                script.onload = () => {
+                  const iframe = document.getElementById('sc-widget');
+                  scWidget = SC.Widget(iframe);
+                  scWidget.bind(SC.Widget.Events.READY, () => {
+                    const storedPos = sessionStorage.getItem('audio_pos');
+                    const storedPlaying = sessionStorage.getItem('audio_playing');
+
+                    if (storedPos) {
+                      currentPos = parseFloat(storedPos);
+                      scWidget.seekTo(currentPos);
+                    }
+
+                    if (storedPlaying === 'true') {
+                      setTimeout(() => {
+                        scWidget.play();
+                        updateAudioUI(true);
+                      }, 500);
+                    }
+                  });
+
+                  scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
+                    currentPos = data.currentPosition;
+                  });
+                };
+                document.head.appendChild(script);
+
+                window.addEventListener('beforeunload', () => {
+                  sessionStorage.setItem('audio_pos', currentPos);
+                  sessionStorage.setItem('audio_playing', isPlaying);
+                });
+              }
+
+              function toggleMusic() {
+                if (!scWidget) return;
+                scWidget.isPaused((paused) => {
+                  if (paused) {
+                    scWidget.play();
+                    updateAudioUI(true);
+                  } else {
+                    scWidget.pause();
+                    updateAudioUI(false);
+                  }
+                });
+              }
+
+              function updateAudioUI(playing) {
+                isPlaying = playing;
+                const btn = document.getElementById('btn-music');
+                if (playing) {
+                  btn.innerHTML = "<span>🎵 AUDIO: ON</span>";
+                  btn.classList.add('playing');
+                } else {
+                  btn.innerHTML = "<span>🎵 AUDIO: OFF</span> <span style='font-size:0.7em; opacity:0.7'>(Synthwave80s)</span>";
+                  btn.classList.remove('playing');
+                }
+              }
+
+              /* --- LIBRERIA & LOCALSTORAGE --- */
+              const STORAGE_KEY = "vhs_quest_library_v1";
+              let library = [];
+
+              function readLibraryFromStorage() {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return [];
+
+                try {
+                  let parsed = JSON.parse(raw);
+                  if (typeof parsed === "string") parsed = JSON.parse(parsed);
+                  if (!Array.isArray(parsed)) return [];
+                  return parsed;
+                } catch {
+                  return [];
+                }
+              }
+
+              function writeLibraryToStorage(arr) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+              }
+
+              function saveData() {
+                writeLibraryToStorage(library);
+              }
+
+              function isOldBrokenX(src) {
+                if (!src) return false;
+                if (!src.startsWith("data:image/svg+xml")) return false;
+                return src.includes("<text") || src.includes("✕") || src.includes("Ã") || src.includes("Â");
+              }
+
+              function migrateBrokenXInLibrary() {
+                let changed = false;
+                library.forEach(card => {
+                  if (!card || !Array.isArray(card.slots)) return;
+                  card.slots = card.slots.map(src => {
+                    if (isOldBrokenX(src)) {
+                      changed = true;
+                      return createXSvg();
+                    }
+                    return src;
+                  });
+                });
+
+                if (changed) saveData();
+              }
+
+              function initLibrary() {
+                library = readLibraryFromStorage();
+                writeLibraryToStorage(library);
+                migrateBrokenXInLibrary();
+                renderLibrary();
+              }
+
+              function saveToLibrary() {
+                const name = document.getElementById('configName').value.trim() || "Senza Nome";
+                const cardTitle = document.getElementById('cardTitle').innerHTML;
+                const cardDesc = document.getElementById('cardDesc').innerHTML;
+                const bgColor = document.getElementById('questCard').style.backgroundColor || '#fdfd96';
+
+                const slotStates = [];
+                document.querySelectorAll('#mainShelfGrid .shelf-slot').forEach(slot => {
+                  const img = slot.querySelector('img');
+                  slotStates.push(img.getAttribute('src'));
+                });
+
+                const data = {
+                  id: Date.now(),
+                  name: name,
+                  title: cardTitle,
+                  desc: cardDesc,
+                  bg: bgColor,
+                  slots: slotStates,
+                  selected: true
+                };
+
+                library.push(data);
+                saveData();
+                renderLibrary();
+                document.getElementById('configName').value = "";
+              }
+
+              function renderLibrary() {
+                const list = document.getElementById('libraryList');
+                list.innerHTML = "";
+                if (library.length === 0) {
+                  list.innerHTML = "<div style='padding:10px; color:#666; font-size:0.8rem;'>Nessuna carta salvata.</div>";
+                  return;
+                }
+                library.forEach((item, index) => {
+                  const div = document.createElement('div');
+                  div.className = "lib-item";
+                  div.innerHTML = `
+                    <input type="checkbox" ${item.selected ? "checked" : ""} onchange="toggleSelect(${index})">
+                    <span class="lib-name" onclick="loadFromLibrary(${index})">${item.name}</span>
+                    <button class="lib-del" onclick="deleteFromLibrary(${index})">✖</button>
+                  `;
+                  list.appendChild(div);
+                });
+              }
+
+              function toggleSelect(index) {
+                library[index].selected = !library[index].selected;
+                saveData();
+              }
+
+              function loadFromLibrary(index) {
+                const item = library[index];
+                document.getElementById('cardTitle').innerHTML = item.title;
+                document.getElementById('cardDesc').innerHTML = item.desc;
+                setBg(item.bg);
+
+                const slots = document.querySelectorAll('#mainShelfGrid .shelf-slot');
+                slots.forEach((slot, i) => {
+                  if (item.slots[i]) {
+                    const match = items.find(x => x.src === item.slots[i]);
+                    if (match) updateSlotVisuals(slot, match);
+                    else updateSlotVisuals(slot, items[0]);
+                  } else {
+                    updateSlotVisuals(slot, items[0]);
+                  }
+                });
+              }
+
+              function deleteFromLibrary(index) {
+                if (confirm("Eliminare questa configurazione?")) {
+                  library.splice(index, 1);
+                  saveData();
+                  renderLibrary();
+                }
+              }
+
+              function clearLibrary() {
+                if (confirm("DAI, SERIO? CANCELLI TUTTO?")) {
+                  library = [];
+                  saveData();
+                  renderLibrary();
+                }
+              }
+
+              function exportLibrary() {
+                const data = readLibraryFromStorage();
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "vhs_quest_library_backup.json";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+              }
+
+              function importLibrary(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                  try {
+                    let imported = JSON.parse(e.target.result);
+                    if (typeof imported === "string") imported = JSON.parse(imported);
+                    if (!Array.isArray(imported)) throw new Error("Il file non contiene una libreria valida (array).");
+
+                    library = imported;
+                    migrateBrokenXInLibrary();
+                    saveData();
+                    renderLibrary();
+                    alert("Import riuscito! (" + library.length + " carte)");
+                  } catch (err) {
+                    alert("Errore import: " + err.message);
+                  }
+                };
+                reader.readAsText(file);
+                event.target.value = "";
+              }
+
+              function dataUriToInlineSvg(src) {
+                if (!src) return "";
+                try {
+                  const parts = src.split(",");
+                  if (parts.length < 2) return "";
+                  return decodeURIComponent(parts.slice(1).join(","));
+                } catch {
+                  return "";
+                }
+              }
+
+              function printSelected() {
+                const selected = library.filter(i => i.selected);
+                if (selected.length === 0) {
+                  alert("Seleziona almeno una carta dalla libreria!");
+                  return;
+                }
+
+                const gridArea = document.getElementById('print-grid-area');
+                gridArea.innerHTML = "";
+
+                let pageDiv = null;
+                let counter = 0;
+
+                selected.forEach((item) => {
+                  if (counter % 12 === 0) {
+                    pageDiv = document.createElement('div');
+                    pageDiv.className = 'print-page';
+                    gridArea.appendChild(pageDiv);
+                  }
+
+                  const card = document.createElement('div');
+                  card.className = 'card';
+                  card.style.backgroundColor = item.bg;
+                  card.style.borderColor = item.bg;
+
+                  let shelfHtml = "";
+                  item.slots.forEach(src => {
+                    const has = !!src;
+                    shelfHtml += `
+                      <div class="shelf-slot ${has ? "has-item" : "is-empty"}">
+                        ${has ? dataUriToInlineSvg(src) : ``}
+                      </div>
+                    `;
+                  });
+
+                  card.innerHTML = `
+                    <div class="card-col-left">
+                      <div class="card-title">${item.title}</div>
+                      <div class="card-desc">${item.desc}</div>
+                    </div>
+                    <div class="card-col-right">
+                      <div class="sketch-area" style="height:100%">
+                        <div class="sketch-label"></div>
+                        <div class="shelf-grid" style="height:100%">
+                          ${shelfHtml}
+                        </div>
+                      </div>
+                    </div>
+                  `;
+
+                  pageDiv.appendChild(card);
+                  counter++;
+                });
+
+                document.body.classList.add('printing-grid');
+                window.print();
+                document.body.classList.remove('printing-grid');
+              }
+
+              window.onload = () => {
+                initAudio();
+                initLibrary();
+              };
+            </script>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .retro-banner {
+        background-color: #000080;
+        border: 4px ridge #c0c0c0;
+        box-shadow: 10px 10px 0 #000;
+      }
+
+      .retro-marquee-container {
+        background: #000;
+        border: 2px inset #fff;
+        color: #0f0;
+        font-family: 'Courier New', monospace;
+        padding: 5px;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-bottom: 15px;
+      }
+
+      .retro-marquee-text {
+        display: inline-block;
+        animation: marquee 10s linear infinite;
+      }
+
+      @keyframes marquee {
+        0% {
+          transform: translateX(100%);
+        }
+
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+
+      .retro-btn {
+        background: #c0c0c0;
+        border: 2px outset #fff;
+        color: #000;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .retro-btn:active {
+        border-style: inset;
+        transform: translate(1px, 1px);
+      }
+    </style>
+
+    <footer id="contacts-footer" class="max-w-4xl mx-auto mt-12 mb-12 retro-banner p-6 text-center relative z-20">
+      <div class="retro-marquee-container"><span class="retro-marquee-text">*** RIMANIAMO IN CONTATTO *** VISITA I MIEI
+          SOCIAL *** SCRIVIMI UNA MAIL ***</span></div>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="mailto:massi.sabato@gmail.com" class="retro-btn"><span>📧</span>EMAIL ME ! </a>
+        <a href="https://wa.me/393295644852" target="_blank" class="retro-btn"><span>💬</span>WHATSAPP </a>
+        <a href="https://linktr.ee/JustMax76" target="_blank" class="retro-btn"><span>🌲</span>LINKTREE </a>
+      </div>
+      <div class="mt-4 text-white font-mono text-xs">(c) 1999 - 2026 VideoClub Inc. <br>Best viewed with Netscape
+        Navigator 4.0 <br>
+        <img src="netscape_icon.png" alt="Netscape Logo"
+          style="display:inline; width:20px; vertical-align:middle; margin-right:5px;">
+      </div>
+    </footer>
+  </div>
+</body>
+
+</html>
